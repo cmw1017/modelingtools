@@ -1,10 +1,8 @@
 package swing;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.Map;
 
 import javax.swing.*;
@@ -15,11 +13,13 @@ public class MainPanel extends JFrame implements PanelTemplete {
 	JFrame frame;
 	ImagePanel mainjp;
 	JLabel content = new JLabel();
-	JButton ctgproc = new JButton("CTGPROC");
-	JButton makegeo = new JButton("MAKEGEO");
-	JButton read62 = new JButton("READ62");
-	JButton smerge = new JButton("SMERGE");
-	JButton calpost = new JButton("CALPOST 후처리");
+	Color navy = new Color(66,59,105);
+	Color white = new Color(255,255,255);
+	JButton ctgproc = new RoundedButton("CTGPROC", navy, white);
+	JButton makegeo = new RoundedButton("MAKEGEO", navy, white);
+	JButton read62 = new RoundedButton("READ62", navy, white);
+	JButton smerge = new RoundedButton("SMERGE", navy, white);
+	JButton calpost = new RoundedButton("CALPOST 후처리", navy, white);
 	
 	public MainPanel(JFrame frame) {
 		this.frame = frame;
@@ -62,7 +62,6 @@ public class MainPanel extends JFrame implements PanelTemplete {
 	
 	public void setVisible() {
 		frame.add(mainjp);
-		frame.pack();
 		mainjp.setVisible(true);
 	}
 	
