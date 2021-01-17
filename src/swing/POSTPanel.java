@@ -149,6 +149,19 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 			} else if(e.getSource() == exe) {
 				frames.get("postres").setVisible();
 				frames.get("post").setUnVisible();
+				frames.get("postres").paintNow();
+				
+//				System.out.println(hourT.getText());
+//				System.out.println(rankT.getText());
+//				System.out.println(gridR.isSelected());
+				
+				Data d = new Data();
+				d.setLoad_path(load_path.getText());
+				d.setGridR(gridR.isSelected());
+				d.setRankT(Integer.parseInt(rankT.getText()));
+				d.setHourT(Integer.parseInt(hourT.getText()));
+				frames.get("postres").exet(d);
+				
 			}
 		}
 	}

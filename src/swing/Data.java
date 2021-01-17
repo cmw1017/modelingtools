@@ -9,6 +9,34 @@ public class Data {
 	private int ycountT;
 	private int gridresolutionT;
 	private int gridradiusT;
+	//======================
+	private int hourT;
+	private int rankT;
+	private Boolean gridR;
+
+	public int getHourT() {
+		return hourT;
+	}
+
+	public void setHourT(int hourT) {
+		this.hourT = hourT;
+	}
+
+	public int getRankT() {
+		return rankT;
+	}
+
+	public void setRankT(int rankT) {
+		this.rankT = rankT;
+	}
+
+	public Boolean getGridR() {
+		return gridR;
+	}
+
+	public void setGridR(Boolean gridR) {
+		this.gridR = gridR;
+	}
 
 	public Data() {
 		// TODO Auto-generated constructor stub
