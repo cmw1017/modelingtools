@@ -7,4 +7,6 @@ public interface PanelTemplete {
 	public void setVisible();
 	public void setUnVisible();
 	public void setFrames(Map<String, PanelTemplete> frames);
+	public void exet(Data data);
+	public void paintNow();
 }

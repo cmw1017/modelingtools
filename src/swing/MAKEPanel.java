@@ -3,6 +3,7 @@ package swing;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import javax.swing.*;
@@ -115,7 +116,28 @@ public class MAKEPanel extends JFrame implements PanelTemplete {
 				} else if(e.getSource() == exe) {
 					frames.get("makeres").setVisible();
 					frames.get("make").setUnVisible();
+					
+					//System.out.println("load_path : "+load_path.getText());
+					try {
+						new MAKEResultPanel().make_logic(load_path.getText());
+					} catch (IOException | InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 				}
 			}
+		}
+
+		@Override
+		public void exet(Data data) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void paintNow() {
+			// TODO Auto-generated method stub
+			
 		}
 }

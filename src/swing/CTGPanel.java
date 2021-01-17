@@ -12,6 +12,7 @@ import javax.swing.filechooser.FileSystemView;
 
 public class CTGPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
+	public static final PanelTemplete CTGResultPanel = null;
 	Map<String, PanelTemplete> frames;
 	
 	// 파일명, 남서 X, Y, GRID X, Y, GRID 해상도, GRID 탐색 반경
@@ -73,6 +74,14 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 		
 		ctgjp.add(exe);
 		ctgjp.add(back);
+		
+		gridradiusT.setText("500");
+		gridresolutionT.setText("1000");
+		load_path.setText("E:\\atest\\2019_40km(30m)_matched_ys.txt");
+		xcountT.setText("40");
+		xpositionT.setText("378252");
+		ycountT.setText("40");
+		ypositionT.setText("3854833");
 		
 		// 위치 및 모양 설정
 		content.setText("CTGPROC Content");
@@ -172,21 +181,39 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == back) {
+				System.out.println("1");
 				frames.get("main").setVisible();
 				frames.get("ctg").setUnVisible();
 			} else if(e.getSource() == exe) {
+				System.out.println("2");
 				frames.get("ctgres").setVisible();
 				frames.get("ctg").setUnVisible();
-				System.out.println(load_path.getText());
-				System.out.println(xpositionT.getText());
-				System.out.println(ypositionT.getText());
-				System.out.println(xcountT.getText());
-				System.out.println(ycountT.getText());
-				System.out.println(gridresolutionT.getText());
-				System.out.println(gridradiusT.getText());
+				frames.get("ctgres").paintNow();
+				
+				Data d = new Data();
+				d.setGridradiusT(Integer.parseInt(gridradiusT.getText()));
+				d.setGridresolutionT(Integer.parseInt(gridresolutionT.getText()));
+				d.setLoad_path(load_path.getText());
+				d.setXcountT(Integer.parseInt(xcountT.getText()));
+				d.setXpositionT(Integer.parseInt(xpositionT.getText()));
+				d.setYcountT(Integer.parseInt(ycountT.getText()));
+				d.setYpositionT(Integer.parseInt(ypositionT.getText()));
+				frames.get("ctgres").exet(d);
+				
 			}
 		}
 	}
-	
+
+	@Override
+	public void exet(Data data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void paintNow() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

@@ -66,4 +66,16 @@ public class POSTResultPanel extends JFrame implements PanelTemplete {
 				}
 			}
 		}
+
+		@Override
+		public void exet(Data data) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void paintNow() {
+			// TODO Auto-generated method stub
+			
+		}
 }

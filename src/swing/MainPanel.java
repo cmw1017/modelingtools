@@ -27,7 +27,7 @@ public class MainPanel extends JFrame implements PanelTemplete {
 	
 	public void setPanel() {
 		
-		mainjp = new ImagePanel(new ImageIcon("D:\\eclipse\\workspace\\CALpre\\src\\resource\\back.jpg").getImage());
+		mainjp = new ImagePanel(new ImageIcon("E:\\jspservelt-work\\calpreprocessor-master\\src\\resource\\back.jpg").getImage());
 		
 		mainjp.setLayout(null);
 		
@@ -88,5 +88,17 @@ public class MainPanel extends JFrame implements PanelTemplete {
 				frames.get("post").setVisible();
 			}
 		}
+	}
+
+	@Override
+	public void exet(Data data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void paintNow() {
+		// TODO Auto-generated method stub
+		
 	}
 }
