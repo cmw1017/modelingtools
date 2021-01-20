@@ -59,6 +59,7 @@ public class CTGResultPanel extends JFrame implements PanelTemplete {
 		
 		ctgresjp.add(content);
 		ctgresjp.add(complete);
+		System.out.println("setPanel End");
 	}
 	
 	public void setVisible() {
@@ -74,6 +75,7 @@ public class CTGResultPanel extends JFrame implements PanelTemplete {
 	
 	public void setFrames(Map<String, PanelTemplete> frames) {
 		this.frames = frames;
+		System.out.println("setFrame");
 	}
 	
 	// 페이지 이동
@@ -422,7 +424,7 @@ public class CTGResultPanel extends JFrame implements PanelTemplete {
 		@Override
 		public void exet(Data data) {
 			// TODO Auto-generated method stub
-			
+			System.out.println("exet");
 			outputText =
 					"<html>exetctgproc load_path : E:\\atest\\2019_40km(30m)_matched_ys.txt<br/>" + 
 					"ctgproc xpositionT : 378252<br/>" + 
@@ -432,7 +434,7 @@ public class CTGResultPanel extends JFrame implements PanelTemplete {
 					"ctgproc gridresolutionT : 1000<br/>" + 
 					"ctgproc gridradiusT : 500<br/>";
 			
-			System.out.print("exet");
+			
 			System.out.println("ctgproc load_path : "+data.getLoad_path());
 			String insrc = data.getLoad_path();
 			
@@ -454,24 +456,24 @@ public class CTGResultPanel extends JFrame implements PanelTemplete {
 			
 			String listsrc = root+"\\ProcessList.lst";
 			String datasrc = root+"\\LANDUSE_CLASSIFY.DAT";
-			try {
-				int x1 = data.getXpositionT();
-				int y1 = data.getYpositionT(); 
-				int x2 = data.getXcountT(); 
-				int y2 = data.getYcountT();
-				int gre = data.getGridresolutionT();
-				int gra = data.getGridradiusT();
-				
-				fileRead(insrc);
-				paramCheck(x2,y2,gre,gra);
-				listDataInput(x1,y1,x2,y2,gre,gra,listsrc);
-				mainProcess(x1,y1,x2,y2,gre,gra);
-				dataOutput(x1,y1,x2,y2,gre,gra,datasrc);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
+//			try {
+//				int x1 = data.getXpositionT();
+//				int y1 = data.getYpositionT(); 
+//				int x2 = data.getXcountT(); 
+//				int y2 = data.getYcountT();
+//				int gre = data.getGridresolutionT();
+//				int gra = data.getGridradiusT();
+//				
+//				fileRead(insrc);
+//				paramCheck(x2,y2,gre,gra);
+//				listDataInput(x1,y1,x2,y2,gre,gra,listsrc);
+//				mainProcess(x1,y1,x2,y2,gre,gra);
+//				dataOutput(x1,y1,x2,y2,gre,gra,datasrc);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			System.out.println("exet End");
 		}
 
 		@Override
