@@ -1,6 +1,7 @@
 package swing;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
@@ -13,6 +14,7 @@ public class MainPanel extends JFrame implements PanelTemplete {
 	JFrame frame;
 	ImagePanel mainjp;
 	JLabel content = new JLabel();
+	JLabel title = new JLabel();
 	Color navy = new Color(66,59,105);
 	Color white = new Color(255,255,255);
 	JButton ctgproc = new RoundedButton("CTGPROC", navy, white);
@@ -27,32 +29,43 @@ public class MainPanel extends JFrame implements PanelTemplete {
 	
 	public void setPanel() {
 		
-		mainjp = new ImagePanel(new ImageIcon("E:\\jspservelt-work\\calpreprocessor-master\\src\\resource\\back.jpg").getImage());
+		mainjp = new ImagePanel(new ImageIcon("D:\\eclipse\\workspace\\CALpre\\src\\resource\\back.jpg").getImage());
 		
 		mainjp.setLayout(null);
-		
 
-		mainjp.add(content);
+
 		mainjp.add(ctgproc);
 		mainjp.add(makegeo);
 		mainjp.add(read62);
 		mainjp.add(smerge);
 		mainjp.add(calpost);
+		mainjp.add(content);
+		mainjp.add(title);
 
-
+		title.setText("칼퍼프 서브 모듈");
+		title.setBackground(new Color(87,37,125));
+		title.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		title.setForeground(Color.WHITE);
+		title.setHorizontalAlignment(SwingConstants.LEFT);
+		title.setVerticalAlignment(SwingConstants.CENTER);
+		title.setBorder(BorderFactory.createEmptyBorder(0 , 10, 0 , 0));
+		title.setOpaque(true);
+		title.setLocation(0, 0); title.setSize(800, 75);
+		
+		content.setBackground(new Color(255,255,255,122));
 		content.setText("Main Content");
 		content.setHorizontalAlignment(SwingConstants.CENTER);
 		content.setVerticalAlignment(SwingConstants.CENTER);
 		content.setOpaque(true);
-		content.setBackground(Color.WHITE);
-		content.setBounds(25,25,725,225);
-		ctgproc.setBounds(50, 275, 150, 100);
+		content.setBackground(new Color(255,255,255,122));
+		content.setLocation(150, 75); content.setSize(650, 400);
+		ctgproc.setLocation(0, 75); ctgproc.setSize(150, 50);
 		ctgproc.addActionListener(new MoveListener());
-		makegeo.setBounds(225, 275, 150, 100);
+		makegeo.setLocation(0, 125); makegeo.setSize(150, 50);
 		makegeo.addActionListener(new MoveListener());
-		read62.setBounds(400, 275, 150, 100);
-		smerge.setBounds(575, 275, 150, 100);
-		calpost.setBounds(50, 400, 150, 100);
+		read62.setLocation(0, 175); read62.setSize(150, 50);
+		smerge.setLocation(0, 225); smerge.setSize(150, 50);
+		calpost.setLocation(0, 275); calpost.setSize(150, 50);
 		calpost.addActionListener(new MoveListener());
 		
 		
