@@ -176,31 +176,29 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 	}
 	
 	// 페이지 이동
-	class MoveListener implements ActionListener {
+class MoveListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == back) {
-				System.out.println("1");
 				frames.get("main").setVisible();
 				frames.get("ctg").setUnVisible();
 			} else if(e.getSource() == exe) {
-				System.out.println("2");
 				frames.get("ctgres").setVisible();
 				frames.get("ctg").setUnVisible();
-				frames.get("ctgres").paintNow();
-				
-				Data d = new Data();
-				d.setGridradiusT(Integer.parseInt(gridradiusT.getText()));
-				d.setGridresolutionT(Integer.parseInt(gridresolutionT.getText()));
-				d.setLoad_path(load_path.getText());
-				d.setXcountT(Integer.parseInt(xcountT.getText()));
-				d.setXpositionT(Integer.parseInt(xpositionT.getText()));
-				d.setYcountT(Integer.parseInt(ycountT.getText()));
-				d.setYpositionT(Integer.parseInt(ypositionT.getText()));
-				frames.get("ctgres").exet(d);
-				
+				//frames.get("ctgres").paintNow();
 			}
+			
+			Data d = new Data();
+			d.setGridradiusT(Integer.parseInt(gridradiusT.getText()));
+			d.setGridresolutionT(Integer.parseInt(gridresolutionT.getText()));
+			d.setLoad_path(load_path.getText());
+			d.setXcountT(Integer.parseInt(xcountT.getText()));
+			d.setXpositionT(Integer.parseInt(xpositionT.getText()));
+			d.setYcountT(Integer.parseInt(ycountT.getText()));
+			d.setYpositionT(Integer.parseInt(ypositionT.getText()));
+			frames.get("ctgres").exet(d);
+			
 		}
 	}
 
