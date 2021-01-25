@@ -10,6 +10,8 @@ import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import swing.MainPanel.MoveListener;
+
 public class CTGPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
 	public static final PanelTemplete CTGResultPanel = null;
@@ -18,6 +20,13 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 	// 파일명, 남서 X, Y, GRID X, Y, GRID 해상도, GRID 탐색 반경
 	JFrame frame;
 	JPanel ctgjp = new JPanel();
+	JLabel title = new JLabel();
+	Color white = new Color(255,255,255);
+	JButton ctgproc = new RoundedButton("CTGPROC", Color.decode("#DDC3C1"), white);
+	JButton makegeo = new RoundedButton("MAKEGEO", Color.decode("#D99C9C"), white);
+	JButton read62 = new RoundedButton("READ62", Color.decode("#D99C9C"), white);
+	JButton smerge = new RoundedButton("SMERGE", Color.decode("#D99C9C"), white);
+	JButton calpost = new RoundedButton("CALPOST 후처리", Color.decode("#D99C9C"), white);
 	JPanel position = new JPanel();
 	JPanel count = new JPanel();
 	JPanel grid = new JPanel();
@@ -34,9 +43,9 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 	JTextField ycountT = new JTextField();
 	JTextField gridresolutionT = new JTextField();
 	JTextField gridradiusT = new JTextField();
-	JButton exe = new JButton("실행");
-	JButton back = new JButton("메인 페이지로");
-	JButton load = new JButton("파일 불러오기");
+	JButton exe = new RoundedButton("실행", Color.decode("#84B1D9"), white, 15);
+	JButton back = new RoundedButton("메인 페이지로", Color.decode("#84B1D9"), white, 20);
+	JButton load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
 	JLabel load_path = new JLabel();
 	
 	public CTGPanel(JFrame frame) {
@@ -47,9 +56,13 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 		
 		ctgjp.setLayout(null);
 		
-		// 콘텐츠 그룹 설정 ctgjp > position, grid > ..
-		
-		ctgjp.add(content);
+		// 프레임
+		ctgjp.add(ctgproc);
+		ctgjp.add(makegeo);
+		ctgjp.add(read62);
+		ctgjp.add(smerge);
+		ctgjp.add(calpost);
+		ctgjp.add(title);
 		
 		ctgjp.add(load);
 		ctgjp.add(load_path);
@@ -75,6 +88,44 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 		ctgjp.add(exe);
 		ctgjp.add(back);
 		
+		ctgjp.add(content);
+		
+		title.setText("칼퍼프 서브 모듈 - CTGPROC");
+		title.setBackground(Color.decode("#596C73"));
+		title.setFont(new Font("맑은 고딕", Font.BOLD, 30));
+		title.setForeground(Color.WHITE);
+		title.setHorizontalAlignment(SwingConstants.LEFT);
+		title.setVerticalAlignment(SwingConstants.CENTER);
+		title.setBorder(BorderFactory.createEmptyBorder(0 , 25, 0 , 0));
+		title.setOpaque(true);
+		title.setLocation(0, 0); title.setSize(1000, 75);
+		
+		content.setBackground(new Color(255,255,255,122));
+		content.setText("CTGPROC Content");
+		content.setHorizontalAlignment(SwingConstants.CENTER);
+		content.setVerticalAlignment(SwingConstants.CENTER);
+		content.setOpaque(true);
+		content.setBackground(Color.decode("#D0D8DA"));
+		content.setLocation(150, 75); content.setSize(850, 625);
+		
+		ctgproc.setLocation(0, 75); ctgproc.setSize(150, 50);
+		ctgproc.addActionListener(new MoveListener());
+		ctgproc.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		makegeo.setLocation(0, 125); makegeo.setSize(150, 50);
+		makegeo.addActionListener(new MoveListener());
+		makegeo.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		read62.setLocation(0, 175); read62.setSize(150, 50);
+		read62.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		smerge.setLocation(0, 225); smerge.setSize(150, 50);
+		smerge.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		calpost.setLocation(0, 275); calpost.setSize(150, 50);
+		calpost.addActionListener(new MoveListener());
+		calpost.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		
+		// 콘텐츠 그룹 설정 ctgjp > position, grid > ..
+		
+
+		
 		gridradiusT.setText("500");
 		gridresolutionT.setText("1000");
 		load_path.setText("E:\\atest\\2019_40km(30m)_matched_ys.txt");
@@ -83,50 +134,50 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 		ycountT.setText("40");
 		ypositionT.setText("3854833");
 		
-		// 위치 및 모양 설정
-		content.setText("CTGPROC Content");
-		content.setHorizontalAlignment(SwingConstants.CENTER);
-		content.setVerticalAlignment(SwingConstants.CENTER);
-		content.setOpaque(true);
-		content.setBackground(Color.WHITE);
-		content.setBounds(25,25,725,225);
-		
-		load.setBounds(50,275,125,50);
+		load.setLocation(200, 350); load.setSize(125, 50);
 		load.addActionListener(new loadListener());
+		load.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		load_path.setBounds(200,275,550,50);
+		load_path.setLocation(350, 350); load_path.setSize(550, 50);
 		load_path.setHorizontalAlignment(SwingConstants.CENTER);
 		load_path.setVerticalAlignment(SwingConstants.CENTER);
 		load_path.setOpaque(true);
 		load_path.setBackground(Color.WHITE);
 		
-		position.setBounds(50,360,175,100);
+		position.setLocation(200, 430); position.setSize(175, 100);
 		position.setBorder(new TitledBorder(new LineBorder(Color.BLACK,3),"남서쪽 방향 포인트"));
 		position.setLayout(new GridLayout(2,2,5,10));
+		position.setBackground(Color.decode("#D0D8DA"));
 		xposition.setText("X 좌표(m)");
 		xposition.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		yposition.setText("Y 좌표(m)");
 		yposition.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		
-		count.setBounds(250,360,175,100);
+		count.setLocation(410, 430); count.setSize(175, 100);
 		count.setBorder(new TitledBorder(new LineBorder(Color.BLACK,3),"GRID 개수"));
 		count.setLayout(new GridLayout(2,2,5,10));
+		count.setBackground(Color.decode("#D0D8DA"));
 		xcount.setText("X 축(개)");
 		xcount.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		ycount.setText("Y 축(개)");
 		ycount.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		
-		grid.setBounds(450,360,275,100);
+		grid.setLocation(620, 430); grid.setSize(275, 100);
 		grid.setBorder(new TitledBorder(new LineBorder(Color.BLACK,3),"GRID 설정"));
 		grid.setLayout(new GridLayout(2,2,5,10));
+		grid.setBackground(Color.decode("#D0D8DA"));
 		gridresolution.setText("GRID 해상도(m)");
 		gridresolution.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		gridradius.setText("GRID 계산 반경(m)");
 		gridradius.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		
-		back.setBounds(450,490,150,50);
+		back.setLocation(650, 550); back.setSize(150, 50);
 		back.addActionListener(new MoveListener());
-		exe.setBounds(625,490,100,50);
+		back.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		exe.setLocation(825, 550); exe.setSize(100, 50);
 		exe.addActionListener(new MoveListener());
+		exe.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		
 	}
 	
 	public void setVisible() {

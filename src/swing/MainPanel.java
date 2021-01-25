@@ -12,24 +12,21 @@ public class MainPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
 	Map<String, PanelTemplete> frames;
 	JFrame frame;
-	ImagePanel mainjp;
+	JPanel mainjp = new JPanel();
 	JLabel content = new JLabel();
 	JLabel title = new JLabel();
-	Color navy = new Color(66,59,105);
 	Color white = new Color(255,255,255);
-	JButton ctgproc = new RoundedButton("CTGPROC", navy, white);
-	JButton makegeo = new RoundedButton("MAKEGEO", navy, white);
-	JButton read62 = new RoundedButton("READ62", navy, white);
-	JButton smerge = new RoundedButton("SMERGE", navy, white);
-	JButton calpost = new RoundedButton("CALPOST 후처리", navy, white);
+	JButton ctgproc = new RoundedButton("CTGPROC", Color.decode("#D99C9C"), white);
+	JButton makegeo = new RoundedButton("MAKEGEO", Color.decode("#D99C9C"), white);
+	JButton read62 = new RoundedButton("READ62", Color.decode("#D99C9C"), white);
+	JButton smerge = new RoundedButton("SMERGE", Color.decode("#D99C9C"), white);
+	JButton calpost = new RoundedButton("CALPOST 후처리", Color.decode("#D99C9C"), white);
 	
 	public MainPanel(JFrame frame) {
 		this.frame = frame;
 	}
 	
 	public void setPanel() {
-		
-		mainjp = new ImagePanel(new ImageIcon("D:\\eclipse\\workspace\\CALpre\\src\\resource\\back.jpg").getImage());
 		
 		mainjp.setLayout(null);
 
@@ -43,30 +40,36 @@ public class MainPanel extends JFrame implements PanelTemplete {
 		mainjp.add(title);
 
 		title.setText("칼퍼프 서브 모듈");
-		title.setBackground(new Color(87,37,125));
-		title.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		title.setBackground(Color.decode("#596C73"));
+		title.setFont(new Font("맑은 고딕", Font.BOLD, 30));
 		title.setForeground(Color.WHITE);
 		title.setHorizontalAlignment(SwingConstants.LEFT);
 		title.setVerticalAlignment(SwingConstants.CENTER);
-		title.setBorder(BorderFactory.createEmptyBorder(0 , 10, 0 , 0));
+		title.setBorder(BorderFactory.createEmptyBorder(0 , 25, 0 , 0));
 		title.setOpaque(true);
-		title.setLocation(0, 0); title.setSize(800, 75);
+		title.setLocation(0, 0); title.setSize(1000, 75);
 		
 		content.setBackground(new Color(255,255,255,122));
 		content.setText("Main Content");
 		content.setHorizontalAlignment(SwingConstants.CENTER);
 		content.setVerticalAlignment(SwingConstants.CENTER);
 		content.setOpaque(true);
-		content.setBackground(new Color(255,255,255,122));
-		content.setLocation(150, 75); content.setSize(650, 400);
+		content.setBackground(Color.decode("#D0D8DA"));
+		content.setLocation(150, 75); content.setSize(850, 625);
+		
 		ctgproc.setLocation(0, 75); ctgproc.setSize(150, 50);
 		ctgproc.addActionListener(new MoveListener());
+		ctgproc.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		makegeo.setLocation(0, 125); makegeo.setSize(150, 50);
 		makegeo.addActionListener(new MoveListener());
+		makegeo.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		read62.setLocation(0, 175); read62.setSize(150, 50);
+		read62.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		smerge.setLocation(0, 225); smerge.setSize(150, 50);
+		smerge.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		calpost.setLocation(0, 275); calpost.setSize(150, 50);
 		calpost.addActionListener(new MoveListener());
+		calpost.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		
 		
 		

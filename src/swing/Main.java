@@ -34,7 +34,7 @@ public class Main extends JFrame {
 		frames.get("main").setVisible();
 
 		frame.setTitle("CALPUFF");
-		frame.setSize(800, 600);
+		frame.setSize(1000, 700);
 		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x 버튼을 눌렀을때 종료

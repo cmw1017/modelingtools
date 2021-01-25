@@ -11,6 +11,7 @@ public class RoundedButton extends JButton {
 
 	Color c = new Color(255, 247, 242); // 배경색 결정
 	Color o = new Color(247, 99, 12); // 글자색 결정
+	int arcWidth = 0;
 	
 	public RoundedButton() {
 		super();
@@ -26,6 +27,14 @@ public class RoundedButton extends JButton {
 		super(text);
 		c= background;
 		o = content;
+		decorate();
+	}
+	
+	public RoundedButton(String text, Color background, Color content, int arcWidth) {
+		super(text);
+		c = background;
+		o = content;
+		this.arcWidth = arcWidth;
 		decorate();
 	}
 
@@ -62,7 +71,7 @@ public class RoundedButton extends JButton {
 		} else {
 			graphics.setColor(c);
 		}
-		graphics.fillRoundRect(0, 0, width, height, 10, 10);
+		graphics.fillRoundRect(0, 0, width, height, arcWidth, arcWidth);
 		FontMetrics fontMetrics = graphics.getFontMetrics();
 		Rectangle stringBounds = fontMetrics.getStringBounds(this.getText(), graphics).getBounds();
 		int textX = (width - stringBounds.width) / 2;
