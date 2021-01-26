@@ -10,6 +10,9 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import swing.CTGPanel.MoveListener;
+import swing.CTGPanel.loadListener;
+
 public class MAKEPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
 	Map<String, PanelTemplete> frames;
@@ -17,7 +20,14 @@ public class MAKEPanel extends JFrame implements PanelTemplete {
 	// 파일명, 남서 X, Y, GRID X, Y, GRID 해상도, GRID 탐색 반경
 	JFrame frame;
 	JPanel makejp = new JPanel();
-	JLabel content1 = new JLabel();
+	JLabel content = new JLabel();
+	JLabel title = new JLabel();
+	Color white = new Color(255,255,255);
+	JButton ctgproc = new RoundedButton("CTGPROC", Color.decode("#DDC3C1"), white);
+	JButton makegeo = new RoundedButton("MAKEGEO", Color.decode("#D99C9C"), white);
+	JButton read62 = new RoundedButton("READ62", Color.decode("#D99C9C"), white);
+	JButton smerge = new RoundedButton("SMERGE", Color.decode("#D99C9C"), white);
+	JButton calpost = new RoundedButton("CALPOST 후처리", Color.decode("#D99C9C"), white);
 	JButton load = new JButton("파일 불러오기");
 	JButton exe = new JButton("실행");
 	JButton back = new JButton("메인 페이지로");
@@ -31,32 +41,74 @@ public class MAKEPanel extends JFrame implements PanelTemplete {
 	
 		makejp.setLayout(null);
 		
-		makejp.add(content1);
+		// 프레임
+		makejp.add(ctgproc);
+		makejp.add(makegeo);
+		makejp.add(read62);
+		makejp.add(smerge);
+		makejp.add(calpost);
+		makejp.add(title);
+		
 		makejp.add(load);
 		makejp.add(load_path);
 		makejp.add(exe);
 		makejp.add(back);
 		
-		// 위치 및 모양 설정
-		content1.setText("MAKEGEO Content");
-		content1.setHorizontalAlignment(SwingConstants.CENTER);
-		content1.setVerticalAlignment(SwingConstants.CENTER);
-		content1.setOpaque(true);
-		content1.setBackground(Color.WHITE);
-		content1.setBounds(25, 25, 725, 225);
+		makejp.add(content);
 		
-		load.setBounds(50,275,125,50);
+		// 타이틀 및 메뉴 버튼들 시작
+		title.setText("칼퍼프 서브 모듈 - CTGPROC");
+		title.setBackground(Color.decode("#596C73"));
+		title.setFont(new Font("맑은 고딕", Font.BOLD, 30));
+		title.setForeground(Color.WHITE);
+		title.setHorizontalAlignment(SwingConstants.LEFT);
+		title.setVerticalAlignment(SwingConstants.CENTER);
+		title.setBorder(BorderFactory.createEmptyBorder(0 , 25, 0 , 0));
+		title.setOpaque(true);
+		title.setLocation(0, 0); title.setSize(1000, 75);
+		
+		content.setBackground(new Color(255,255,255,122));
+		content.setHorizontalAlignment(SwingConstants.CENTER);
+		content.setVerticalAlignment(SwingConstants.CENTER);
+		content.setOpaque(true);
+		content.setBackground(Color.decode("#D0D8DA"));
+		content.setLocation(150, 75); content.setSize(850, 625);
+		
+		ctgproc.setLocation(0, 75); ctgproc.setSize(150, 50);
+		ctgproc.addActionListener(new MoveListener());
+		ctgproc.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		makegeo.setLocation(0, 125); makegeo.setSize(150, 50);
+		makegeo.addActionListener(new MoveListener());
+		makegeo.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		read62.setLocation(0, 175); read62.setSize(150, 50);
+		read62.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		smerge.setLocation(0, 225); smerge.setSize(150, 50);
+		smerge.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		calpost.setLocation(0, 275); calpost.setSize(150, 50);
+		calpost.addActionListener(new MoveListener());
+		calpost.setFont(new Font("맑은 고딕", Font.BOLD, 15));	
+		// 타이틀 및 메뉴 버튼들 끝
+		
+		// content 시작
+		load.setLocation(200, 350); load.setSize(125, 50);
 		load.addActionListener(new loadListener());
+		load.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		load_path.setBounds(200,275,550,50);
+		load_path.setLocation(350, 350); load_path.setSize(550, 50);
 		load_path.setHorizontalAlignment(SwingConstants.CENTER);
 		load_path.setVerticalAlignment(SwingConstants.CENTER);
 		load_path.setOpaque(true);
 		load_path.setBackground(Color.WHITE);
+		// content 끝
 		
-		back.setBounds(450,490,150,50);
+		//이동 버튼 시작
+		back.setLocation(650, 550); back.setSize(150, 50);
 		back.addActionListener(new MoveListener());
-		exe.setBounds(625,490,100,50);
+		back.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		exe.setLocation(825, 550); exe.setSize(100, 50);
 		exe.addActionListener(new MoveListener());
+		exe.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		//이동 버튼 끝
 	}
 	
 	public void setVisible() {

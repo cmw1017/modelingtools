@@ -30,7 +30,7 @@ public class MainPanel extends JFrame implements PanelTemplete {
 		
 		mainjp.setLayout(null);
 
-
+		
 		mainjp.add(ctgproc);
 		mainjp.add(makegeo);
 		mainjp.add(read62);
@@ -39,6 +39,7 @@ public class MainPanel extends JFrame implements PanelTemplete {
 		mainjp.add(content);
 		mainjp.add(title);
 
+		// 타이틀 및 메뉴 버튼들 시작
 		title.setText("칼퍼프 서브 모듈");
 		title.setBackground(Color.decode("#596C73"));
 		title.setFont(new Font("맑은 고딕", Font.BOLD, 30));
@@ -70,7 +71,7 @@ public class MainPanel extends JFrame implements PanelTemplete {
 		calpost.setLocation(0, 275); calpost.setSize(150, 50);
 		calpost.addActionListener(new MoveListener());
 		calpost.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		
+		// 타이틀 및 메뉴 버튼들 끝
 		
 		
 		//frame.add(mainjp);

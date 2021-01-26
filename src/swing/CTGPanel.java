@@ -90,6 +90,7 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 		
 		ctgjp.add(content);
 		
+		// 타이틀 및 메뉴 버튼들 시작
 		title.setText("칼퍼프 서브 모듈 - CTGPROC");
 		title.setBackground(Color.decode("#596C73"));
 		title.setFont(new Font("맑은 고딕", Font.BOLD, 30));
@@ -101,7 +102,6 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 		title.setLocation(0, 0); title.setSize(1000, 75);
 		
 		content.setBackground(new Color(255,255,255,122));
-		content.setText("CTGPROC Content");
 		content.setHorizontalAlignment(SwingConstants.CENTER);
 		content.setVerticalAlignment(SwingConstants.CENTER);
 		content.setOpaque(true);
@@ -121,11 +121,9 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 		calpost.setLocation(0, 275); calpost.setSize(150, 50);
 		calpost.addActionListener(new MoveListener());
 		calpost.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		// 타이틀 및 메뉴 버튼들 끝
 		
-		// 콘텐츠 그룹 설정 ctgjp > position, grid > ..
-		
-
-		
+		// content 시작
 		gridradiusT.setText("500");
 		gridresolutionT.setText("1000");
 		load_path.setText("E:\\atest\\2019_40km(30m)_matched_ys.txt");
@@ -170,13 +168,16 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 		gridresolution.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		gridradius.setText("GRID 계산 반경(m)");
 		gridradius.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+		// content 끝
 		
+		//이동 버튼 시작
 		back.setLocation(650, 550); back.setSize(150, 50);
 		back.addActionListener(new MoveListener());
 		back.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		exe.setLocation(825, 550); exe.setSize(100, 50);
 		exe.addActionListener(new MoveListener());
 		exe.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		//이동 버튼 끝
 		
 	}
 	
