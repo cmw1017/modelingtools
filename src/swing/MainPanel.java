@@ -50,7 +50,6 @@ public class MainPanel extends JFrame implements PanelTemplete {
 		title.setOpaque(true);
 		title.setLocation(0, 0); title.setSize(1000, 75);
 		
-		content.setBackground(new Color(255,255,255,122));
 		content.setText("Main Content");
 		content.setHorizontalAlignment(SwingConstants.CENTER);
 		content.setVerticalAlignment(SwingConstants.CENTER);

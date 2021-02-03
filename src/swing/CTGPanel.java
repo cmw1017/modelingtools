@@ -10,8 +10,6 @@ import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
-import swing.MainPanel.MoveListener;
-
 public class CTGPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
 	public static final PanelTemplete CTGResultPanel = null;
@@ -101,7 +99,6 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 		title.setOpaque(true);
 		title.setLocation(0, 0); title.setSize(1000, 75);
 		
-		content.setBackground(new Color(255,255,255,122));
 		content.setHorizontalAlignment(SwingConstants.CENTER);
 		content.setVerticalAlignment(SwingConstants.CENTER);
 		content.setOpaque(true);
@@ -232,12 +229,21 @@ class MoveListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == back) {
+			if (e.getSource() == ctgproc) {
+				frames.get("ctg").setUnVisible();
+				frames.get("ctg").setVisible();
+			} else if (e.getSource() == makegeo) {
+				frames.get("ctg").setUnVisible();
+				frames.get("make").setVisible();
+			} else if (e.getSource() == calpost) {
+				frames.get("ctg").setUnVisible();
+				frames.get("post").setVisible();
+			} else if (e.getSource() == back) {
+				frames.get("ctg").setUnVisible();
 				frames.get("main").setVisible();
-				frames.get("ctg").setUnVisible();
 			} else if(e.getSource() == exe) {
-				frames.get("ctgres").setVisible();
 				frames.get("ctg").setUnVisible();
+				frames.get("ctgres").setVisible();
 				//frames.get("ctgres").paintNow();
 			}
 			
@@ -249,7 +255,7 @@ class MoveListener implements ActionListener {
 			d.setXpositionT(Integer.parseInt(xpositionT.getText()));
 			d.setYcountT(Integer.parseInt(ycountT.getText()));
 			d.setYpositionT(Integer.parseInt(ypositionT.getText()));
-			frames.get("ctgres").exet(d);
+			//frames.get("ctgres").exet(d);
 			
 		}
 	}

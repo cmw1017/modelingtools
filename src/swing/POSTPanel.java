@@ -16,6 +16,7 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 	// 파일명, 남서 X, Y, GRID X, Y, GRID 해상도, GRID 탐색 반경
 	JFrame frame;
 	JPanel postjp =new JPanel();
+	JLabel title = new JLabel();
 	JLabel content = new JLabel();
 	JLabel hour = new JLabel();
 	JLabel rank = new JLabel();
@@ -23,9 +24,15 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 	JTextField hourT = new JTextField();
 	JTextField rankT = new JTextField();
 	JRadioButton gridR = new JRadioButton();
-	JButton exe = new JButton("실행");
-	JButton back = new JButton("메인 페이지로");
-	JButton load = new JButton("파일 불러오기");
+	Color white = new Color(255,255,255);
+	JButton ctgproc = new RoundedButton("CTGPROC", Color.decode("#D99C9C"), white);
+	JButton makegeo = new RoundedButton("MAKEGEO", Color.decode("#D99C9C"), white);
+	JButton read62 = new RoundedButton("READ62", Color.decode("#D99C9C"), white);
+	JButton smerge = new RoundedButton("SMERGE", Color.decode("#D99C9C"), white);
+	JButton calpost = new RoundedButton("CALPOST 후처리", Color.decode("#DDC3C1"), white);
+	JButton exe = new RoundedButton("실행", Color.decode("#84B1D9"), white, 15);
+	JButton back = new RoundedButton("메인 페이지로", Color.decode("#84B1D9"), white, 20);
+	JButton load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
 	JLabel load_path = new JLabel();
 	
 	public POSTPanel(JFrame frame) {
@@ -38,10 +45,19 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 		
 		postjp.setLayout(null);
 		
-		// 콘텐츠 그룹 설정 ctgjp > position, grid > ..
-		
-		postjp.add(content);
-		
+		// 프레임
+		postjp.add(ctgproc);
+		postjp.add(makegeo);
+		postjp.add(read62);
+		postjp.add(smerge);
+		postjp.add(calpost);
+		postjp.add(title);
+				
+		postjp.add(load);
+		postjp.add(load_path);
+		postjp.add(exe);
+		postjp.add(back);
+				
 		postjp.add(load);
 		postjp.add(load_path);
 		
@@ -52,21 +68,51 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 		postjp.add(grid);
 		postjp.add(gridR);
 		
+		postjp.add(content);
 		
-		postjp.add(exe);
-		postjp.add(back);
-		
-		// 위치 및 모양 설정
-		content.setText("CALPOST Content");
+		// 타이틀 및 메뉴 버튼들 시작
+		title.setText("칼퍼프 서브 모듈 - CALPOST 후처리");
+		title.setBackground(Color.decode("#596C73"));
+		title.setFont(new Font("맑은 고딕", Font.BOLD, 30));
+		title.setForeground(Color.WHITE);
+		title.setHorizontalAlignment(SwingConstants.LEFT);
+		title.setVerticalAlignment(SwingConstants.CENTER);
+		title.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
+		title.setOpaque(true);
+		title.setLocation(0, 0);
+		title.setSize(1000, 75);
+		content.setBackground(new Color(255, 255, 255, 122));
 		content.setHorizontalAlignment(SwingConstants.CENTER);
 		content.setVerticalAlignment(SwingConstants.CENTER);
 		content.setOpaque(true);
-		content.setBackground(Color.WHITE);
-		content.setBounds(25,25,725,225);
+		content.setBackground(Color.decode("#D0D8DA"));
+		content.setLocation(150, 75);
+		content.setSize(850, 625);
+		ctgproc.setLocation(0, 75);
+		ctgproc.setSize(150, 50);
+		ctgproc.addActionListener(new MoveListener());
+		ctgproc.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		makegeo.setLocation(0, 125);
+		makegeo.setSize(150, 50);
+		makegeo.addActionListener(new MoveListener());
+		makegeo.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		read62.setLocation(0, 175);
+		read62.setSize(150, 50);
+		read62.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		smerge.setLocation(0, 225);
+		smerge.setSize(150, 50);
+		smerge.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		calpost.setLocation(0, 275);
+		calpost.setSize(150, 50);
+		calpost.addActionListener(new MoveListener());
+		calpost.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		// 타이틀 및 메뉴 버튼들 끝
 		
-		load.setBounds(50,275,125,50);
+		// content 시작
+		load.setLocation(200, 350); load.setSize(125, 50);
 		load.addActionListener(new loadListener());
-		load_path.setBounds(200,275,550,50);
+		load.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		load_path.setLocation(350, 350); load_path.setSize(550, 50);
 		load_path.setHorizontalAlignment(SwingConstants.CENTER);
 		load_path.setVerticalAlignment(SwingConstants.CENTER);
 		load_path.setOpaque(true);
@@ -74,22 +120,31 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 		
 
 		hour.setText("총 입력 시간");
-		hour.setBounds(50,360,100,50);
-		hourT.setBounds(125,370,75,30);
+		hour.setFont(new Font("맑은 고딕", Font.BOLD, 10));
+		hour.setLocation(250, 460); hour.setSize(100, 50);
+		hourT.setLocation(325, 470); hourT.setSize(75, 30);
 		
 		rank.setText("출력 데이터 순위");
-		rank.setBounds(250,360,100,50);
-		rankT.setBounds(350,370,75,30);
+		rank.setFont(new Font("맑은 고딕", Font.BOLD, 10));
+		rank.setLocation(450, 460); rank.setSize(100, 50);
+		rankT.setLocation(550, 470); rankT.setSize(75, 30);
 		
 		grid.setText("GRID 생성 여부");
-		grid.setBounds(450,360,100,50);
-		gridR.setBounds(550,370,30,30);
+		grid.setFont(new Font("맑은 고딕", Font.BOLD, 10));
+		grid.setLocation(650, 460); grid.setSize(100, 50);
+		gridR.setLocation(750, 470); gridR.setSize(30, 30);
 		
 		
-		back.setBounds(450,490,150,50);
+		// 이동 버튼 시작
+		back.setLocation(650, 550);
+		back.setSize(150, 50);
 		back.addActionListener(new MoveListener());
-		exe.setBounds(625,490,100,50);
+		back.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		exe.setLocation(825, 550);
+		exe.setSize(100, 50);
 		exe.addActionListener(new MoveListener());
+		exe.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		// 이동 버튼 끝
 	}
 	
 	public void setVisible() {
@@ -143,12 +198,21 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == back) {
+			if (e.getSource() == ctgproc) {
+				frames.get("post").setUnVisible();
+				frames.get("ctg").setVisible();
+			} else if (e.getSource() == makegeo) {
+				frames.get("post").setUnVisible();
+				frames.get("make").setVisible();
+			} else if (e.getSource() == calpost) {
+				frames.get("post").setUnVisible();
+				frames.get("post").setVisible();
+			} else if (e.getSource() == back) {
+				frames.get("post").setUnVisible();
 				frames.get("main").setVisible();
-				frames.get("post").setUnVisible();
 			} else if(e.getSource() == exe) {
-				frames.get("postres").setVisible();
 				frames.get("post").setUnVisible();
+				frames.get("postres").setVisible();
 				frames.get("postres").paintNow();
 				
 //				System.out.println(hourT.getText());

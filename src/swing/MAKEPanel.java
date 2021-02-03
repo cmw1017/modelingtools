@@ -10,9 +10,6 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
-import swing.CTGPanel.MoveListener;
-import swing.CTGPanel.loadListener;
-
 public class MAKEPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
 	Map<String, PanelTemplete> frames;
@@ -23,14 +20,14 @@ public class MAKEPanel extends JFrame implements PanelTemplete {
 	JLabel content = new JLabel();
 	JLabel title = new JLabel();
 	Color white = new Color(255,255,255);
-	JButton ctgproc = new RoundedButton("CTGPROC", Color.decode("#DDC3C1"), white);
-	JButton makegeo = new RoundedButton("MAKEGEO", Color.decode("#D99C9C"), white);
+	JButton ctgproc = new RoundedButton("CTGPROC", Color.decode("#D99C9C"), white);
+	JButton makegeo = new RoundedButton("MAKEGEO", Color.decode("#DDC3C1"), white);
 	JButton read62 = new RoundedButton("READ62", Color.decode("#D99C9C"), white);
 	JButton smerge = new RoundedButton("SMERGE", Color.decode("#D99C9C"), white);
 	JButton calpost = new RoundedButton("CALPOST 후처리", Color.decode("#D99C9C"), white);
-	JButton load = new JButton("파일 불러오기");
-	JButton exe = new JButton("실행");
-	JButton back = new JButton("메인 페이지로");
+	JButton exe = new RoundedButton("실행", Color.decode("#84B1D9"), white, 15);
+	JButton back = new RoundedButton("메인 페이지로", Color.decode("#84B1D9"), white, 20);
+	JButton load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
 	JLabel load_path = new JLabel();
 	
 	public MAKEPanel(JFrame frame) {
@@ -57,7 +54,7 @@ public class MAKEPanel extends JFrame implements PanelTemplete {
 		makejp.add(content);
 		
 		// 타이틀 및 메뉴 버튼들 시작
-		title.setText("칼퍼프 서브 모듈 - CTGPROC");
+		title.setText("칼퍼프 서브 모듈 - MAKEGEO");
 		title.setBackground(Color.decode("#596C73"));
 		title.setFont(new Font("맑은 고딕", Font.BOLD, 30));
 		title.setForeground(Color.WHITE);
@@ -93,7 +90,6 @@ public class MAKEPanel extends JFrame implements PanelTemplete {
 		load.setLocation(200, 350); load.setSize(125, 50);
 		load.addActionListener(new loadListener());
 		load.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		load_path.setBounds(200,275,550,50);
 		load_path.setLocation(350, 350); load_path.setSize(550, 50);
 		load_path.setHorizontalAlignment(SwingConstants.CENTER);
 		load_path.setVerticalAlignment(SwingConstants.CENTER);
@@ -162,12 +158,21 @@ public class MAKEPanel extends JFrame implements PanelTemplete {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == back) {
+				if (e.getSource() == ctgproc) {
+					frames.get("make").setUnVisible();
+					frames.get("ctg").setVisible();
+				} else if (e.getSource() == makegeo) {
+					frames.get("make").setUnVisible();
+					frames.get("make").setVisible();
+				} else if (e.getSource() == calpost) {
+					frames.get("make").setUnVisible();
+					frames.get("post").setVisible();
+				} else if (e.getSource() == back) {
+					frames.get("make").setUnVisible();
 					frames.get("main").setVisible();
-					frames.get("make").setUnVisible();
 				} else if(e.getSource() == exe) {
-					frames.get("makeres").setVisible();
 					frames.get("make").setUnVisible();
+					frames.get("makeres").setVisible();
 					
 					//System.out.println("load_path : "+load_path.getText());
 					try {
