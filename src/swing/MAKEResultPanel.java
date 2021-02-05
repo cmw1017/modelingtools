@@ -619,12 +619,4 @@ public class MAKEResultPanel extends JFrame implements PanelTemplete {
 			// TODO Auto-generated method stub
 			
 		}
-
-		@Override
-		public void paintNow() {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		
 }

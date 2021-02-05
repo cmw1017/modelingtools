@@ -338,12 +338,6 @@ public class POSTResultPanel extends JFrame implements PanelTemplete {
 
 	}
 
-	@Override
-	public void paintNow() {
-		// TODO Auto-generated method stub
-
-	}
-
 	int[] findOrder(Double[][] conc, int datalen, int orderNum, int reNum) {
 		int[] orderArray = new int[reNum];
 		Double[] concorder = new Double[orderNum];

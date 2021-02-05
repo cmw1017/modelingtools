@@ -123,7 +123,7 @@ public class CTGPanel extends JFrame implements PanelTemplete {
 		// content 시작
 		gridradiusT.setText("500");
 		gridresolutionT.setText("1000");
-		load_path.setText("E:\\atest\\2019_40km(30m)_matched_ys.txt");
+		load_path.setText("D:\\Modeling\\CALPUFF 개발프로그램\\sample\\2013_25km(50m)_matched.txt");
 		xcountT.setText("40");
 		xpositionT.setText("378252");
 		ycountT.setText("40");
@@ -229,10 +229,8 @@ class MoveListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == ctgproc) {
-				frames.get("ctg").setUnVisible();
-				frames.get("ctg").setVisible();
-			} else if (e.getSource() == makegeo) {
+			
+			if (e.getSource() == makegeo) {
 				frames.get("ctg").setUnVisible();
 				frames.get("make").setVisible();
 			} else if (e.getSource() == calpost) {
@@ -255,8 +253,7 @@ class MoveListener implements ActionListener {
 			d.setXpositionT(Integer.parseInt(xpositionT.getText()));
 			d.setYcountT(Integer.parseInt(ycountT.getText()));
 			d.setYpositionT(Integer.parseInt(ypositionT.getText()));
-			//frames.get("ctgres").exet(d);
-			
+			frames.get("ctgres").exet(d);
 		}
 	}
 
@@ -265,11 +262,4 @@ class MoveListener implements ActionListener {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void paintNow() {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

@@ -213,7 +213,6 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 			} else if(e.getSource() == exe) {
 				frames.get("post").setUnVisible();
 				frames.get("postres").setVisible();
-				frames.get("postres").paintNow();
 				
 //				System.out.println(hourT.getText());
 //				System.out.println(rankT.getText());
@@ -235,12 +234,4 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void paintNow() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
 }
