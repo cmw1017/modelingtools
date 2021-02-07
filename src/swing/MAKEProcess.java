@@ -16,7 +16,7 @@ public class MAKEProcess implements Runnable {
 		this.complete = complete;
 	}
 
-	public void make_logic() throws IOException, InterruptedException {
+	public void exet() throws IOException, InterruptedException {
 		System.out.println("make load_path : " + load_path);
 		System.out.print("make_logic....");
 		outputText = "<html>--- makegeo 진행 중 ---<br/>";
@@ -578,7 +578,7 @@ public class MAKEProcess implements Runnable {
 	@Override
 	public void run() {
 		try {
-			make_logic();
+			exet();
 		} catch (IOException e) {
 			System.out.println("에러 : IOException");
 			outputText += "에러 : IOException<br/>";

@@ -23,12 +23,12 @@ public class CTGProcess implements Runnable{
 	private TreeMap<Double, TreeMap<Double, Integer>> outputList;
 	private double outdata[][][];
 	private String outputText;
-	private Data d;
+	private Data data;
 	private JLabel content;
 	private JButton complete;
 	
-	public CTGProcess(Data d, JLabel content, JButton complete){
-		this.d = d;
+	public CTGProcess(Data data, JLabel content, JButton complete){
+		this.data = data;
 		this.content = content;
 		this.complete = complete;
 	}
@@ -392,24 +392,24 @@ public class CTGProcess implements Runnable{
 	public void exet() {
 		System.out.println("Exet Start");
 		outputText = "<html> --- 입력 파라미터 ---<br/>"
-				+ "&nbsp&nbsp입력파일 경로 : " + d.getLoad_path() + "<br/>"
-				+ "&nbsp&nbsp남서쪽 x 좌표(m) : " + d.getXpositionT() + "<br/>" 
-				+ "&nbsp&nbsp남서쪽 y 좌표(m) : " + d.getYpositionT() + "<br/>" 
-				+ "&nbsp&nbsp;x 방향 그리드 개수 : " + d.getXcountT() + "<br/>"
-				+ "&nbsp&nbsp;y 방향 그리드 개수 : " + d.getYcountT() + "<br/>" 
-				+ "&nbsp&nbsp그리드 해상도(m) : " + d.getGridresolutionT() + "<br/>"
-				+ "&nbsp&nbsp데이터 탐색 반경-사각형 기준(m) : "+ d.getGridradiusT() + "<br/>";
+				+ "&nbsp&nbsp입력파일 경로 : " + data.getLoad_path() + "<br/>"
+				+ "&nbsp&nbsp남서쪽 x 좌표(m) : " + data.getXpositionT() + "<br/>" 
+				+ "&nbsp&nbsp남서쪽 y 좌표(m) : " + data.getYpositionT() + "<br/>" 
+				+ "&nbsp&nbsp;x 방향 그리드 개수 : " + data.getXcountT() + "<br/>"
+				+ "&nbsp&nbsp;y 방향 그리드 개수 : " + data.getYcountT() + "<br/>" 
+				+ "&nbsp&nbsp그리드 해상도(m) : " + data.getGridresolutionT() + "<br/>"
+				+ "&nbsp&nbsp데이터 탐색 반경-사각형 기준(m) : "+ data.getGridradiusT() + "<br/>";
 		content.setText(outputText);
 
-		System.out.println("ctgproc load_path : " + d.getLoad_path());
-		System.out.println("ctgproc xpositionT : " + d.getXpositionT());
-		System.out.println("ctgproc ypositionT : " + d.getYpositionT());
-		System.out.println("ctgproc xcountT : " + d.getXcountT());
-		System.out.println("ctgproc ycountT : " + d.getYcountT());
-		System.out.println("ctgproc gridresolutionT : " + d.getGridresolutionT());
-		System.out.println("ctgproc gridradiusT : " + d.getGridradiusT());
+		System.out.println("ctgproc load_path : " + data.getLoad_path());
+		System.out.println("ctgproc xpositionT : " + data.getXpositionT());
+		System.out.println("ctgproc ypositionT : " + data.getYpositionT());
+		System.out.println("ctgproc xcountT : " + data.getXcountT());
+		System.out.println("ctgproc ycountT : " + data.getYcountT());
+		System.out.println("ctgproc gridresolutionT : " + data.getGridresolutionT());
+		System.out.println("ctgproc gridradiusT : " + data.getGridradiusT());
 		
-		String insrc = d.getLoad_path();
+		String insrc = data.getLoad_path();
 
 		if (!insrc.substring(insrc.indexOf('.') + 1).equals("txt")) {
 			outputText += "입력파일 에러 : 확장자를 확인하여 주세요(." + insrc.substring(insrc.indexOf('.') + 1) + ")";
@@ -425,12 +425,12 @@ public class CTGProcess implements Runnable{
 		String listsrc = root + "\\ProcessList.lst";
 		String datasrc = root + "\\LANDUSE_CLASSIFY.DAT";
 		try {
-			int x1 = d.getXpositionT();
-			int y1 = d.getYpositionT();
-			int x2 = d.getXcountT();
-			int y2 = d.getYcountT();
-			int gre = d.getGridresolutionT();
-			int gra = d.getGridradiusT();
+			int x1 = data.getXpositionT();
+			int y1 = data.getYpositionT();
+			int x2 = data.getXcountT();
+			int y2 = data.getYcountT();
+			int gre = data.getGridresolutionT();
+			int gra = data.getGridradiusT();
 
 			fileRead(insrc);
 			paramCheck(x2, y2, gre, gra);

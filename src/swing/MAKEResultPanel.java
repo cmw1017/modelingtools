@@ -127,9 +127,18 @@ public class MAKEResultPanel extends JFrame implements PanelTemplete {
 	class MoveListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == complete) {
-				frames.get("main").setVisible();
+			if (e.getSource() == ctgproc) {
 				frames.get("makeres").setUnVisible();
+				frames.get("ctg").setVisible();
+			} else if (e.getSource() == makegeo) {
+				frames.get("makeres").setUnVisible();
+				frames.get("make").setVisible();
+			} else if (e.getSource() == calpost) {
+				frames.get("makeres").setUnVisible();
+				frames.get("post").setVisible();
+			} else if (e.getSource() == complete) {
+				frames.get("makeres").setUnVisible();
+				frames.get("main").setVisible();
 			}
 		}
 	}
