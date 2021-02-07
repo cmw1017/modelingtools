@@ -14,26 +14,26 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 	Map<String, PanelTemplete> frames;
 	
 	// 파일명, 남서 X, Y, GRID X, Y, GRID 해상도, GRID 탐색 반경
-	JFrame frame;
-	JPanel postjp =new JPanel();
-	JLabel title = new JLabel();
-	JLabel content = new JLabel();
-	JLabel hour = new JLabel();
-	JLabel rank = new JLabel();
-	JLabel grid = new JLabel();
-	JTextField hourT = new JTextField();
-	JTextField rankT = new JTextField();
-	JRadioButton gridR = new JRadioButton();
-	Color white = new Color(255,255,255);
-	JButton ctgproc = new RoundedButton("CTGPROC", Color.decode("#D99C9C"), white);
-	JButton makegeo = new RoundedButton("MAKEGEO", Color.decode("#D99C9C"), white);
-	JButton read62 = new RoundedButton("READ62", Color.decode("#D99C9C"), white);
-	JButton smerge = new RoundedButton("SMERGE", Color.decode("#D99C9C"), white);
-	JButton calpost = new RoundedButton("CALPOST 후처리", Color.decode("#DDC3C1"), white);
-	JButton exe = new RoundedButton("실행", Color.decode("#84B1D9"), white, 15);
-	JButton back = new RoundedButton("메인 페이지로", Color.decode("#84B1D9"), white, 20);
-	JButton load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
-	JLabel load_path = new JLabel();
+	private JFrame frame;
+	private JPanel postjp =new JPanel();
+	private JLabel title = new JLabel();
+	private JLabel content = new JLabel();
+	private JLabel hour = new JLabel();
+	private JLabel rank = new JLabel();
+	private JLabel grid = new JLabel();
+	private JTextField hourT = new JTextField();
+	private JTextField rankT = new JTextField();
+	private JRadioButton gridR = new JRadioButton();
+	private Color white = new Color(255,255,255);
+	private JButton ctgproc = new RoundedButton("CTGPROC", Color.decode("#D99C9C"), white);
+	private JButton makegeo = new RoundedButton("MAKEGEO", Color.decode("#D99C9C"), white);
+	private JButton read62 = new RoundedButton("READ62", Color.decode("#D99C9C"), white);
+	private JButton smerge = new RoundedButton("SMERGE", Color.decode("#D99C9C"), white);
+	private JButton calpost = new RoundedButton("CALPOST 후처리", Color.decode("#DDC3C1"), white);
+	private JButton exe = new RoundedButton("실행", Color.decode("#84B1D9"), white, 15);
+	private JButton back = new RoundedButton("메인 페이지로", Color.decode("#84B1D9"), white, 20);
+	private JButton load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
+	private JLabel load_path = new JLabel();
 	
 	public POSTPanel(JFrame frame) {
 		this.frame = frame;
@@ -109,6 +109,8 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 		// 타이틀 및 메뉴 버튼들 끝
 		
 		// content 시작
+		load_path.setText("D:\\Modeling\\CALPUFF 개발프로그램\\sample\\TSERIES_SOX_1HR_CONC_ys.DAT");
+		
 		load.setLocation(200, 350); load.setSize(125, 50);
 		load.addActionListener(new loadListener());
 		load.setFont(new Font("맑은 고딕", Font.BOLD, 15));
@@ -213,10 +215,6 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 			} else if(e.getSource() == exe) {
 				frames.get("post").setUnVisible();
 				frames.get("postres").setVisible();
-				
-//				System.out.println(hourT.getText());
-//				System.out.println(rankT.getText());
-//				System.out.println(gridR.isSelected());
 				
 				Data d = new Data();
 				d.setLoad_path(load_path.getText());

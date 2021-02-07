@@ -21,6 +21,7 @@ public class CTGResultPanel extends JFrame implements PanelTemplete {
 	private JButton calpost = new RoundedButton("CALPOST 후처리", Color.decode("#D99C9C"), white);
 	private JLabel content = new JLabel();
 	private JLabel content2 = new JLabel();
+	private JButton back = new RoundedButton("메인 페이지로", Color.decode("#84B1D9"), white, 20);
 	private JButton complete = new RoundedButton("완료", Color.decode("#84B1D9"), white, 20);
 	private CTGProcess process;
 	
@@ -90,7 +91,12 @@ public class CTGResultPanel extends JFrame implements PanelTemplete {
 		calpost.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		// 타이틀 및 메뉴 버튼들 끝
 	
-		
+		// 이동 버튼 시작
+		back.setLocation(650, 550);
+		back.setSize(150, 50);
+		back.addActionListener(new MoveListener());
+		back.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		back.setVisible(false);
 		complete.setLocation(825, 550); complete.setSize(100, 50);
 		complete.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		complete.addActionListener(new MoveListener());

@@ -90,6 +90,8 @@ public class POSTProcess implements Runnable {
 				date[i] = "";
 			}
 			System.out.println("진행중....");
+			outputText += "진행중....<br/>";
+			content.setText(outputText);
 			while (true) {
 				ch = inStream.read();
 				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1) {
@@ -104,7 +106,9 @@ public class POSTProcess implements Runnable {
 							continue;
 						} else if (str.toString().equals("y(km):")) {
 							if (series1 == reNum) {
-								System.out.println("데이터가 충분하지 않습니다");
+								System.out.println("에러 : 데이터가 충분하지 않습니다");
+								outputText += "에러 : 데이터가 충분하지 않습니다<br/>";
+								content.setText(outputText);
 							}
 							series1 = 0;
 							series2++;
@@ -112,7 +116,9 @@ public class POSTProcess implements Runnable {
 							continue;
 						} else if (str.toString().equals("YYYY")) {
 							if (series1 == reNum) {
-								System.out.println("데이터가 충분하지 않습니다");
+								System.out.println("에러 : 데이터가 충분하지 않습니다");
+								outputText += "에러 : 데이터가 충분하지 않습니다<br/>";
+								content.setText(outputText);
 							}
 							series1 = 0;
 							series2++;
@@ -155,11 +161,15 @@ public class POSTProcess implements Runnable {
 				}
 				if (ch == -1) {
 					System.out.println("읽기 종료");
+					outputText += "읽기 종료<br/>";
+					content.setText(outputText);
 					break;
 				}
 			}
 			if (series3 != datalen) {
-				System.out.println("데이터가 충분하지 않습니다.(현재 데이터 시간 : " + series3 + ")");
+				System.out.println("에러 : 데이터가 충분하지 않습니다.(현재 데이터 시간 : " + series3 + ")");
+				outputText += "에러 : 데이터가 충분하지 않습니다.(현재 데이터 시간 : " + series3 + ")<br/>";
+				content.setText(outputText);
 				inStream.close();
 				return;
 			}
@@ -176,7 +186,7 @@ public class POSTProcess implements Runnable {
 			orderArray = findOrder(conc, datalen, orderNum, reNum);
 			// String listsrc =
 			// ".\\output\\SUMARRY_"+polutid+"_"+hourNum+"HOUR"+"_"+orderNum+"TH_CONC.DAT";
-			String listsrc = "F:\\output\\SUMARRY_" + polutid + "_" + hourNum + "HOUR" + "_" + orderNum + "TH_CONC.DAT";
+			String listsrc = root + "\\SUMARRY_" + polutid + "_" + hourNum + "HOUR" + "_" + orderNum + "TH_CONC.DAT";
 			BufferedWriter outStream = new BufferedWriter(new FileWriter(listsrc));
 			tempstr = "   X       Y      CONC";
 			outStream.write(tempstr, 0, tempstr.length());
@@ -194,7 +204,7 @@ public class POSTProcess implements Runnable {
 			if (hourNum == 1) {
 				// String anlistsrc =
 				// ".\\output\\SUMARRY_"+polutid+"_"+totalhour+"HOUR"+"_1ST_CONC.DAT";
-				String anlistsrc = "F:\\output\\SUMARRY_" + polutid + "_" + totalhour + "HOUR" + "_1ST_CONC.DAT";
+				String anlistsrc = root + "\\SUMARRY_" + polutid + "_" + totalhour + "HOUR" + "_1ST_CONC.DAT";
 				gridAvgData = avgCalc(conc, datalen, reNum);
 				BufferedWriter outStream2 = new BufferedWriter(new FileWriter(anlistsrc));
 				tempstr = "   X       Y      CONC";
@@ -223,7 +233,7 @@ public class POSTProcess implements Runnable {
 			}
 
 			if (answer == 1) {
-				String gridsrc = ".\\output\\GRID_" + polutid + "_" + hourNum + "HOUR" + "_" + orderNum + "TH_CONC.GRD";
+				String gridsrc =  root + "\\GRID_" + polutid + "_" + hourNum + "HOUR" + "_" + orderNum + "TH_CONC.GRD";
 				BufferedWriter outStream3 = new BufferedWriter(new FileWriter(gridsrc));
 				tempstr = "DSAA";
 				outStream3.write(tempstr, 0, tempstr.length());
@@ -254,7 +264,7 @@ public class POSTProcess implements Runnable {
 				}
 				outStream3.close();
 				if (hourNum == 1) {
-					String angridsrc = ".\\output\\GRID_" + polutid + "_" + totalhour + "HOUR" + "_1ST_CONC.GRD";
+					String angridsrc =  root + "\\GRID_" + polutid + "_" + totalhour + "HOUR" + "_1ST_CONC.GRD";
 					BufferedWriter outStream4 = new BufferedWriter(new FileWriter(angridsrc));
 					tempstr = "DSAA";
 					outStream4.write(tempstr, 0, tempstr.length());
@@ -286,13 +296,20 @@ public class POSTProcess implements Runnable {
 					outStream4.close();
 				}
 				System.out.println("작업을 성공적으로 완료하였습니다.");
+				outputText += "작업을 성공적으로 완료하였습니다.<br/>";
+				content.setText(outputText);
 			} else {
 				System.out.println("작업을 성공적으로 완료하였습니다.");
+				outputText += "작업을 성공적으로 완료하였습니다.<br/>";
+				content.setText(outputText);
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		outputText += "완료<br/></html>";
+		content.setText(outputText);
+		complete.setVisible(true);
 	}
 	
 	int[] findOrder(Double[][] conc, int datalen, int orderNum, int reNum) {
@@ -358,6 +375,5 @@ public class POSTProcess implements Runnable {
 	@Override
 	public void run() {
 		this.exet();
-		
 	}
 }
