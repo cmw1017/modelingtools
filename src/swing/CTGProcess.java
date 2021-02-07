@@ -36,6 +36,8 @@ public class CTGProcess implements Runnable{
 	public void mainProcess(int findX, int findY, int cellNumX, int cellNumY, int cellSize, int radius)
 			throws IOException {
 		System.out.print("mainProcess....");
+		outputText += "--- 해상도 값 계산 중 ---<br/>";
+		content.setText(outputText);
 		outputList = new TreeMap<Double, TreeMap<Double, Integer>>();
 		TreeMap<Double, Integer> tempMap2 = new TreeMap<Double, Integer>();
 		HashMap<Integer, Integer> frequencyLU = new HashMap<Integer, Integer>();
@@ -146,6 +148,8 @@ public class CTGProcess implements Runnable{
 	public void dataOutput(int findX, int findY, int cellNumX, int cellNumY, int cellSize, int radius, String datasrc)
 			throws IOException {
 		System.out.print("dataOutput......");
+		outputText += "--- 데이터 파일 작성 중 ---<br/>";
+		content.setText(outputText);
 		tempstr = "--------------------------------------------------------------------------------";
 		outStream.write(tempstr, 0, tempstr.length());
 		outStream.newLine();
@@ -237,7 +241,7 @@ public class CTGProcess implements Runnable{
 		}
 		outStream.close();
 		System.out.print(" End\n");
-		outputText += "작업을 성공적으로 완료하였습니다.</html>";
+		outputText += "&nbsp&nbsp작업을 성공적으로 완료하였습니다.</html>";
 		content.setText(outputText);
 		System.out.println("작업을 성공적으로 완료하였습니다.");
 		// ---------------------------------------------------------------------------------------------------------------------------------
@@ -247,6 +251,8 @@ public class CTGProcess implements Runnable{
 	public void listDataInput(int findX, int findY, int cellNumX, int cellNumY, int cellSize, int radius,
 			String listsrc) throws IOException {
 		System.out.print("listDataInput....");
+		outputText += "--- 리스트 파일 작성 중 ---<br/>";
+		content.setText(outputText);
 		outStream = new BufferedWriter(new FileWriter(listsrc));
 		tempstr = "--- input info -----------------------------------------------------------------";
 		outStream.write(tempstr, 0, tempstr.length());
@@ -283,18 +289,26 @@ public class CTGProcess implements Runnable{
 
 	public void paramCheck(int cellNumX, int cellNumY, int cellSize, int radius) throws IOException {
 		System.out.print("paramCheck....");
+		outputText += "--- 입력값 체크 중 ---<br/>";
+		content.setText(outputText);
 		if (cellNumX < 0 || cellNumY < 0) {
-			System.out.println("Error : CellNum must be positive number");
+			System.out.println("에러 : 셀 개수는 양수이어야 합니다.");
+			outputText += "에러 : 셀 개수는 양수이어야  합니다.<br/>";
+			content.setText(outputText);
 			inStream.close();
 			return;
 		}
 		if (cellSize < 0) {
-			System.out.println("Error : Resolution must be positive number");
+			System.out.println("에러 : 셀 해상도는 양수이어야 합니다.");
+			outputText += "에러 : 셀 해상도는 양수이어야 합니다.<br/>";
+			content.setText(outputText);
 			inStream.close();
 			return;
 		}
 		if (radius < 0) {
-			System.out.println("Error : A Square Side Length must be positive number");
+			System.out.println("에러 : 셀 탐색 반경은 양수이어야 합니다.");
+			outputText += "에러 : 셀 탐색 반경은 양수이어야 합니다.<br/>";
+			content.setText(outputText);
 			inStream.close();
 			return;
 		}
@@ -304,6 +318,8 @@ public class CTGProcess implements Runnable{
 
 	public void fileRead(String insrc) throws IOException {
 		System.out.print("fileRead....");
+		outputText += "--- 파일 읽는 중 ---<br/>";
+		content.setText(outputText);
 		inStream = new FileReader(insrc);
 		int ch, flag = 0, lu = 0, count = 0;
 		double xpos = 0, ypos = 0, tempY = 0, tempX = 0;
@@ -320,7 +336,9 @@ public class CTGProcess implements Runnable{
 					xpos = Double.parseDouble(str.toString());
 					str = new StringBuilder();
 					if (tempX == xpos) { // 중복 값이 있는경우 에러 발생
-						System.out.println("Error : Not Sorted or Exist Overlapped data");
+						System.out.println("에러 : 정렬되있지 않거나 중복된 데이터가 있습니다.");
+						outputText += "에러 : 정렬되있지 않거나 중복된 데이터가 있습니다.<br/>";
+						content.setText(outputText);
 						return;
 					}
 					break;
@@ -336,7 +354,9 @@ public class CTGProcess implements Runnable{
 				}
 				case 3: {
 					if (tempY > ypos || tempX > xpos) { // 정렬 되어있지 않은경우 발생
-						System.out.println("Error : Not Sorted or Exist Overlapped data");
+						System.out.println("에러 : 정렬되있지 않거나 중복된 데이터가 있습니다.");
+						outputText += "에러 : 정렬되있지 않거나 중복된 데이터가 있습니다.<br/>";
+						content.setText(outputText);
 						return;
 					}
 					tempX = xpos;
@@ -362,34 +382,42 @@ public class CTGProcess implements Runnable{
 			str.append((char) ch);
 		}
 		System.out.print(" End\n");
-		outputText += "파일 읽기 완료<br/> 입력 데이터 수" + count + "<br/>";
+		outputText += "--- 파일 읽기 완료 ---<br/> "
+				+ "&nbsp&nbsp입력 데이터 수  : " + count + "<br/>";
 		content.setText(outputText);
 		System.out.println("파일 읽기 완료");
 		System.out.println("입력 데이터 수 : " + count);
 	}
 
 	public void exet() {
-		System.out.println("exet");
-		outputText = "<html>exetctgproc load_path : E:\\atest\\2019_40km(30m)_matched_ys.txt<br/>"
-				+ "ctgproc xpositionT : 378252<br/>" + "ctgproc ypositionT : 3854833<br/>" + "ctgproc xcountT : 40<br/>"
-				+ "ctgproc ycountT : 40<br/>" + "ctgproc gridresolutionT : 1000<br/>"
-				+ "ctgproc gridradiusT : 500<br/>";
+		System.out.println("Exet Start");
+		outputText = "<html> --- 입력 파라미터 ---<br/>"
+				+ "&nbsp&nbsp입력파일 경로 : " + d.getLoad_path() + "<br/>"
+				+ "&nbsp&nbsp남서쪽 x 좌표(m) : " + d.getXpositionT() + "<br/>" 
+				+ "&nbsp&nbsp남서쪽 y 좌표(m) : " + d.getYpositionT() + "<br/>" 
+				+ "&nbsp&nbsp;x 방향 그리드 개수 : " + d.getXcountT() + "<br/>"
+				+ "&nbsp&nbsp;y 방향 그리드 개수 : " + d.getYcountT() + "<br/>" 
+				+ "&nbsp&nbsp그리드 해상도(m) : " + d.getGridresolutionT() + "<br/>"
+				+ "&nbsp&nbsp데이터 탐색 반경-사각형 기준(m) : "+ d.getGridradiusT() + "<br/>";
+		content.setText(outputText);
 
 		System.out.println("ctgproc load_path : " + d.getLoad_path());
-		String insrc = d.getLoad_path();
-
-		if (!insrc.substring(insrc.indexOf('.') + 1).equals("txt")) {
-			System.out.println("확장자를 확인하여 주세요(." + insrc.substring(insrc.indexOf('.') + 1) + ")");
-			content.setText("확장자를 확인해주세요");
-			return;
-		}
-
 		System.out.println("ctgproc xpositionT : " + d.getXpositionT());
 		System.out.println("ctgproc ypositionT : " + d.getYpositionT());
 		System.out.println("ctgproc xcountT : " + d.getXcountT());
 		System.out.println("ctgproc ycountT : " + d.getYcountT());
 		System.out.println("ctgproc gridresolutionT : " + d.getGridresolutionT());
 		System.out.println("ctgproc gridradiusT : " + d.getGridradiusT());
+		
+		String insrc = d.getLoad_path();
+
+		if (!insrc.substring(insrc.indexOf('.') + 1).equals("txt")) {
+			outputText += "입력파일 에러 : 확장자를 확인하여 주세요(." + insrc.substring(insrc.indexOf('.') + 1) + ")";
+			System.out.println("입력파일 에러 : 확장자를 확인하여 주세요(." + insrc.substring(insrc.indexOf('.') + 1) + ")");
+			content.setText(outputText);
+			return;
+		}
+		
 
 		String root = insrc.substring(0, insrc.lastIndexOf("\\"));
 		System.out.println("root : " + root);
@@ -413,8 +441,10 @@ public class CTGProcess implements Runnable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("exet End");
+		System.out.println("Exet End");
 		complete.setVisible(true);
+		outputText += "</html>";
+		content.setText(outputText);
 	}
 
 	@Override

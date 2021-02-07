@@ -242,18 +242,18 @@ class MoveListener implements ActionListener {
 			} else if(e.getSource() == exe) {
 				frames.get("ctg").setUnVisible();
 				frames.get("ctgres").setVisible();
-				//frames.get("ctgres").paintNow();
+				Data d = new Data();
+				d.setGridradiusT(Integer.parseInt(gridradiusT.getText()));
+				d.setGridresolutionT(Integer.parseInt(gridresolutionT.getText()));
+				d.setLoad_path(load_path.getText());
+				d.setXcountT(Integer.parseInt(xcountT.getText()));
+				d.setXpositionT(Integer.parseInt(xpositionT.getText()));
+				d.setYcountT(Integer.parseInt(ycountT.getText()));
+				d.setYpositionT(Integer.parseInt(ypositionT.getText()));
+				frames.get("ctgres").exet(d);
 			}
 			
-			Data d = new Data();
-			d.setGridradiusT(Integer.parseInt(gridradiusT.getText()));
-			d.setGridresolutionT(Integer.parseInt(gridresolutionT.getText()));
-			d.setLoad_path(load_path.getText());
-			d.setXcountT(Integer.parseInt(xcountT.getText()));
-			d.setXpositionT(Integer.parseInt(xpositionT.getText()));
-			d.setYcountT(Integer.parseInt(ycountT.getText()));
-			d.setYpositionT(Integer.parseInt(ypositionT.getText()));
-			frames.get("ctgres").exet(d);
+			
 		}
 	}
 

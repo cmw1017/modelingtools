@@ -3,7 +3,6 @@ package swing;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 import javax.swing.*;
@@ -87,6 +86,8 @@ public class MAKEPanel extends JFrame implements PanelTemplete {
 		// 타이틀 및 메뉴 버튼들 끝
 		
 		// content 시작
+		load_path.setText("D:\\Modeling\\CALPUFF 개발프로그램\\sample\\makegeo.set");
+		
 		load.setLocation(200, 350); load.setSize(125, 50);
 		load.addActionListener(new loadListener());
 		load.setFont(new Font("맑은 고딕", Font.BOLD, 15));
@@ -173,15 +174,9 @@ public class MAKEPanel extends JFrame implements PanelTemplete {
 				} else if(e.getSource() == exe) {
 					frames.get("make").setUnVisible();
 					frames.get("makeres").setVisible();
-					
-					//System.out.println("load_path : "+load_path.getText());
-					try {
-						new MAKEResultPanel().make_logic(load_path.getText());
-					} catch (IOException | InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
+					Data d = new Data();
+					d.setLoad_path(load_path.getText());
+					frames.get("makeres").exet(d);
 				}
 			}
 		}
