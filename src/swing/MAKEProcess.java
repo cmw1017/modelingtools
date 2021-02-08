@@ -9,11 +9,13 @@ public class MAKEProcess implements Runnable {
 	private JLabel content;
 	private JButton complete;
 	private String outputText;
+	private JButton back;
 
-	public MAKEProcess(String load_path, JLabel content, JButton complete) {
+	public MAKEProcess(String load_path, JLabel content, JButton complete, JButton back) {
 		this.load_path = load_path;
 		this.content = content;
 		this.complete = complete;
+		this.back = back;
 	}
 
 	public void exet() throws IOException, InterruptedException {
@@ -33,6 +35,7 @@ public class MAKEProcess implements Runnable {
 			System.out.println("에러 : 확장자를 확인하여 주세요(set 형식이어야 합니다).");
 			outputText += "에러 : 확장자를 확인하여 주세요(set 형식이어야 합니다).<br/>";
 			content.setText(outputText);
+			back.setVisible(true);
 			return;
 		}
 
@@ -525,12 +528,14 @@ public class MAKEProcess implements Runnable {
 			System.out.println("No such file here(" + LU + ")");
 			outputText += "에러 : LandUse 파일이 없습니다.<br/>";
 			content.setText(outputText);
+			back.setVisible(true);
 			return;
 		}
 		if (!Terrfile.isFile()) {
 			System.out.println("No such file here(" + Terrain + ")");
 			outputText += "에러 : Terrain 파일이 없습니다.<br/>";
 			content.setText(outputText);
+			back.setVisible(true);
 			return;
 		}
 
@@ -571,6 +576,7 @@ public class MAKEProcess implements Runnable {
 			System.out.println("에러 : MAKEGEO 프로그램이 설치 되어있지 않거나 변경하였습니다(makegeo.exe)");
 			outputText += "에러 : MAKEGEO 프로그램이 설치 되어있지 않거나 변경하였습니다(makegeo.exe)<br/>";
 			content.setText(outputText);
+			back.setVisible(true);
 			return;
 		}
 	}
@@ -583,12 +589,13 @@ public class MAKEProcess implements Runnable {
 			System.out.println("에러 : IOException");
 			outputText += "에러 : IOException<br/>";
 			content.setText(outputText);
+			back.setVisible(true);
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			System.out.println("에러 : InterruptedException");
 			outputText += "에러 : InterruptedException<br/>";
 			content.setText(outputText);
-			
+			back.setVisible(true);
 		}
 		
 	}

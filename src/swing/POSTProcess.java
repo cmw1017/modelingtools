@@ -15,11 +15,13 @@ public class POSTProcess implements Runnable {
 	private JLabel content;
 	private JButton complete;
 	private String outputText;
+	private JButton back;
 	
-	public POSTProcess(Data data, JLabel content, JButton complete) {
+	public POSTProcess(Data data, JLabel content, JButton complete, JButton back) {
 		this.data = data;
 		this.content = content;
 		this.complete = complete;
+		this.back = back;
 	}
 	
 	public void exet() {
@@ -64,12 +66,13 @@ public class POSTProcess implements Runnable {
 			series1 = 0;
 			totalhour = data.getHourT();
 			orderNum = data.getRankT();
-			datalen = totalhour / hourNum;
+			datalen = totalhour / hourNum; //보통은 1시간으로 나눔
 			if (orderNum > datalen || orderNum == 0) {
 				System.out.println("에러 : 순위가 데이터 개수 범위를 벗어났거나, 0순위를 입력하였습니다.  ( orderNum = " + orderNum + "/ datalen = " + datalen + " )");
 				outputText += "에러 : 순위가 데이터 개수 범위를 벗어났거나, 0순위를 입력하였습니다.  ( orderNum = " + orderNum + "/ datalen = " + datalen + " )<br/>";
 				content.setText(outputText);
 				inStream.close();
+				back.setVisible(true);
 				return;
 			}
 			System.out.println("입력 총 시간 : " + totalhour);
@@ -93,35 +96,37 @@ public class POSTProcess implements Runnable {
 			outputText += "진행중....<br/>";
 			content.setText(outputText);
 			while (true) {
-				ch = inStream.read();
-				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1) {
+				ch = inStream.read(); //한 글자씩 읽음
+				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1) { //  단어를 구분하는 문자가 아닌 경우
 					str.append((char) ch);
 				} else {
 					if (str.length() != 0) {
 						series1++;
-						if (str.toString().equals("x(km):")) {
+						if (str.toString().equals("x(km):")) { // 처음 x 좌표를 읽음 y가 나올때까지 x 좌표의 개수를 셈
 							series1 = 0;
-							series2++;
+							series2++; // 0 -> 1
 							str = new StringBuilder();
 							continue;
-						} else if (str.toString().equals("y(km):")) {
-							if (series1 == reNum) {
-								System.out.println("에러 : 데이터가 충분하지 않습니다");
-								outputText += "에러 : 데이터가 충분하지 않습니다<br/>";
+						} else if (str.toString().equals("y(km):")) { // y 좌표가 시작되면 읽은 x 좌표의 개수와  수용점 개수를 비교
+							if (series1 - 1 != reNum) {
+								System.out.println("에러 : 데이터가 충분하지 않습니다(x 좌표 개수 부족)");
+								outputText += "에러 : 데이터가 충분하지 않습니다(x 좌표 개수 부족)<br/>";
 								content.setText(outputText);
 							}
+							System.out.println("x data 개수 :" + (series1 - 1));
 							series1 = 0;
-							series2++;
+							series2++; // 1 -> 2
 							str = new StringBuilder();
 							continue;
-						} else if (str.toString().equals("YYYY")) {
-							if (series1 == reNum) {
-								System.out.println("에러 : 데이터가 충분하지 않습니다");
-								outputText += "에러 : 데이터가 충분하지 않습니다<br/>";
+						} else if (str.toString().equals("YYYY")) { // 처음 데이터가 시작되는 부분 두 번째 비교(y 좌표 개수 비교)
+							if (series1 - 1 != reNum) {
+								System.out.println("에러 : 데이터가 충분하지 않습니다(y 좌표 개수 부족)");
+								outputText += "에러 : 데이터가 충분하지 않습니다(y 좌표 개수 부족)<br/>";
 								content.setText(outputText);
 							}
+							System.out.println("y data 개수 :" + (series1 - 1));
 							series1 = 0;
-							series2++;
+							series2++; // 2 -> 3
 							str = new StringBuilder();
 							continue;
 						} else if (str.toString().equals("JDY")) {
@@ -134,7 +139,7 @@ public class POSTProcess implements Runnable {
 							continue;
 						}
 
-						switch (series2) {
+						switch (series2) { //데이터 분리
 						case 1: {
 							xcordinate[series1 - 1] = Double.parseDouble(str.toString());
 							break;
@@ -144,12 +149,12 @@ public class POSTProcess implements Runnable {
 							break;
 						}
 						case 3: {
-							if (series1 == 1 || series1 == 2 || series1 == 3) {
-								date[series3] += str.toString() + " ";
+							if (series1 == 1 || series1 == 2 || series1 == 3) { // 처음 날짜를 저장
+								date[series3] += str.toString() + " "; //하나의 문자열로 합침
 							} else {
-								conc[series3][series1 - 4] = Double.parseDouble(str.toString());
+								conc[series3][series1 - 4] = Double.parseDouble(str.toString()); // 농도 데이터는 Double로 변환하여 저장
 							}
-							if (series1 - 3 == reNum) {
+							if (series1 - 3 == reNum) { // 날짜 데이터가 3개 추가되므로 3을 빼줌(하루가 지나감)
 								series3++;
 								series1 = 0;
 							}
@@ -171,6 +176,7 @@ public class POSTProcess implements Runnable {
 				outputText += "에러 : 데이터가 충분하지 않습니다.(현재 데이터 시간 : " + series3 + ")<br/>";
 				content.setText(outputText);
 				inStream.close();
+				back.setVisible(true);
 				return;
 			}
 			inStream.close();
@@ -233,6 +239,13 @@ public class POSTProcess implements Runnable {
 			}
 
 			if (answer == 1) {
+				if(Math.sqrt(reNum) % 1 > 0) {
+					System.out.println("경고 : 입력 수용점의 개수가 제곱수이어야 합니다.");
+					outputText += "경고 : 입력 수용점의 개수가 제곱수이어야 합니다.<br/>";
+					content.setText(outputText);
+					back.setVisible(true);
+					return;
+				}
 				String gridsrc =  root + "\\GRID_" + polutid + "_" + hourNum + "HOUR" + "_" + orderNum + "TH_CONC.GRD";
 				BufferedWriter outStream3 = new BufferedWriter(new FileWriter(gridsrc));
 				tempstr = "DSAA";

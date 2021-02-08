@@ -38,7 +38,8 @@ public class CTGResultPanel extends JFrame implements PanelTemplete {
 		ctgresjp.add(smerge);
 		ctgresjp.add(calpost);
 		ctgresjp.add(title);
-		
+
+		ctgresjp.add(back);
 		ctgresjp.add(complete);
 		
 		ctgresjp.add(content2);
@@ -141,13 +142,16 @@ public class CTGResultPanel extends JFrame implements PanelTemplete {
 				content2.setText("");
 				frames.get("ctgres").setUnVisible();
 				frames.get("main").setVisible();
+			} else if (e.getSource() == back) {
+				frames.get("ctgres").setUnVisible();
+				frames.get("main").setVisible();
 			}
 		}
 	}
 	
 	@Override
 	public void exet(Data data) {
-		process = new CTGProcess(data, content2, complete);
+		process = new CTGProcess(data, content2, complete, back);
 		Thread thread = new Thread(process,"process");
 		thread.start();
 	}

@@ -47,7 +47,8 @@ public class POSTResultPanel extends JFrame implements PanelTemplete {
 		postresjp.add(smerge);
 		postresjp.add(calpost);
 		postresjp.add(title);
-				
+
+		postresjp.add(back);
 		postresjp.add(complete);
 				
 		postresjp.add(content2);
@@ -152,7 +153,7 @@ public class POSTResultPanel extends JFrame implements PanelTemplete {
 
 	@Override
 	public void exet(Data data) {
-		process = new POSTProcess(data, content2, complete);
+		process = new POSTProcess(data, content2, complete, back);
 		Thread thread = new Thread(process,"process");
 		thread.start();
 	}

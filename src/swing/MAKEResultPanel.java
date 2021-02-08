@@ -50,7 +50,8 @@ public class MAKEResultPanel extends JFrame implements PanelTemplete {
 		makeresjp.add(smerge);
 		makeresjp.add(calpost);
 		makeresjp.add(title);
-		
+
+		makeresjp.add(back);
 		makeresjp.add(complete);
 		
 		makeresjp.add(content2);
@@ -146,13 +147,16 @@ public class MAKEResultPanel extends JFrame implements PanelTemplete {
 			} else if (e.getSource() == complete) {
 				frames.get("makeres").setUnVisible();
 				frames.get("main").setVisible();
+			} else if (e.getSource() == back) {
+				frames.get("makeres").setUnVisible();
+				frames.get("main").setVisible();
 			}
 		}
 	}
 
 	@Override
 	public void exet(Data data) {
-		process = new MAKEProcess(data.getLoad_path(), content2, complete);
+		process = new MAKEProcess(data.getLoad_path(), content2, complete, back);
 		Thread thread = new Thread(process,"process");
 		thread.start();
 

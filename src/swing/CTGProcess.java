@@ -26,11 +26,13 @@ public class CTGProcess implements Runnable{
 	private Data data;
 	private JLabel content;
 	private JButton complete;
+	private JButton back;
 	
-	public CTGProcess(Data data, JLabel content, JButton complete){
+	public CTGProcess(Data data, JLabel content, JButton complete, JButton back){
 		this.data = data;
 		this.content = content;
 		this.complete = complete;
+		this.back = back;
 	}
 	
 	public void mainProcess(int findX, int findY, int cellNumX, int cellNumY, int cellSize, int radius)
@@ -296,6 +298,7 @@ public class CTGProcess implements Runnable{
 			outputText += "에러 : 셀 개수는 양수이어야  합니다.<br/>";
 			content.setText(outputText);
 			inStream.close();
+			back.setVisible(true);
 			return;
 		}
 		if (cellSize < 0) {
@@ -303,6 +306,7 @@ public class CTGProcess implements Runnable{
 			outputText += "에러 : 셀 해상도는 양수이어야 합니다.<br/>";
 			content.setText(outputText);
 			inStream.close();
+			back.setVisible(true);
 			return;
 		}
 		if (radius < 0) {
@@ -310,6 +314,7 @@ public class CTGProcess implements Runnable{
 			outputText += "에러 : 셀 탐색 반경은 양수이어야 합니다.<br/>";
 			content.setText(outputText);
 			inStream.close();
+			back.setVisible(true);
 			return;
 		}
 		inStream.close();
@@ -339,6 +344,7 @@ public class CTGProcess implements Runnable{
 						System.out.println("에러 : 정렬되있지 않거나 중복된 데이터가 있습니다.");
 						outputText += "에러 : 정렬되있지 않거나 중복된 데이터가 있습니다.<br/>";
 						content.setText(outputText);
+						back.setVisible(true);
 						return;
 					}
 					break;
@@ -357,6 +363,7 @@ public class CTGProcess implements Runnable{
 						System.out.println("에러 : 정렬되있지 않거나 중복된 데이터가 있습니다.");
 						outputText += "에러 : 정렬되있지 않거나 중복된 데이터가 있습니다.<br/>";
 						content.setText(outputText);
+						back.setVisible(true);
 						return;
 					}
 					tempX = xpos;
@@ -415,6 +422,7 @@ public class CTGProcess implements Runnable{
 			outputText += "입력파일 에러 : 확장자를 확인하여 주세요(." + insrc.substring(insrc.indexOf('.') + 1) + ")";
 			System.out.println("입력파일 에러 : 확장자를 확인하여 주세요(." + insrc.substring(insrc.indexOf('.') + 1) + ")");
 			content.setText(outputText);
+			back.setVisible(true);
 			return;
 		}
 		

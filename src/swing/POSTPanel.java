@@ -109,7 +109,7 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 		// 타이틀 및 메뉴 버튼들 끝
 		
 		// content 시작
-		load_path.setText("D:\\Modeling\\CALPUFF 개발프로그램\\sample\\TSERIES_SOX_1HR_CONC_ys.DAT");
+		load_path.setText("D:\\Modeling\\CALPUFF 개발프로그램\\sample\\TSERIES_SOX_1HR_CONC.DAT");
 		
 		load.setLocation(200, 350); load.setSize(125, 50);
 		load.addActionListener(new loadListener());
@@ -179,7 +179,7 @@ public class POSTPanel extends JFrame implements PanelTemplete {
 	        chooser.setDialogTitle("타이틀"); // 창의 제목
 	        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
 	        
-	        FileNameExtensionFilter filter = new FileNameExtensionFilter("txt", "txt"); // filter 확장자 추가
+	        FileNameExtensionFilter filter = new FileNameExtensionFilter("dat", "dat"); // filter 확장자 추가
 	        chooser.setFileFilter(filter); // 파일 필터를 추가
 	        
 	        int returnVal = chooser.showOpenDialog(null); // 열기용 창 오픈
