@@ -3,17 +3,26 @@ package aermod;
 import java.io.*;
 import java.util.*;
 
+import javax.swing.JLabel;
+
 public class AERMOD implements Runnable{
 	
 	String matter;
 	String[] seires = {"1", "24", "an"};
 	String src = "D:\\Modeling\\AERMOD\\yeosu";
-
+	JLabel produce;
+	JLabel count;
 	Process process = null;
 	ProcessBuilder processBuilder = null;
+	ThreadInfo t_info;
+	int index_thread;
 	
-	public AERMOD(String matter) {
+	public AERMOD(String matter, JLabel  produce, JLabel count, ThreadInfo t_info, int index_thread) {
 		this.matter = matter;
+		this.produce = produce;
+		this.count = count;
+		this.t_info = t_info;
+		this.index_thread = index_thread;
 	}
 	
 	public void ReadyProcess(String matter) throws InterruptedException, IOException{
@@ -50,13 +59,14 @@ public class AERMOD implements Runnable{
 				if (str.contains("+Now Processing Data For Day No.")) {
 					str = str.substring(str.lastIndexOf("No.") + 5, str.length());
 					str = str.substring(0, 3);
-					System.out.println(str + "/" + matter);
+					produce.setText(str + "/365");
 				}
 			}
-			
 			process.waitFor();
 			process.destroy();
-			
+			count.setText(String.valueOf(Integer.parseInt(count.getText()) + 1));
+			t_info.index[index_thread] = false;
+			t_info.current_thread_count--;
 			System.out.println("aermod complete(" + matter + ")");
 		} else {
 			System.out.println("에러 : 모델링 실행파일이 없습니다.(3aermod.exe)");

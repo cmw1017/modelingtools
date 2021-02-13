@@ -24,6 +24,7 @@ public class AerMain extends JFrame {
 		List<String> matters = new ArrayList<String>();
 		matters.add("SO2");
 		matters.add("TSP");
+		matters.add("CO");
 		Data data = new Data();
 		data.setMatters(matters);
 		frames.get("aerres").exet(data);
@@ -38,23 +39,6 @@ public class AerMain extends JFrame {
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
-//		List<String> matters = new ArrayList<String>();
-//		matters.add("SO2");
-//		matters.add("TSP");
-//		Thread[] threads = new Thread[5];
-//		int index = 0;
-//		for(;index < 2; index ++) {
-//			String matter = matters.get(index);
-//			AERMOD aermod = new AERMOD(matter);
-//			threads[index] = new Thread(aermod, matter);
-//			threads[index].start();
-//			Thread.sleep(100);
-//		}
-//
-//		for(;index < 2; index ++) {
-//			threads[index].join();
-//		}
-//		System.out.println("end");
 		new AerMain();
 	}
 

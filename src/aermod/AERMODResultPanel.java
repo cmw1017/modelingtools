@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import javax.swing.*;
 
@@ -20,7 +22,6 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	private JLabel content2 = new JLabel();
 	private JButton back = new RoundedButton("메인페이지로", Color.decode("#84B1D9"), white, 20);
 	private JButton complete = new RoundedButton("완료", Color.decode("#84B1D9"), white, 20);
-	private AERMOD process;
 	private List<String> matters;
 	private String[] header = {"오염물질", "모델링 진행시간", "모델링 횟수"};
 	
@@ -126,16 +127,8 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 		}
 		aerresjp.add(content2);
 		
-//		contents = new String[matters.size()][3];
-//		for(int i =0; i < matters.size(); i++) {
-//			for(int j =0; j < 3; j++) {
-//				if(j == 0) contents[i][j] = matters.get(i);
-//				else contents[i][j] = "0";
-//			}
-//		}
-//		process = new MAKEProcess(data.getLoad_path(), content2, complete, back);
-//		Thread thread = new Thread(process,"process");
-//		thread.start();
-
+		AERMOD_main aermain = new AERMOD_main(matters, matters_label);
+		Thread thread = new Thread(aermain, "aermod_main");
+		thread.start();
 	}
 }
