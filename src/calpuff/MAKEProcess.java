@@ -550,9 +550,9 @@ public class MAKEProcess implements Runnable {
 			process.destroy();
 		}
 
-		File make = new File(root + "\\MAKEGEO\\makegeo.bat");
+		File make = new File(root + "\\MAKEGEO\\aermod.bat");
 		File makedir = new File(root + "\\MAKEGEO");
-//
+
 		String makesrc = make.getAbsolutePath();
 		String makedirsrc = makedir.getAbsolutePath();
 
