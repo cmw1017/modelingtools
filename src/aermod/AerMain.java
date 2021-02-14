@@ -25,6 +25,8 @@ public class AerMain extends JFrame {
 		matters.add("SO2");
 		matters.add("TSP");
 		matters.add("CO");
+		matters.add("PM10");
+		matters.add("NH3");
 		Data data = new Data();
 		data.setMatters(matters);
 		frames.get("aerres").exet(data);

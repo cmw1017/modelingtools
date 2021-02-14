@@ -30,6 +30,7 @@ public class AERMOD implements Runnable{
 		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\3aermod.exe", src + "\\" + matter + "\\").start();
 		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\aermod.bat", src + "\\" + matter + "\\").start();
 		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\aermod_" + matter + ".inp", src + "\\" + matter + "\\").start();
+		process.waitFor();
 		process = new ProcessBuilder("cmd", "/c", "move", src + "\\" +matter + "\\aermod_" + matter + ".inp", src + "\\" +matter + "\\aermod.inp").start();
 		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\AERMOD.PFL", src + "\\" + matter + "\\").start();
 		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\AERMOD.SFC", src + "\\" + matter + "\\").start();
@@ -80,6 +81,7 @@ public class AERMOD implements Runnable{
 	public void run() {
 			try {
 				ReadyProcess(matter);
+				Thread.sleep(10);
 				RunProcess(matter);
 			} catch (IOException e) {
 				e.printStackTrace();
