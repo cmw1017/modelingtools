@@ -1,5 +1,6 @@
 package aermod;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -13,21 +14,30 @@ public class AERMOD_main implements Runnable{
 	
 	private List<String> matters;
 	private JLabel[][] matters_label;
+	private String insrc;
+	private Process process = null;
 	
-	public AERMOD_main(List<String> matters, JLabel[][] matters_label) {
+	public AERMOD_main(List<String> matters, JLabel[][] matters_label, String insrc) {
 		this.matters = matters;
 		this.matters_label = matters_label;
+		this.insrc = insrc;
 	}
 
 	@Override
 	public void run() {
 		try {
+			
+			process = new ProcessBuilder("cmd", "/c", "mkdir", insrc + "\\run").start();
+			process.waitFor();
+			process = new ProcessBuilder("cmd", "/c", "mkdir", insrc + "\\res").start();
+			process.waitFor();
+			process.destroy();
 			// 큐에 입력
 			for(String matter : matters) {
 				queue.add(matter);
 			}
 			Thread[] threads = new Thread[max_thread]; // 최대 쓰레드 개수
-			ThreadInfo t_info = new ThreadInfo();
+			ThreadInfo t_info = new ThreadInfo(max_thread);
 			while(queue.size() != 0) {
 				if(t_info.current_thread_count != max_thread) {
 					String matter = queue.poll();
@@ -52,6 +62,8 @@ public class AERMOD_main implements Runnable{
 				System.out.println("wait" + "_" + t_info.current_thread_count + "_" + queue.size() + "_" + t_info.index[0] + "_" + t_info.index[1]);
 			}
 		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		

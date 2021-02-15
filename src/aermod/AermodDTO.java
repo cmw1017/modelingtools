@@ -1,11 +1,13 @@
 package aermod;
 
 import java.util.List;
+import java.util.Map;
 
-public class Data {
+public class AermodDTO {
 
 	private String load_path;
 	private List<String> matters;
+	private Map<String,Map<String,String>> inpparam;
 	
 	
 	public String getLoad_path() {
@@ -19,6 +21,12 @@ public class Data {
 	}
 	public void setMatters(List<String> matters) {
 		this.matters = matters;
+	}
+	public Map<String,Map<String,String>> getInpparam() {
+		return inpparam;
+	}
+	public void setInpparam(Map<String,Map<String,String>> inpparam) {
+		this.inpparam = inpparam;
 	}
 
 }

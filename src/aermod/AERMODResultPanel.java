@@ -4,10 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 import javax.swing.*;
 
@@ -106,8 +104,8 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	}
 
 	@Override
-	public void exet(Data data) {
-		matters = data.getMatters();
+	public void exet(AermodDTO aermodDTO) {
+		matters = aermodDTO.getMatters();
 		int length = matters.size();
 		
 		JLabel[][] matters_label = new JLabel[length][3];
@@ -126,8 +124,8 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 			}
 		}
 		aerresjp.add(content2);
-		
-		AERMOD_main aermain = new AERMOD_main(matters, matters_label);
+		String insrc = "D:\\Modeling\\AERMOD\\yeosu";
+		AERMOD_main aermain = new AERMOD_main(matters, matters_label, insrc);
 		Thread thread = new Thread(aermain, "aermod_main");
 		thread.start();
 	}

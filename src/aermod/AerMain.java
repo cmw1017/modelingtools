@@ -21,15 +21,45 @@ public class AerMain extends JFrame {
 			frame.setFrames(frames);
 		}
 		
+		// 나중에 지워져야할 부분
 		List<String> matters = new ArrayList<String>();
 		matters.add("SO2");
 		matters.add("TSP");
 		matters.add("CO");
 		matters.add("PM10");
 		matters.add("NH3");
-		Data data = new Data();
-		data.setMatters(matters);
-		frames.get("aerres").exet(data);
+		Map<String,Map<String,String>> inpparam = new HashMap<String,Map<String,String>>();
+		inpparam.put("SO2", new HashMap<String,String>());
+		inpparam.get("SO2").put("@@!1", "SO2");
+		inpparam.get("SO2").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
+		inpparam.get("SO2").put("@@!3", "43168");
+		inpparam.get("SO2").put("@@!4", "47158");
+		inpparam.put("TSP", new HashMap<String,String>());
+		inpparam.get("TSP").put("@@!1", "TSP");
+		inpparam.get("TSP").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
+		inpparam.get("TSP").put("@@!3", "43168");
+		inpparam.get("TSP").put("@@!4", "47158");
+		inpparam.put("CO", new HashMap<String,String>());
+		inpparam.get("CO").put("@@!1", "CO");
+		inpparam.get("CO").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
+		inpparam.get("CO").put("@@!3", "43168");
+		inpparam.get("CO").put("@@!4", "47158");
+		inpparam.put("PM10", new HashMap<String,String>());
+		inpparam.get("PM10").put("@@!1", "PM10");
+		inpparam.get("PM10").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
+		inpparam.get("PM10").put("@@!3", "43168");
+		inpparam.get("PM10").put("@@!4", "47158");
+		inpparam.put("NH3", new HashMap<String,String>());
+		inpparam.get("NH3").put("@@!1", "NH3");
+		inpparam.get("NH3").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
+		inpparam.get("NH3").put("@@!3", "43168");
+		inpparam.get("NH3").put("@@!4", "47158");
+		// 나중에 지워져야할 부분
+		
+		AermodDTO aermodDTO = new AermodDTO();
+		aermodDTO.setMatters(matters);
+		aermodDTO.setInpparam(inpparam);
+		frames.get("aerres").exet(aermodDTO);
 		
 		frames.get("aerres").setVisible();
 
