@@ -3,6 +3,7 @@ package aermod;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 import javax.swing.JLabel;
@@ -13,28 +14,32 @@ public class AERMOD_main implements Runnable{
 	private final int max_thread = 2;
 	
 	private List<String> matters;
+	private Map<String,Map<String,String>> inpparam;
 	private JLabel[][] matters_label;
-	private String insrc;
+	private String base_path;
 	private Process process = null;
 	
-	public AERMOD_main(List<String> matters, JLabel[][] matters_label, String insrc) {
-		this.matters = matters;
+	public AERMOD_main(AermodDTO aermodDTO, JLabel[][] matters_label) {
+		this.base_path = aermodDTO.getBase_path();
+		this.matters = aermodDTO.getMatters();
+		this.inpparam = aermodDTO.getInpparam();
 		this.matters_label = matters_label;
-		this.insrc = insrc;
 	}
 
 	@Override
 	public void run() {
+		
 		try {
-			
-			process = new ProcessBuilder("cmd", "/c", "mkdir", insrc + "\\run").start();
+			process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\run").start();
 			process.waitFor();
-			process = new ProcessBuilder("cmd", "/c", "mkdir", insrc + "\\res").start();
+			process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\res").start();
 			process.waitFor();
 			process.destroy();
 			// 큐에 입력
 			for(String matter : matters) {
 				queue.add(matter);
+				AERPRE aerpre = new AERPRE(matter, inpparam.get(matter), base_path);
+				aerpre.CreateInp();
 			}
 			Thread[] threads = new Thread[max_thread]; // 최대 쓰레드 개수
 			ThreadInfo t_info = new ThreadInfo(max_thread);
@@ -52,7 +57,7 @@ public class AERMOD_main implements Runnable{
 						}
 					}
 					if (index_thread != -1) {
-						AERMOD aermod = new AERMOD(matter, matters_label[num][1], matters_label[num][2], t_info, index_thread);
+						AERMOD aermod = new AERMOD(base_path, matter, matters_label[num][1], matters_label[num][2], t_info, index_thread);
 						threads[index_thread] = new Thread(aermod, matter);
 						threads[index_thread].start();
 						t_info.current_thread_count++;

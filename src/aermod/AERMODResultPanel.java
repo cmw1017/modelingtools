@@ -22,6 +22,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	private JButton complete = new RoundedButton("완료", Color.decode("#84B1D9"), white, 20);
 	private List<String> matters;
 	private String[] header = {"오염물질", "모델링 진행시간", "모델링 횟수"};
+	private Map<String,Map<String,String>> inpparam;
 	
 	
 	public AERMODResultPanel(JFrame frame) {
@@ -106,6 +107,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	@Override
 	public void exet(AermodDTO aermodDTO) {
 		matters = aermodDTO.getMatters();
+		inpparam = aermodDTO.getInpparam();
 		int length = matters.size();
 		
 		JLabel[][] matters_label = new JLabel[length][3];
@@ -124,8 +126,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 			}
 		}
 		aerresjp.add(content2);
-		String insrc = "D:\\Modeling\\AERMOD\\yeosu";
-		AERMOD_main aermain = new AERMOD_main(matters, matters_label, insrc);
+		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label);
 		Thread thread = new Thread(aermain, "aermod_main");
 		thread.start();
 	}

@@ -6,6 +6,7 @@ import java.util.Map;
 public class AermodDTO {
 
 	private String load_path;
+	private String base_path;
 	private List<String> matters;
 	private Map<String,Map<String,String>> inpparam;
 	
@@ -27,6 +28,12 @@ public class AermodDTO {
 	}
 	public void setInpparam(Map<String,Map<String,String>> inpparam) {
 		this.inpparam = inpparam;
+	}
+	public String getBase_path() {
+		return base_path;
+	}
+	public void setBase_path(String base_path) {
+		this.base_path = base_path;
 	}
 
 }

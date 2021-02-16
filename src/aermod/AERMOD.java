@@ -9,7 +9,7 @@ public class AERMOD implements Runnable{
 	
 	String matter;
 	String[] seires = {"1", "24", "an"};
-	String src = "D:\\Modeling\\AERMOD\\yeosu";
+	String base_path;
 	JLabel produce;
 	JLabel count;
 	Process process = null;
@@ -17,7 +17,14 @@ public class AERMOD implements Runnable{
 	ThreadInfo t_info;
 	int index_thread;
 	
-	public AERMOD(String matter, JLabel  produce, JLabel count, ThreadInfo t_info, int index_thread) {
+	// base_path : 기본 파일이 넣어져 있는 경로(에어모드 실행파일, inp base 파일 등..)
+	// matter : 모델링 할 물질 명
+	// produce : 진행 상태를 알려주는 상자
+	// count : 현재 모델링 진행 횟수를 알려주는 상자
+	// t_info : 모든 쓰레드의 정보 및 상태를 가지고 있는 클래스
+	// index_thread : 쓰레드의 사용 상태를 알려주는 변수
+	public AERMOD(String base_path, String matter, JLabel  produce, JLabel count, ThreadInfo t_info, int index_thread) {
+		this.base_path = base_path;
 		this.matter = matter;
 		this.produce = produce;
 		this.count = count;
@@ -25,26 +32,26 @@ public class AERMOD implements Runnable{
 		this.index_thread = index_thread;
 	}
 	
-	public void ReadyProcess(String matter) throws InterruptedException, IOException{
+	public void ReadyProcess() throws InterruptedException, IOException{
 		
-		process = new ProcessBuilder("cmd", "/c", "mkdir", src + "\\run\\" + matter).start();
-		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\3aermod.exe", src + "\\run\\" + matter + "\\").start();
-		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\aermod.bat", src + "\\run\\" + matter + "\\").start();
-		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\aermod_" + matter + ".inp", src + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\run\\" + matter).start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\3aermod.exe", base_path + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\aermod.bat", base_path + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\aermod_" + matter + ".inp", base_path + "\\run\\" + matter + "\\").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "move", src + "\\run\\" +matter + "\\aermod_" + matter + ".inp", src + "\\run\\" +matter + "\\aermod.inp").start();
-		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\AERMOD.PFL", src + "\\run\\" + matter + "\\").start();
-		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\AERMOD.SFC", src + "\\run\\" + matter + "\\").start();
-		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\POINT_" + matter + ".dat", src + "\\run\\" + matter + "\\").start();
-		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\receptor_input.dat", src + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "move", base_path + "\\run\\" +matter + "\\aermod_" + matter + ".inp", base_path + "\\run\\" +matter + "\\aermod.inp").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\AERMOD.PFL", base_path + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\AERMOD.SFC", base_path + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\POINT_" + matter + ".dat", base_path + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\receptor_input.dat", base_path + "\\run\\" + matter + "\\").start();
 		process.waitFor();
 		process.destroy();
 	}
-	public void RunProcess(String matter) throws IOException, InterruptedException {
+	public void RunProcess() throws IOException, InterruptedException {
 
 
-		File aermod = new File(src + "\\run\\" + matter + "\\aermod.bat");
-		File aermoddir = new File(src + "\\run\\" + matter);
+		File aermod = new File(base_path + "\\run\\" + matter + "\\aermod.bat");
+		File aermoddir = new File(base_path + "\\run\\" + matter);
 		String str = null;
 
 		String aermodsrc = aermod.getAbsolutePath();
@@ -73,14 +80,14 @@ public class AERMOD implements Runnable{
 		}
 	}
 	
-	public void FinishProcess(String matter) throws IOException, InterruptedException {
-		process = new ProcessBuilder("cmd", "/c", "mkdir", src + "\\res\\" + matter).start();
+	public void FinishProcess() throws IOException, InterruptedException {
+		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\res\\" + matter).start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\run\\" +matter + "\\" + matter + "_an.FIL", src + "\\res\\" +matter + "\\" + matter + "_an.FIL").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_an.FIL", base_path + "\\res\\" +matter + "\\" + matter + "_an.FIL").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\run\\" +matter + "\\" + matter + "_24.FIL", src + "\\res\\" +matter + "\\" + matter + "_24.FIL").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_24.FIL", base_path + "\\res\\" +matter + "\\" + matter + "_24.FIL").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", src + "\\run\\" +matter + "\\" + matter + "_1.FIL", src + "\\res\\" +matter + "\\" + matter + "_1.FIL").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_1.FIL", base_path + "\\res\\" +matter + "\\" + matter + "_1.FIL").start();
 		process.waitFor();
 		process.destroy();
 		
@@ -93,11 +100,11 @@ public class AERMOD implements Runnable{
 	@Override
 	public void run() {
 			try {
-				ReadyProcess(matter);
+				ReadyProcess();
 				Thread.sleep(10);
-				RunProcess(matter);
+				RunProcess();
 				Thread.sleep(10);
-				FinishProcess(matter);
+				FinishProcess();
 				Thread.sleep(10);
 			} catch (IOException e) {
 				e.printStackTrace();

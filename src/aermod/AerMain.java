@@ -22,6 +22,7 @@ public class AerMain extends JFrame {
 		}
 		
 		// 나중에 지워져야할 부분
+		String base_path = "D:\\Modeling\\AERMOD\\yeosu";
 		List<String> matters = new ArrayList<String>();
 		matters.add("SO2");
 		matters.add("TSP");
@@ -57,6 +58,7 @@ public class AerMain extends JFrame {
 		// 나중에 지워져야할 부분
 		
 		AermodDTO aermodDTO = new AermodDTO();
+		aermodDTO.setBase_path(base_path);
 		aermodDTO.setMatters(matters);
 		aermodDTO.setInpparam(inpparam);
 		frames.get("aerres").exet(aermodDTO);
