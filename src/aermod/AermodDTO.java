@@ -9,6 +9,7 @@ public class AermodDTO {
 	private String base_path;
 	private List<String> matters;
 	private Map<String,Map<String,String>> inpparam;
+	private Map<String,Map<String,Double>> criteria;
 	
 	
 	public String getLoad_path() {
@@ -34,6 +35,12 @@ public class AermodDTO {
 	}
 	public void setBase_path(String base_path) {
 		this.base_path = base_path;
+	}
+	public Map<String,Map<String,Double>> getCriteria() {
+		return criteria;
+	}
+	public void setCriteria(Map<String,Map<String,Double>> criteria) {
+		this.criteria = criteria;
 	}
 
 }

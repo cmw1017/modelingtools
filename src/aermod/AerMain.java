@@ -55,12 +55,34 @@ public class AerMain extends JFrame {
 		inpparam.get("NH3").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
 		inpparam.get("NH3").put("@@!3", "43168");
 		inpparam.get("NH3").put("@@!4", "47158");
+		Map<String,Map<String,Double>> criteria = new HashMap<String,Map<String,Double>>();
+		criteria.put("SO2", new HashMap<String, Double>());
+		criteria.get("SO2").put("1", 100.00);
+		criteria.get("SO2").put("24", 20.00);
+		criteria.get("SO2").put("an", 5.00);
+		criteria.put("TSP", new HashMap<String, Double>());
+		criteria.get("TSP").put("1", 200.00);
+		criteria.get("TSP").put("24", 20.00);
+		criteria.get("TSP").put("an", 5.00);
+		criteria.put("CO", new HashMap<String, Double>());
+		criteria.get("CO").put("1", 200.00);
+		criteria.get("CO").put("24", 10.00);
+		criteria.get("CO").put("an", 5.00);
+		criteria.put("PM10", new HashMap<String, Double>());
+		criteria.get("PM10").put("1", 200.00);
+		criteria.get("PM10").put("24", 20.00);
+		criteria.get("PM10").put("an", 5.00);
+		criteria.put("NH3", new HashMap<String, Double>());
+		criteria.get("NH3").put("1", 200.00);
+		criteria.get("NH3").put("24", 20.00);
+		criteria.get("NH3").put("an", 1.00);
 		// 나중에 지워져야할 부분
 		
 		AermodDTO aermodDTO = new AermodDTO();
 		aermodDTO.setBase_path(base_path);
 		aermodDTO.setMatters(matters);
 		aermodDTO.setInpparam(inpparam);
+		aermodDTO.setCriteria(criteria);
 		frames.get("aerres").exet(aermodDTO);
 		
 		frames.get("aerres").setVisible();

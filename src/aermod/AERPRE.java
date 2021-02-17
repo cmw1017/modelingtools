@@ -74,5 +74,9 @@ public class AERPRE {
 			e.printStackTrace();
 		}
 	}
+	
+	public void RunProcess() {
+		CreateInp();
+	}
 
 }

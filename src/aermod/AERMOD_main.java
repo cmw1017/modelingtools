@@ -15,6 +15,7 @@ public class AERMOD_main implements Runnable{
 	
 	private List<String> matters;
 	private Map<String,Map<String,String>> inpparam;
+	private Map<String,Map<String,Double>> criteria;
 	private JLabel[][] matters_label;
 	private String base_path;
 	private Process process = null;
@@ -24,6 +25,7 @@ public class AERMOD_main implements Runnable{
 		this.matters = aermodDTO.getMatters();
 		this.inpparam = aermodDTO.getInpparam();
 		this.matters_label = matters_label;
+		this.criteria = aermodDTO.getCriteria();
 	}
 
 	@Override
@@ -39,7 +41,7 @@ public class AERMOD_main implements Runnable{
 			for(String matter : matters) {
 				queue.add(matter);
 				AERPRE aerpre = new AERPRE(matter, inpparam.get(matter), base_path);
-				aerpre.CreateInp();
+				aerpre.RunProcess();
 			}
 			Thread[] threads = new Thread[max_thread]; // 최대 쓰레드 개수
 			ThreadInfo t_info = new ThreadInfo(max_thread);
@@ -57,7 +59,7 @@ public class AERMOD_main implements Runnable{
 						}
 					}
 					if (index_thread != -1) {
-						AERMOD aermod = new AERMOD(base_path, matter, matters_label[num][1], matters_label[num][2], t_info, index_thread);
+						AERMOD aermod = new AERMOD(base_path, matter, criteria.get(matter), matters_label[num][1], matters_label[num][2], t_info, index_thread, queue);
 						threads[index_thread] = new Thread(aermod, matter);
 						threads[index_thread].start();
 						t_info.current_thread_count++;

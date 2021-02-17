@@ -4,22 +4,29 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AERPOST {
 
-	String insrc;
+	String base_path;
+	String matter;
+	String[] series = {"1", "24", "an"};
+	Map<String, Double> criteria;
 	
-	public AERPOST(String insrc) {
-		this.insrc = insrc;
+	public AERPOST(String base_path, String matter, Map<String, Double> criteria) {
+		this.base_path = base_path;
+		this.matter = matter;
+		this.criteria = criteria;
 	}
 	
-	public double exet() {
+	public double ReadData(String series) {
 		double maxconc = -1;
 		try {
 			int ch, series1 = 0, series2 = 0; // serise1 : 데이터 종류 구분, series2 : 데이터 개수 구분
 			int flag = 0; // 데이터 읽기 시작 플래그
-			Reader inStream = new FileReader(insrc);
+			Reader inStream = new FileReader(base_path + "\\res\\" +matter + "\\" + matter + "_"+ series+".FIL");
 			StringBuilder str = new StringBuilder();
 			List<Double> conc = new ArrayList<Double>();
 			
@@ -36,7 +43,7 @@ public class AERPOST {
 						}
 						if(flag == 1) series1++;
 						if(series1 == 3) {
-							System.out.println(str);
+//							System.out.println(str);
 							conc.add(Double.parseDouble(str.toString()));
 							series2++;
 						}
@@ -45,13 +52,13 @@ public class AERPOST {
 					if(ch == 13  || ch == 10) series1 = 0;
 				}
 				if (ch == -1) {
-					System.out.println("읽기 종료");
+					System.out.println("< FIL read complete >");
 					System.out.println("데이터 개수 : " + series2);
 					break;
 				}
 			}
 			maxconc = findMax(conc);
-			System.out.println(maxconc);
+//			System.out.println(maxconc);
 			inStream.close();
 			return maxconc;
 		} catch(IOException e) {
@@ -68,5 +75,13 @@ public class AERPOST {
 			}
 		}
 		return max;
+	}
+	
+	public boolean RunProcess() {
+		for(String time : series) {
+			if(ReadData(time) > criteria.get(time)) return true;
+		}
+		return false;
+		
 	}
 }
