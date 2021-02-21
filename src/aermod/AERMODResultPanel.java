@@ -105,27 +105,30 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 
 	@Override
 	public void exet(AermodDTO aermodDTO) {
-		matters = aermodDTO.getMatters();
-		int length = matters.size();
 		
-		JLabel[][] matters_label = new JLabel[length][3];
-		for(int i = 0; i < length; i++) {
-			for(int j = 0; j < 3; j++) {
-				matters_label[i][j] = new JLabel();
-				matters_label[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-				matters_label[i][j].setOpaque(true);
-				matters_label[i][j].setBackground(Color.decode("#D0D8DA"));
-				matters_label[i][j].setFont(new Font("맑은 고딕", Font.BOLD, 15));
-				matters_label[i][j].setLocation(50 + 150 * j, 175 + 50 * i);
-				matters_label[i][j].setSize(150, 50);
-				if(j ==0) matters_label[i][j].setText(matters.get(i));
-				else matters_label[i][j].setText("0");
-				aerresjp.add(matters_label[i][j]);
-			}
-		}
-		aerresjp.add(content2);
-		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label);
-		Thread thread = new Thread(aermain, "aermod_main");
-		thread.start();
+		AERPRE aerpre = new AERPRE(aermodDTO.getMatters().get(0), aermodDTO.getInpparam().get("SO2"), aermodDTO.getBase_path());
+		aerpre.CreateSource();
+//		matters = aermodDTO.getMatters();
+//		int length = matters.size();
+//		
+//		JLabel[][] matters_label = new JLabel[length][3];
+//		for(int i = 0; i < length; i++) {
+//			for(int j = 0; j < 3; j++) {
+//				matters_label[i][j] = new JLabel();
+//				matters_label[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+//				matters_label[i][j].setOpaque(true);
+//				matters_label[i][j].setBackground(Color.decode("#D0D8DA"));
+//				matters_label[i][j].setFont(new Font("맑은 고딕", Font.BOLD, 15));
+//				matters_label[i][j].setLocation(50 + 150 * j, 175 + 50 * i);
+//				matters_label[i][j].setSize(150, 50);
+//				if(j ==0) matters_label[i][j].setText(matters.get(i));
+//				else matters_label[i][j].setText("0");
+//				aerresjp.add(matters_label[i][j]);
+//			}
+//		}
+//		aerresjp.add(content2);
+//		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label);
+//		Thread thread = new Thread(aermain, "aermod_main");
+//		thread.start();
 	}
 }
