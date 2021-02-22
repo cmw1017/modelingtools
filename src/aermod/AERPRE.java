@@ -88,7 +88,6 @@ public class AERPRE {
 			int ch;
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
 			InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\111.csv"),"euc-kr");
-//			BufferedWriter outStream = new BufferedWriter(new FileWriter(base_path + "\\run\\aermod_" + matter + ".inp"));
 			StringBuilder str = new StringBuilder();
 			
 			while (true) {
@@ -112,32 +111,45 @@ public class AERPRE {
 						stack_info.add(new HashMap<String, Double>());
 					}
 					if (str.length() != 0) {
-//						outStream.write(str.toString(), 0, str.toString().length());
 						str = new StringBuilder();
 					}
 					if (ch == -1) {
-//						System.out.println("complete create INP file(" + matter + ")");
 						break;
 					}
-//					outStream.write(String.valueOf((char)ch), 0, String.valueOf((char)ch).length());
 				}
 				
 			}
 			inStream.close();
 			stack_info.remove(series2-1);
 			
-			for(String temp_str : stack_header) {
-				System.out.print(temp_str + " ");
-			}
-			System.out.println("");
-			for(Map<String,Double> temp_map : stack_info) {
-				for(String temp_str : stack_header) {
-					System.out.print(temp_map.get(temp_str) + " ");
+//			for(String temp_str : stack_header) {
+//				System.out.print(temp_str + " ");
+//			}
+//			System.out.println("");
+			if(stack_header.indexOf(matter) == -1) System.out.println("에러");
+			BufferedWriter outStream = new BufferedWriter(new FileWriter(base_path + "\\run\\aermod_" + matter + ".inp"));
+			for (Map<String, Double> temp_map : stack_info) {
+				if (temp_map.get(matter) != 0) {
+					String source1 = "SO LOCATION  "
+							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0)))))
+							+ "    POINT" + String.format("%11.2f", temp_map.get(stack_header.get(1)))
+							+ String.format("%11.2f", temp_map.get(stack_header.get(2))) + String.format("%4d",
+									Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(3))))))
+							+ "\n";
+					String source2 = "SO SRCPARAM  "
+							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0))))) + "    "
+							+ String.format("%7.4f",
+									temp_map.get(stack_header.get(9)) * temp_map.get(matter) / 1000 / 60)
+							+ String.format("%8.2f", temp_map.get(stack_header.get(5)))
+							+ String.format("%8.2f", temp_map.get(stack_header.get(6)) + 273.15)
+							+ String.format("%10.5f", temp_map.get(stack_header.get(7)))
+							+ String.format("%5.1f", temp_map.get(stack_header.get(8)))
+							+ "\n";
+					outStream.write(source1, 0, source1.length());
+					outStream.write(source2, 0, source2.length());
 				}
-				System.out.println("");
 			}
-			
-//			outStream.close();
+			outStream.close();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}

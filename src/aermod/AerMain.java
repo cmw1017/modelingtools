@@ -22,12 +22,14 @@ public class AerMain extends JFrame {
 		}
 		
 		// 나중에 지워져야할 부분
+		// SO2 CO NO2 Pb Benzene PM-10 Zn NH3 CS2 Cr Hg Cu Vinylchloride H2S Dichloromethane TCE As Ni Cd Br F HCN HCl Phenol Formaldehyde
+
 		String base_path = "D:\\Modeling\\AERMOD\\yeosu";
 		List<String> matters = new ArrayList<String>();
 		matters.add("SO2");
 		matters.add("TSP");
 		matters.add("CO");
-		matters.add("PM10");
+		matters.add("PM-10");
 		matters.add("NH3");
 		Map<String,Map<String,String>> inpparam = new HashMap<String,Map<String,String>>();
 		inpparam.put("SO2", new HashMap<String,String>());
@@ -45,11 +47,11 @@ public class AerMain extends JFrame {
 		inpparam.get("CO").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
 		inpparam.get("CO").put("@@!3", "43168");
 		inpparam.get("CO").put("@@!4", "47158");
-		inpparam.put("PM10", new HashMap<String,String>());
-		inpparam.get("PM10").put("@@!1", "PM10");
-		inpparam.get("PM10").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
-		inpparam.get("PM10").put("@@!3", "43168");
-		inpparam.get("PM10").put("@@!4", "47158");
+		inpparam.put("PM-10", new HashMap<String,String>());
+		inpparam.get("PM-10").put("@@!1", "PM10");
+		inpparam.get("PM-10").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
+		inpparam.get("PM-10").put("@@!3", "43168");
+		inpparam.get("PM-10").put("@@!4", "47158");
 		inpparam.put("NH3", new HashMap<String,String>());
 		inpparam.get("NH3").put("@@!1", "NH3");
 		inpparam.get("NH3").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
@@ -68,10 +70,10 @@ public class AerMain extends JFrame {
 		criteria.get("CO").put("1", 200.00);
 		criteria.get("CO").put("24", 10.00);
 		criteria.get("CO").put("an", 5.00);
-		criteria.put("PM10", new HashMap<String, Double>());
-		criteria.get("PM10").put("1", 200.00);
-		criteria.get("PM10").put("24", 20.00);
-		criteria.get("PM10").put("an", 5.00);
+		criteria.put("PM-10", new HashMap<String, Double>());
+		criteria.get("PM-10").put("1", 200.00);
+		criteria.get("PM-10").put("24", 20.00);
+		criteria.get("PM-10").put("an", 5.00);
 		criteria.put("NH3", new HashMap<String, Double>());
 		criteria.get("NH3").put("1", 200.00);
 		criteria.get("NH3").put("24", 20.00);

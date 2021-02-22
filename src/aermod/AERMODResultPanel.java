@@ -106,7 +106,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	@Override
 	public void exet(AermodDTO aermodDTO) {
 		
-		AERPRE aerpre = new AERPRE(aermodDTO.getMatters().get(0), aermodDTO.getInpparam().get("SO2"), aermodDTO.getBase_path());
+		AERPRE aerpre = new AERPRE(aermodDTO.getMatters().get(3), aermodDTO.getInpparam().get("PM-10"), aermodDTO.getBase_path());
 		aerpre.CreateSource();
 //		matters = aermodDTO.getMatters();
 //		int length = matters.size();
