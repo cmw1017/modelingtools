@@ -26,8 +26,6 @@ public class AerMain extends JFrame {
 		
 		// 나중에 지워져야할 부분
 		// SO2 CO NO2 Pb Benzene PM-10 Zn NH3 CS2 Cr Hg Cu Vinylchloride H2S Dichloromethane TCE As Ni Cd Br F HCN HCl Phenol Formaldehyde
-
-//		String base_path = "D:\\Modeling\\AERMOD\\yeosu";
 //		List<String> matters = new ArrayList<String>();
 //		matters.add("SO2");
 //		matters.add("TSP");
@@ -82,16 +80,18 @@ public class AerMain extends JFrame {
 //		criteria.get("NH3").put("24", 20.00);
 //		criteria.get("NH3").put("an", 1.00);
 //		
-		AermodDTO aermodDTO = new AermodDTO();
-//		aermodDTO.setBase_path(base_path);
+
 //		aermodDTO.setMatters(matters);
 //		aermodDTO.setInpparam(inpparam);
 //		aermodDTO.setCriteria(criteria);
 //		frames.get("arein").exet(aermodDTO);
 		// 나중에 지워져야할 부분
 		
-		frames.get("aerpol").setVisible();
-		frames.get("aerpol").exet(aermodDTO);
+		String base_path = "D:\\Modeling\\AERMOD\\yeosu";
+		AermodDTO aermodDTO = new AermodDTO();
+		aermodDTO.setBase_path(base_path);
+		frames.get("aerin").setVisible();
+		frames.get("aerin").exet(aermodDTO);
 		
 		frame.setTitle("AERMOD");
 		frame.setSize(1000, 700);

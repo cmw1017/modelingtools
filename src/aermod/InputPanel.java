@@ -3,6 +3,7 @@ package aermod;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -14,6 +15,9 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
 	public static final PanelTemplete CTGResultPanel = null;
 	Map<String, PanelTemplete> frames;
+	private Process process = null;
+	String base_path;
+	String temp_path[] = new String[3];
 	
 	JFrame frame;
 	private Color white = new Color(255,255,255);
@@ -133,6 +137,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		
 		next.setLocation(800, 570); next.setSize(150, 50);
 		next.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		next.addActionListener(new MoveListener());
 		
 	}
 	
@@ -165,8 +170,10 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	        chooser.setAcceptAllFileFilterUsed(true);   // Fileter 모든 파일 적용 
 	        chooser.setDialogTitle("타이틀"); // 창의 제목
 	        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
-	        
-	        FileNameExtensionFilter filter = new FileNameExtensionFilter("txt", "txt"); // filter 확장자 추가
+	        FileNameExtensionFilter filter = new FileNameExtensionFilter("dxf", "dxf"); // filter 확장자 추가
+	        if (e.getSource() == source_load) {
+				filter = new FileNameExtensionFilter("csv", "csv"); // filter 확장자 추가
+			}
 	        chooser.setFileFilter(filter); // 파일 필터를 추가
 	        
 	        int returnVal = chooser.showOpenDialog(null); // 열기용 창 오픈
@@ -175,10 +182,13 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	            folderPath = chooser.getSelectedFile().toString();
 	            if (e.getSource() == topy_load) {
 	            	topy_txt.setText(folderPath);
+	            	temp_path[0] = folderPath;
 				} else if (e.getSource() == boundary_load) {
 	            	boundary_txt.setText(folderPath);
+	            	temp_path[1] = folderPath;
 				} else if (e.getSource() == source_load) {
 					source_txt.setText(folderPath);
+	            	temp_path[2] = folderPath;
 				}
 	        }else if(returnVal == JFileChooser.CANCEL_OPTION){ // 취소를 클릭
 	            System.out.println("cancel"); 
@@ -194,10 +204,29 @@ class MoveListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-//			if (e.getSource() == makegeo) {
-//				frames.get("ctg").setUnVisible();
-//				frames.get("make").setVisible();
-//			} 
+			if (e.getSource() == next) {
+				for(String temp : temp_path) {
+					if(temp == null) {
+						System.out.println("입력자료가 충분하지 않습니다.");
+						return;
+					}
+				}
+				frames.get("aerin").setUnVisible();
+				frames.get("aermet").setVisible();
+				try {
+					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[0], base_path + "\\temp\\topy.dxf").start();
+					process.waitFor();
+					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[1], base_path + "\\temp\\boundary.dxf").start();
+					process.waitFor();
+					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[2], base_path + "\\temp\\source.csv").start();
+					process.waitFor();
+					process.destroy();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			} 
 			
 			
 		}
@@ -205,7 +234,20 @@ class MoveListener implements ActionListener {
 
 	@Override
 	public void exet(AermodDTO data) {
-		// TODO Auto-generated method stub
+		base_path = data.getBase_path();
+		try {
+		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\run").start();
+		process.waitFor();
+		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\res").start();
+		process.waitFor();
+		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\temp").start();
+		process.waitFor();
+		process.destroy();
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 }

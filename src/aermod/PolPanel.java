@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.*;
 
+import aermod.MeteoPanel.MoveListener;
 import calpuff.RoundedButton;
 
 public class PolPanel extends JFrame implements PanelTemplete {
@@ -55,6 +56,7 @@ public class PolPanel extends JFrame implements PanelTemplete {
 		
 		next.setLocation(800, 570); next.setSize(150, 50);
 		next.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		next.addActionListener(new MoveListener());
 		
 	}
 	
@@ -91,10 +93,10 @@ class MoveListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-//			if (e.getSource() == makegeo) {
-//				frames.get("ctg").setUnVisible();
-//				frames.get("make").setVisible();
-//			} 
+			if (e.getSource() == next) {
+				frames.get("aerpol").setUnVisible();
+				frames.get("aerres").setVisible();
+			} 
 			
 			
 		}

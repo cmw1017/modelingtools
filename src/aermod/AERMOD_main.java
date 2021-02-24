@@ -18,7 +18,6 @@ public class AERMOD_main implements Runnable{
 	private Map<String,Map<String,Double>> criteria;
 	private JLabel[][] matters_label;
 	private String base_path;
-	private Process process = null;
 	
 	public AERMOD_main(AermodDTO aermodDTO, JLabel[][] matters_label) {
 		this.base_path = aermodDTO.getBase_path();
@@ -32,11 +31,6 @@ public class AERMOD_main implements Runnable{
 	public void run() {
 		
 		try {
-			process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\run").start();
-			process.waitFor();
-			process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\res").start();
-			process.waitFor();
-			process.destroy();
 			// 큐에 입력
 			for(String matter : matters) {
 				queue.add(matter);
@@ -69,8 +63,6 @@ public class AERMOD_main implements Runnable{
 				System.out.println("wait" + "_" + t_info.current_thread_count + "_" + queue.size() + "_" + t_info.index[0] + "_" + t_info.index[1]);
 			}
 		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
