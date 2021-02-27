@@ -18,18 +18,26 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	String base_path;
 	String temp_path[] = new String[3];
 	AermodDTO data;
+	String sido[] = {"서울특별시","인천광역시","경기도"};
 	
 	JFrame frame;
 	private Color white = new Color(255,255,255);
 	JPanel aerinjp = new JPanel();
-	ImagePanel title = new ImagePanel("D:\\Modeling\\AERMOD\\aermod\\resource\\Step1.png", 1000, 133);
+	ImagePanel title = new ImagePanel("D:\\Modeling\\AERMOD\\aermod\\resource\\Step1.png", 1000, 130);
 	JLabel content = new JLabel();
 	JLabel company = new JLabel();
 	JLabel company_lat = new JLabel();
 	JLabel company_lon = new JLabel();
 	JTextField company_lat_txt = new JTextField();
 	JTextField company_lon_txt = new JTextField();
+	JLabel company_sido = new JLabel();
+	JLabel company_sigun = new JLabel();
+	JLabel company_gu = new JLabel();
+	JComboBox<String> company_sido_txt = new JComboBox<String>(sido);
+	JComboBox<String> company_sigun_txt = new JComboBox<String>(sido);
+	JComboBox<String> company_gu_txt = new JComboBox<String>(sido);
 	JLabel ksic = new JLabel();
+	JLabel terrain = new JLabel();
 	JLabel topy = new JLabel();
 	JTextField topy_txt = new JTextField();
 	JButton topy_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
@@ -52,16 +60,22 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		// 프레임
 		aerinjp.add(title);
 		
-		
 		aerinjp.add(company);
 		aerinjp.add(company_lat);
 		aerinjp.add(company_lat_txt);
 		aerinjp.add(company_lon);
 		aerinjp.add(company_lon_txt);
+		aerinjp.add(company_sido);
+		aerinjp.add(company_sido_txt);
+		aerinjp.add(company_sigun);
+		aerinjp.add(company_sigun_txt);
+		aerinjp.add(company_gu);
+		aerinjp.add(company_gu_txt);
 		
 		
 		aerinjp.add(ksic);
-		
+
+		aerinjp.add(terrain);
 		aerinjp.add(topy);
 		aerinjp.add(topy_txt);
 		aerinjp.add(topy_load);
@@ -69,73 +83,92 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		aerinjp.add(boundary_txt);
 		aerinjp.add(boundary_load);
 		
-		aerinjp.add(source);
-		aerinjp.add(source_txt);
-		aerinjp.add(source_load);
+//		aerinjp.add(source);
+//		aerinjp.add(source_txt);
+//		aerinjp.add(source_load);
 		
 		aerinjp.add(next);
 		
 		aerinjp.add(content);
 		
-		title.setLocation(0, 0); title.setSize(1000, 133);
+		title.setLocation(0, 0); title.setSize(1000, 130);
 		
 		content.setHorizontalAlignment(SwingConstants.CENTER);
 		content.setVerticalAlignment(SwingConstants.CENTER);
 		content.setOpaque(true);
 		content.setBackground(Color.decode("#D0D8DA"));
-		content.setLocation(0, 100); content.setSize(1000, 600);
+		content.setLocation(0, 130); content.setSize(1000, 670);
 		
-		company.setLocation(100, 125); company.setSize(150, 50);
-		company.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		company.setText("사업장 위치 정보 입력");
-		company_lat.setLocation(300, 125); company_lat.setSize(50, 50);
+		
+		company.setLocation(50, 150); company.setSize(200, 50);
+		company.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		company.setText("사업장 정보 입력");
+		company_lat.setLocation(150, 200); company_lat.setSize(50, 50);
 		company_lat.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		company_lat.setText("위도");
-		company_lat_txt.setLocation(350, 135); company_lat_txt.setSize(150, 30);
+		company_lat_txt.setLocation(200, 210); company_lat_txt.setSize(100, 30);
 		company_lat_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		company_lat_txt.setText("");
-		company_lon.setLocation(500, 125); company_lon.setSize(100, 50);
+		company_lon.setLocation(350, 200); company_lon.setSize(50, 50);
 		company_lon.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		company_lon.setText("  ,      경도");
-		company_lon_txt.setLocation(600, 135); company_lon_txt.setSize(150, 30);
+		company_lon.setText("경도");
+		company_lon_txt.setLocation(400, 210); company_lon_txt.setSize(100, 30);
 		company_lon_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		company_lon_txt.setText("");
 		
-		ksic.setLocation(100, 200); ksic.setSize(150, 50);
+		company_sido.setLocation(150, 275); company_sido.setSize(50, 50);
+		company_sido.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		company_sido.setText("시도");
+		company_sido_txt.setLocation(200, 285); company_sido_txt.setSize(150, 30);
+		company_sido_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		company_sigun.setLocation(400, 275); company_sigun.setSize(50, 50);
+		company_sigun.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		company_sigun.setText("시군구");
+		company_sigun_txt.setLocation(460, 285); company_sigun_txt.setSize(150, 30);
+		company_sigun_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		company_gu.setLocation(650, 275); company_gu.setSize(50, 50);
+		company_gu.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		company_gu.setText("구");
+		company_gu_txt.setLocation(680, 285); company_gu_txt.setSize(150, 30);
+		company_gu_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		
+		ksic.setLocation(150, 350); ksic.setSize(150, 50);
 		ksic.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		ksic.setText("산업 분류 선택");
 		
-		topy.setLocation(100, 310); topy.setSize(200, 30);
+		terrain.setLocation(50, 420); terrain.setSize(200, 30);
+		terrain.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		terrain.setText("지형자료 입력");
+		topy.setLocation(150, 470); topy.setSize(200, 30);
 		topy.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		topy.setText("지형도(.dxf)");
-		topy_txt.setLocation(300, 310); topy_txt.setSize(350, 30);
+		topy_txt.setLocation(350, 470); topy_txt.setSize(350, 30);
 		topy_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		topy_txt.setText("");
-		topy_load.setLocation(700, 310); topy_load.setSize(150, 30);
+		topy_load.setLocation(750, 470); topy_load.setSize(150, 30);
 		topy_load.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		topy_load.addActionListener(new loadListener());
 		
-		boundary.setLocation(100, 410); boundary.setSize(200, 30);
+		boundary.setLocation(150, 570); boundary.setSize(200, 30);
 		boundary.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		boundary.setText("부지 경계(.dxf)");
-		boundary_txt.setLocation(300, 410); boundary_txt.setSize(350, 30);
+		boundary_txt.setLocation(350, 570); boundary_txt.setSize(350, 30);
 		boundary_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		boundary_txt.setText("");
-		boundary_load.setLocation(700, 410); boundary_load.setSize(150, 30);
+		boundary_load.setLocation(750, 570); boundary_load.setSize(150, 30);
 		boundary_load.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		boundary_load.addActionListener(new loadListener());
 		
-		source.setLocation(100, 510); source.setSize(200, 30);
-		source.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		source.setText("배출원 정보 입력(.csv)");
-		source_txt.setLocation(300, 510); source_txt.setSize(350, 30);
-		source_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		source_txt.setText("");
-		source_load.setLocation(700, 510); source_load.setSize(150, 30);
-		source_load.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		source_load.addActionListener(new loadListener());
+//		source.setLocation(100, 510); source.setSize(200, 30);
+//		source.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+//		source.setText("배출원 정보 입력(.csv)");
+//		source_txt.setLocation(300, 510); source_txt.setSize(350, 30);
+//		source_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+//		source_txt.setText("");
+//		source_load.setLocation(700, 510); source_load.setSize(150, 30);
+//		source_load.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+//		source_load.addActionListener(new loadListener());
 		
-		next.setLocation(800, 570); next.setSize(150, 50);
+		next.setLocation(800, 670); next.setSize(150, 50);
 		next.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		next.addActionListener(new MoveListener());
 
