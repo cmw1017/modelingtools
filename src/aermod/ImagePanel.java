@@ -1,4 +1,4 @@
-package calpuff;
+package aermod;
 
 import java.awt.*;
 

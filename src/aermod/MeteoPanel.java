@@ -5,12 +5,8 @@ import java.awt.event.*;
 import java.util.Map;
 import javax.swing.*;
 
-import aermod.InputPanel.MoveListener;
-import calpuff.RoundedButton;
-
 public class MeteoPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
-	public static final PanelTemplete CTGResultPanel = null;
 	Map<String, PanelTemplete> frames;
 	
 	JFrame frame;

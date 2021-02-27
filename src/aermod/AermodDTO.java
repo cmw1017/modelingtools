@@ -7,6 +7,8 @@ public class AermodDTO {
 
 	private String load_path;
 	private String base_path;
+	private Double latitude; //위도
+	private Double longitude; //경도
 	private List<String> matters;
 	private Map<String,Map<String,String>> inpparam;
 	private Map<String,Map<String,Double>> criteria;
@@ -41,6 +43,18 @@ public class AermodDTO {
 	}
 	public void setCriteria(Map<String,Map<String,Double>> criteria) {
 		this.criteria = criteria;
+	}
+	public Double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+	public Double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
 	}
 
 }

@@ -89,11 +89,11 @@ public class AERMOD implements Runnable{
 	public void FinishProcess() throws IOException, InterruptedException {
 		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\res\\" + matter).start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_an.FIL", base_path + "\\res\\" +matter + "\\" + matter + "_an.FIL").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_an.FIL", base_path + "\\result\\" +matter + "\\" + matter + "_an.FIL").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_24.FIL", base_path + "\\res\\" +matter + "\\" + matter + "_24.FIL").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_24.FIL", base_path + "\\result\\" +matter + "\\" + matter + "_24.FIL").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_1.FIL", base_path + "\\res\\" +matter + "\\" + matter + "_1.FIL").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_1.FIL", base_path + "\\result\\" +matter + "\\" + matter + "_1.FIL").start();
 		process.waitFor();
 		process.destroy();
 		

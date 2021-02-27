@@ -13,16 +13,16 @@ import calpuff.RoundedButton;
 
 public class InputPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
-	public static final PanelTemplete CTGResultPanel = null;
 	Map<String, PanelTemplete> frames;
 	private Process process = null;
 	String base_path;
 	String temp_path[] = new String[3];
+	AermodDTO data;
 	
 	JFrame frame;
 	private Color white = new Color(255,255,255);
 	JPanel aerinjp = new JPanel();
-	JLabel title = new JLabel();
+	ImagePanel title = new ImagePanel("D:\\Modeling\\AERMOD\\aermod\\resource\\Step1.png", 1000, 133);
 	JLabel content = new JLabel();
 	JLabel company = new JLabel();
 	JLabel company_lat = new JLabel();
@@ -77,7 +77,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		
 		aerinjp.add(content);
 		
-		title.setLocation(0, 0); title.setSize(1000, 100);
+		title.setLocation(0, 0); title.setSize(1000, 133);
 		
 		content.setHorizontalAlignment(SwingConstants.CENTER);
 		content.setVerticalAlignment(SwingConstants.CENTER);
@@ -138,6 +138,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		next.setLocation(800, 570); next.setSize(150, 50);
 		next.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		next.addActionListener(new MoveListener());
+
 		
 	}
 	
@@ -208,12 +209,20 @@ class MoveListener implements ActionListener {
 				for(String temp : temp_path) {
 					if(temp == null) {
 						System.out.println("입력자료가 충분하지 않습니다.");
+						JOptionPane.showMessageDialog(null, "입력자료가 충분하지 않습니다.","입력자료 오류",JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 				}
+				data.setLatitude(Double.valueOf(company_lat_txt.getText()));
+				data.setLongitude(Double.valueOf(company_lon_txt.getText()));
 				frames.get("aerin").setUnVisible();
 				frames.get("aermet").setVisible();
+				frames.get("aermet").exet(data);
 				try {
+//					JFrame popupFrame = new JFrame();
+//					ProgressBar pb = new ProgressBar(popupFrame);
+//					Thread thread = new Thread(pb, "pb");
+//					thread.run();
 					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[0], base_path + "\\temp\\topy.dxf").start();
 					process.waitFor();
 					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[1], base_path + "\\temp\\boundary.dxf").start();
@@ -233,12 +242,13 @@ class MoveListener implements ActionListener {
 	}
 
 	@Override
-	public void exet(AermodDTO data) {
+	public void exet(AermodDTO data) { //전 페이지에서 넘어오면서 실행되어
+		this.data = data;
 		base_path = data.getBase_path();
 		try {
 		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\run").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\res").start();
+		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\result").start();
 		process.waitFor();
 		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\temp").start();
 		process.waitFor();

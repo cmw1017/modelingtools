@@ -87,14 +87,14 @@ public class AerMain extends JFrame {
 //		frames.get("arein").exet(aermodDTO);
 		// 나중에 지워져야할 부분
 		
-		String base_path = "D:\\Modeling\\AERMOD\\yeosu";
+		String base_path = "D:\\Modeling\\AERMOD\\aermod";
 		AermodDTO aermodDTO = new AermodDTO();
 		aermodDTO.setBase_path(base_path);
 		frames.get("aerin").setVisible();
 		frames.get("aerin").exet(aermodDTO);
 		
 		frame.setTitle("AERMOD");
-		frame.setSize(1000, 700);
+		frame.setSize(1000, 800);
 		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x 버튼을 눌렀을때 종료
