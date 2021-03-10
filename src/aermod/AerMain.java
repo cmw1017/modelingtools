@@ -90,8 +90,9 @@ public class AerMain extends JFrame {
 		String base_path = "D:\\Modeling\\AERMOD\\aermod";
 		AermodDTO aermodDTO = new AermodDTO();
 		aermodDTO.setBase_path(base_path);
-		frames.get("aerin").setVisible();
-		frames.get("aerin").exet(aermodDTO);
+		frames.get("aermet").setVisible();
+//		frames.get("aerin").setVisible();
+//		frames.get("aerin").exet(aermodDTO);
 		
 		frame.setTitle("AERMOD");
 		frame.setSize(1000, 800);

@@ -16,7 +16,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	Map<String, PanelTemplete> frames;
 	private Process process = null;
 	String base_path;
-	String temp_path[] = new String[3];
+	String temp_path[] = new String[2];
 	AermodDTO data;
 	String sido[] = {"서울특별시","인천광역시","경기도"};
 	
@@ -44,9 +44,9 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	JLabel boundary = new JLabel();
 	JTextField boundary_txt = new JTextField();
 	JButton boundary_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
-	JLabel source = new JLabel();
-	JTextField source_txt = new JTextField();
-	JButton source_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
+//	JLabel source = new JLabel();
+//	JTextField source_txt = new JTextField();
+//	JButton source_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
 	JButton next = new RoundedButton("다음", Color.decode("#BF95BC"), white, 20);
 	
 	public InputPanel(JFrame frame) {
@@ -205,9 +205,6 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	        chooser.setDialogTitle("타이틀"); // 창의 제목
 	        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
 	        FileNameExtensionFilter filter = new FileNameExtensionFilter("dxf", "dxf"); // filter 확장자 추가
-	        if (e.getSource() == source_load) {
-				filter = new FileNameExtensionFilter("csv", "csv"); // filter 확장자 추가
-			}
 	        chooser.setFileFilter(filter); // 파일 필터를 추가
 	        
 	        int returnVal = chooser.showOpenDialog(null); // 열기용 창 오픈
@@ -220,9 +217,6 @@ public class InputPanel extends JFrame implements PanelTemplete {
 				} else if (e.getSource() == boundary_load) {
 	            	boundary_txt.setText(folderPath);
 	            	temp_path[1] = folderPath;
-				} else if (e.getSource() == source_load) {
-					source_txt.setText(folderPath);
-	            	temp_path[2] = folderPath;
 				}
 	        }else if(returnVal == JFileChooser.CANCEL_OPTION){ // 취소를 클릭
 	            System.out.println("cancel"); 
@@ -246,21 +240,21 @@ class MoveListener implements ActionListener {
 						return;
 					}
 				}
-				data.setLatitude(Double.valueOf(company_lat_txt.getText()));
-				data.setLongitude(Double.valueOf(company_lon_txt.getText()));
+				try {
+					data.setLatitude(Double.valueOf(company_lat_txt.getText()));
+					data.setLongitude(Double.valueOf(company_lon_txt.getText()));
+				} catch (Exception e1) {
+					System.out.println("위경도 데이터를 입력해주세요");
+					JOptionPane.showMessageDialog(null, "위경도 데이터를 입력해주세요","입력데이터 오류",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				frames.get("aerin").setUnVisible();
 				frames.get("aermet").setVisible();
 				frames.get("aermet").exet(data);
 				try {
-//					JFrame popupFrame = new JFrame();
-//					ProgressBar pb = new ProgressBar(popupFrame);
-//					Thread thread = new Thread(pb, "pb");
-//					thread.run();
 					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[0], base_path + "\\temp\\topy.dxf").start();
 					process.waitFor();
 					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[1], base_path + "\\temp\\boundary.dxf").start();
-					process.waitFor();
-					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[2], base_path + "\\temp\\source.csv").start();
 					process.waitFor();
 					process.destroy();
 				} catch (InterruptedException e1) {
