@@ -3,6 +3,7 @@ package aermod;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -155,7 +156,34 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-
+			String folderPath = "";
+	        
+	        JFileChooser chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); // 디렉토리 설정
+	        chooser.setCurrentDirectory(new File("/")); // 현재 사용 디렉토리를 지정
+	        chooser.setAcceptAllFileFilterUsed(true);   // Fileter 모든 파일 적용 
+	        chooser.setDialogTitle("파일 선택"); // 창의 제목
+	        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
+	        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv", "csv"); // filter 확장자 추가
+	        chooser.setFileFilter(filter); // 파일 필터를 추가
+	        
+	        int returnVal = chooser.showSaveDialog(null); // 열기용 창 오픈
+	        
+	        if(returnVal == JFileChooser.APPROVE_OPTION) { // 열기를 클릭 
+	            folderPath = chooser.getSelectedFile().toString();
+				try {
+					process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\resource\\test.csv", folderPath+".csv").start();
+					process.waitFor();
+					process.destroy();
+					JOptionPane.showMessageDialog(null, "다운로드가 완료되었습니다.","다운로드 완료",JOptionPane.PLAIN_MESSAGE);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+	        }else if(returnVal == JFileChooser.CANCEL_OPTION){ // 취소를 클릭
+	            System.out.println("cancel"); 
+	            folderPath = "";
+	        }
 		}
 
 	}
@@ -175,7 +203,7 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 		        JFileChooser chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); // 디렉토리 설정
 		        chooser.setCurrentDirectory(new File("/")); // 현재 사용 디렉토리를 지정
 		        chooser.setAcceptAllFileFilterUsed(true);   // Fileter 모든 파일 적용 
-		        chooser.setDialogTitle("타이틀"); // 창의 제목
+		        chooser.setDialogTitle("파일 선택"); // 창의 제목
 		        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
 		        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv", "csv"); // filter 확장자 추가
 		        chooser.setFileFilter(filter); // 파일 필터를 추가
@@ -203,7 +231,14 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 			if (e.getSource() == next) {
 				frames.get("aermet").setUnVisible();
 				frames.get("aerpol").setVisible();
-//				frames.get("aerpol").exet(data);
+				frames.get("aerpol").exet(data);
+				if(ec_select.isSelected() == true) {
+					data.setEc_path(temp_path);
+				} else {
+					data.setEc_path(null);
+				}
+				System.out.println("Move PolPanel");
+				System.out.println("Ec path : " + data.getEc_path());
 			}
 
 		}
@@ -211,7 +246,8 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 
 	@Override
 	public void exet(AermodDTO data) {
-		// TODO Auto-generated method stub
+		this.data = data;
+		base_path = data.getBase_path();
 
 	}
 }

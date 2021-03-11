@@ -11,13 +11,16 @@ import calpuff.RoundedButton;
 
 public class PolPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
-	public static final PanelTemplete CTGResultPanel = null;
 	Map<String, PanelTemplete> frames;
+	private Process process = null;
+	String base_path;
+	String temp_path;
+	AermodDTO data;
 	
 	JFrame frame;
 	private Color white = new Color(255,255,255);
 	JPanel aermetjp = new JPanel();
-	JLabel title = new JLabel();
+	ImagePanel title = new ImagePanel("D:\\Modeling\\AERMOD\\aermod\\resource\\Step2.png", 1000, 130);
 	JLabel content = new JLabel();
 	JLabel pol = new JLabel();
 	String[] pollist = {"SO2", "CO", "NO2", "Pb", "Benzene", "PM-10", "Zn", "NH3", "CS2", "Cr", "Hg", "Cu", "Vinylchloride", "H2S", "Dichloromethane", "TCE", "As", "Ni", "Cd", "Br", "F", "HCN", "HCl", "Phenol", "Formaldehyde"};
@@ -41,17 +44,17 @@ public class PolPanel extends JFrame implements PanelTemplete {
 		
 
 		
-		title.setLocation(0, 0); title.setSize(1000, 100);
+		title.setLocation(0, 0); title.setSize(1000, 130);
 		
 		content.setHorizontalAlignment(SwingConstants.CENTER);
 		content.setVerticalAlignment(SwingConstants.CENTER);
 		content.setOpaque(true);
 		content.setBackground(Color.decode("#D0D8DA"));
-		content.setLocation(0, 100); content.setSize(1000, 600);
+		content.setLocation(0, 100); content.setSize(1000, 670);
 		
-		pol.setLocation(100, 150); pol.setSize(250, 50);
-		pol.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		pol.setText("모델링 진행 오염물질 정보");
+		pol.setLocation(50, 150); pol.setSize(250, 50);
+		pol.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		pol.setText("환경기준 정보");
 		
 		
 		next.setLocation(800, 570); next.setSize(150, 50);
@@ -107,22 +110,23 @@ class MoveListener implements ActionListener {
 
 		int x = 0;
 		int y = 0;
-		for (int i = 0; i < pollist.length; i++, x++) {
-			if ((i % 7) == 6) {
-				y++; x=0;
-			}
+		for (int i = 1; i < pollist.length+1; i++) {
 			polname.add(new JLabel());
-			polname.get(i).setLocation(100 + 200 * y, 200 + 50 * x);
-			polname.get(i).setSize(150, 50);
-			polname.get(i).setFont(new Font("맑은 고딕", Font.BOLD, 15));
-			polname.get(i).setText(pollist[i]);
+			polname.get(i-1).setLocation(100 + 300 * x, 200 + 50 * y);
+			polname.get(i-1).setSize(150, 50);
+			polname.get(i-1).setFont(new Font("맑은 고딕", Font.BOLD, 15));
+			polname.get(i-1).setText(pollist[i-1]);
 			polval.add(new JLabel());
-			polval.get(i).setLocation(250 + 200 * y, 200 + 50 * x);
-			polval.get(i).setSize(150, 50);
-			polval.get(i).setFont(new Font("맑은 고딕", Font.BOLD, 15));
-			polval.get(i).setText("00");
-			aermetjp.add(polname.get(i));
-			aermetjp.add(polval.get(i));
+			polval.get(i-1).setLocation(300 + 300 * x, 200 + 50 * y);
+			polval.get(i-1).setSize(150, 50);
+			polval.get(i-1).setFont(new Font("맑은 고딕", Font.BOLD, 15));
+			polval.get(i-1).setText("00");
+			aermetjp.add(polname.get(i-1));
+			aermetjp.add(polval.get(i-1));
+			y++;
+			if(i % 10 == 0) {
+				x++; y=0;
+			}
 		}
 		aermetjp.add(content);
 	}

@@ -91,6 +91,7 @@ public class AerMain extends JFrame {
 		AermodDTO aermodDTO = new AermodDTO();
 		aermodDTO.setBase_path(base_path);
 		frames.get("aermet").setVisible();
+		frames.get("aermet").exet(aermodDTO);
 //		frames.get("aerin").setVisible();
 //		frames.get("aerin").exet(aermodDTO);
 		
