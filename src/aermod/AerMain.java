@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 public class AerMain extends JFrame {
 	private static final long serialVersionUID = 1L;
 	Map<String, PanelTemplete> frames;
-	JFrame frame = new JFrame();
+	static JFrame frame = new JFrame();
 	
 	public AerMain() {
 		frames = new HashMap<String, PanelTemplete>();
@@ -15,11 +15,13 @@ public class AerMain extends JFrame {
 		frames.put("aermet", new MeteoPanel(frame));
 		frames.put("aerpol", new PolPanel(frame));
 		frames.put("aerres", new AERMODResultPanel(frame));
+		// String base_path = "D:\\Modeling\\AERMOD\\aermod";
+		String base_path = "C:\\Users\\DELL\\OneDrive\\aermod";
 		
 		Iterator<String> iter = frames.keySet().iterator();
 		while(iter.hasNext()) {
 			PanelTemplete frame = frames.get(iter.next());
-			frame.setPanel();
+			frame.setPanel(base_path);
 			frame.setUnVisible();
 			frame.setFrames(frames);
 		}
@@ -87,11 +89,9 @@ public class AerMain extends JFrame {
 //		frames.get("arein").exet(aermodDTO);
 		// 나중에 지워져야할 부분
 		
-		String base_path = "D:\\Modeling\\AERMOD\\aermod";
+		
 		AermodDTO aermodDTO = new AermodDTO();
 		aermodDTO.setBase_path(base_path);
-		frames.get("aermet").setVisible();
-		frames.get("aermet").exet(aermodDTO);
 //		frames.get("aerin").setVisible();
 //		frames.get("aerin").exet(aermodDTO);
 		
@@ -100,6 +100,9 @@ public class AerMain extends JFrame {
 		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x 버튼을 눌렀을때 종료
+		
+		frames.get("aerres").setVisible();
+		frames.get("aerres").exet(aermodDTO);
 	}
 	
 	public static void main(String[] args) throws InterruptedException {

@@ -17,13 +17,12 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	private Process process = null;
 	String base_path;
 	String temp_path[] = new String[3];
-	AermodDTO data;
+	AermodDTO aermodDTO;
 	String sido[] = {"서울특별시","인천광역시","경기도"};
 	
 	JFrame frame;
 	private Color white = new Color(255,255,255);
 	JPanel aerinjp = new JPanel();
-	ImagePanel title = new ImagePanel("D:\\Modeling\\AERMOD\\aermod\\resource\\Step1.png", 1000, 130);
 	JLabel content = new JLabel();
 	JLabel company = new JLabel();
 	JLabel company_lat = new JLabel();
@@ -53,11 +52,13 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		this.frame = frame;
 	}
 	
-	public void setPanel() {
+	public void setPanel(String base_path) {
 		
 		aerinjp.setLayout(null);
 		
 		// 프레임
+		this.base_path = base_path;
+		ImagePanel title = new ImagePanel(base_path+"\\resource\\Step1.png", 1000, 130);
 		aerinjp.add(title);
 		
 		aerinjp.add(company);
@@ -244,19 +245,20 @@ class MoveListener implements ActionListener {
 					}
 				}
 				try {
-					data.setLatitude(Double.valueOf(company_lat_txt.getText()));
-					data.setLongitude(Double.valueOf(company_lon_txt.getText()));
+					aermodDTO.setLatitude(Double.valueOf(company_lat_txt.getText()));
+					aermodDTO.setLongitude(Double.valueOf(company_lon_txt.getText()));
 				} catch (Exception e1) {
 					System.out.println("위경도 데이터를 입력해주세요");
 					JOptionPane.showMessageDialog(null, "위경도 데이터를 입력해주세요","입력데이터 오류",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				data.setSido(company_sido.getText());
-				data.setSigun(company_sigun.getText());
-				data.setGu(company_gu.getText());
+				aermodDTO.setSido(company_sido.getText());
+				aermodDTO.setSigun(company_sigun.getText());
+				aermodDTO.setGu(company_gu.getText());
+				aermodDTO.setSource_path(temp_path[2]);
 				frames.get("aerin").setUnVisible();
 				frames.get("aermet").setVisible();
-				frames.get("aermet").exet(data);
+				frames.get("aermet").exet(aermodDTO);
 				try {
 					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[0], base_path + "\\temp\\topy.dxf").start();
 					process.waitFor();
@@ -271,11 +273,12 @@ class MoveListener implements ActionListener {
 					e1.printStackTrace();
 				}
 				System.out.println("Move MeteoPanel");
-				System.out.println("Company sido : " + data.getSido());
-				System.out.println("Company sigun : " + data.getSigun());
-				System.out.println("Company gu : " + data.getGu());
-				System.out.println("Company lat : " + data.getLatitude());
-				System.out.println("Company lon : " + data.getLongitude());
+				System.out.println("Company sido : " + aermodDTO.getSido());
+				System.out.println("Company sigun : " + aermodDTO.getSigun());
+				System.out.println("Company gu : " + aermodDTO.getGu());
+				System.out.println("Company lat : " + aermodDTO.getLatitude());
+				System.out.println("Company lon : " + aermodDTO.getLongitude());
+				System.out.println("Source Path : " + aermodDTO.getSource_path());
 			} 
 			
 			
@@ -283,10 +286,9 @@ class MoveListener implements ActionListener {
 	}
 
 	@Override
-	public void exet(AermodDTO data) { //전 페이지에서 넘어오면서 실행되어
+	public void exet(AermodDTO aermodDTO) { //전 페이지에서 넘어오면서 실행되어
 		System.out.println("Set Input Panel");
-		this.data = data;
-		base_path = data.getBase_path();
+		this.aermodDTO = aermodDTO;
 		try {
 		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\run").start();
 		process.waitFor();

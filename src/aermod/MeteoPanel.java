@@ -17,12 +17,11 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 	private Process process = null;
 	String base_path;
 	String temp_path;
-	AermodDTO data;
+	AermodDTO aermodDTO;
 
 	JFrame frame;
 	private Color white = new Color(255, 255, 255);
 	JPanel aermetjp = new JPanel();
-	ImagePanel title = new ImagePanel("D:\\Modeling\\AERMOD\\aermod\\resource\\Step2.png", 1000, 130);
 	JLabel content = new JLabel();
 	JLabel station = new JLabel();
 	JLabel station_info = new JLabel();
@@ -43,13 +42,15 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 		this.frame = frame;
 	}
 
-	public void setPanel() {
+	public void setPanel(String base_path) {
 
 		aermetjp.setLayout(null);
 
 		// 프레임
+		this.base_path = base_path;
+		ImagePanel title = new ImagePanel(base_path+"\\resource\\Step2.png", 1000, 130);
 		aermetjp.add(title);
-
+		
 		aermetjp.add(station);
 		aermetjp.add(station_info);
 		aermetjp.add(bc);
@@ -231,23 +232,22 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 			if (e.getSource() == next) {
 				frames.get("aermet").setUnVisible();
 				frames.get("aerpol").setVisible();
-				frames.get("aerpol").exet(data);
+				frames.get("aerpol").exet(aermodDTO);
 				if(ec_select.isSelected() == true) {
-					data.setEc_path(temp_path);
+					aermodDTO.setEc_path(temp_path);
 				} else {
-					data.setEc_path(null);
+					aermodDTO.setEc_path(null);
 				}
 				System.out.println("Move PolPanel");
-				System.out.println("Ec path : " + data.getEc_path());
+				System.out.println("Ec path : " + aermodDTO.getEc_path());
 			}
 
 		}
 	}
 
 	@Override
-	public void exet(AermodDTO data) {
-		this.data = data;
-		base_path = data.getBase_path();
-
+	public void exet(AermodDTO aermodDTO) {
+		this.aermodDTO = aermodDTO;
+		base_path = aermodDTO.getBase_path();
 	}
 }

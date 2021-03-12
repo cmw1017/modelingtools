@@ -6,21 +6,17 @@ import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.*;
 
-import aermod.MeteoPanel.MoveListener;
-import calpuff.RoundedButton;
-
 public class PolPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
 	Map<String, PanelTemplete> frames;
-	private Process process = null;
 	String base_path;
 	String temp_path;
-	AermodDTO data;
+	AermodDTO aermodDTO;
 	
 	JFrame frame;
 	private Color white = new Color(255,255,255);
 	JPanel aermetjp = new JPanel();
-	ImagePanel title = new ImagePanel("D:\\Modeling\\AERMOD\\aermod\\resource\\Step2.png", 1000, 130);
+	ImagePanel title = new ImagePanel(base_path+"\\resource\\Step2.png", 1000, 130);
 	JLabel content = new JLabel();
 	JLabel pol = new JLabel();
 	String[] pollist = {"SO2", "CO", "NO2", "Pb", "Benzene", "PM-10", "Zn", "NH3", "CS2", "Cr", "Hg", "Cu", "Vinylchloride", "H2S", "Dichloromethane", "TCE", "As", "Ni", "Cd", "Br", "F", "HCN", "HCl", "Phenol", "Formaldehyde"};
@@ -32,11 +28,13 @@ public class PolPanel extends JFrame implements PanelTemplete {
 		this.frame = frame;
 	}
 	
-	public void setPanel() {
+	public void setPanel(String base_path) {
 		
 		aermetjp.setLayout(null);
 		
 		// 프레임
+		this.base_path = base_path;
+		ImagePanel title = new ImagePanel(base_path+"\\resource\\Step2.png", 1000, 130);
 		aermetjp.add(title);
 		
 		aermetjp.add(pol);
@@ -106,8 +104,8 @@ class MoveListener implements ActionListener {
 	}
 
 	@Override
-	public void exet(AermodDTO data) {
-
+	public void exet(AermodDTO aermodDTO) {
+		this.aermodDTO = aermodDTO;
 		int x = 0;
 		int y = 0;
 		for (int i = 1; i < pollist.length+1; i++) {

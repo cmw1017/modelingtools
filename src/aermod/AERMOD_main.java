@@ -32,11 +32,11 @@ public class AERMOD_main implements Runnable{
 		
 		try {
 			// 큐에 입력
-			for(String matter : matters) {
-				queue.add(matter);
-				AERPRE aerpre = new AERPRE(matter, inpparam.get(matter), base_path);
-				aerpre.RunProcess();
-			}
+//			for(String matter : matters) {
+//				queue.add(matter);
+//				AERPRE aerpre = new AERPRE(matter, inpparam.get(matter), base_path);
+//				aerpre.RunProcess();
+//			}
 			Thread[] threads = new Thread[max_thread]; // 최대 쓰레드 개수
 			ThreadInfo t_info = new ThreadInfo(max_thread);
 			while(queue.size() != 0) {
