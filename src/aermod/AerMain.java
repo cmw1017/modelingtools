@@ -11,12 +11,12 @@ public class AerMain extends JFrame {
 	
 	public AerMain() {
 		frames = new HashMap<String, PanelTemplete>();
-		frames.put("aerin", new InputPanel(frame));
-		frames.put("aermet", new MeteoPanel(frame));
-		frames.put("aerpol", new PolPanel(frame));
-		frames.put("aerres", new AERMODResultPanel(frame));
-		// String base_path = "D:\\Modeling\\AERMOD\\aermod";
-		String base_path = "C:\\Users\\DELL\\OneDrive\\aermod";
+		frames.put("aerin", new InputPanel());
+		frames.put("aermet", new MeteoPanel());
+		frames.put("aerpol", new PolPanel());
+		frames.put("aerres", new AERMODResultPanel());
+		 String base_path = "C:\\Users\\cmw10\\OneDrive\\aermod";
+//		String base_path = "C:\\Users\\DELL\\OneDrive\\aermod";
 		
 		Iterator<String> iter = frames.keySet().iterator();
 		while(iter.hasNext()) {
@@ -92,6 +92,8 @@ public class AerMain extends JFrame {
 		
 		AermodDTO aermodDTO = new AermodDTO();
 		aermodDTO.setBase_path(base_path);
+		aermodDTO.setLatitude(35.4213);
+		aermodDTO.setLongitude(127.3965);
 //		frames.get("aerin").setVisible();
 //		frames.get("aerin").exet(aermodDTO);
 		
@@ -100,6 +102,7 @@ public class AerMain extends JFrame {
 		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x 버튼을 눌렀을때 종료
+		
 		
 		frames.get("aerres").setVisible();
 		frames.get("aerres").exet(aermodDTO);

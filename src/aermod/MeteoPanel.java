@@ -19,7 +19,6 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 	String temp_path;
 	AermodDTO aermodDTO;
 
-	JFrame frame;
 	private Color white = new Color(255, 255, 255);
 	JPanel aermetjp = new JPanel();
 	JLabel content = new JLabel();
@@ -38,8 +37,7 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 
 	JButton next = new RoundedButton("다음", Color.decode("#BF95BC"), white, 20);
 
-	public MeteoPanel(JFrame frame) {
-		this.frame = frame;
+	public MeteoPanel() {
 	}
 
 	public void setPanel(String base_path) {
@@ -135,7 +133,7 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 	}
 
 	public void setVisible() {
-		frame.add(aermetjp);
+		AerMain.frame.add(aermetjp);
 		aermetjp.setVisible(true);
 	}
 

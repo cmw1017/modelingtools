@@ -20,7 +20,6 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	private String[] header = {"오염물질", "모델 진행도", "모델링 횟수","배출농도","환경기준","통과여부"};
 	private List<String> matters;
 	
-	private JFrame frame;
 	private JPanel aerresjp = new JPanel();
 	private JLabel[] headers = new JLabel[6];
 	private Color white = new Color(255,255,255);
@@ -30,8 +29,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	private JButton complete = new RoundedButton("완료", Color.decode("#84B1D9"), white, 20);
 	
 	
-	public AERMODResultPanel(JFrame frame) {
-		this.frame = frame;
+	public AERMODResultPanel() {
 	}
 	
 	public void setPanel(String base_path) {
@@ -86,7 +84,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	}
 	
 	public void setVisible() {
-		frame.add(aerresjp);
+		AerMain.frame.add(aerresjp);
 		aerresjp.setVisible(true);
 	}
 	
@@ -108,6 +106,8 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	@Override
 	public void exet(AermodDTO aermodDTO) {
 		this.aermodDTO = aermodDTO;
+		AerMain.frame.setPreferredSize(new Dimension(1000,1000));
+		AerMain.frame.pack();
 		AERPRE aerpre = new AERPRE(aermodDTO);
 		aerpre.RunProcess();
 		
@@ -133,8 +133,5 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 //		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label);
 //		Thread thread = new Thread(aermain, "aermod_main");
 //		thread.start();
-		AerMain.frame.setPreferredSize(new Dimension(1000,1000));
-		AerMain.frame.pack();
-		AerMain.frame.setVisible(true);
 	}
 }

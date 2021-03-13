@@ -14,7 +14,7 @@ public class AermodDTO {
 	private String sigun; 		//시군
 	private String gu; 			//구
 	private String ec_path;		//환경기준 사용 파일 경로
-	private String rmo;			//기상대 정보
+	private RMO rmo;			//기상대 정보
 	private List<String> matters;
 	private Map<String,Map<String,String>> inpparam;
 	private Map<String,Map<String,Double>> criteria;
@@ -73,12 +73,6 @@ public class AermodDTO {
 	public void setEc_path(String ec_path) {
 		this.ec_path = ec_path;
 	}
-	public String getRmo() {
-		return rmo;
-	}
-	public void setRmo(String rmo) {
-		this.rmo = rmo;
-	}
 	public List<String> getMatters() {
 		return matters;
 	}
@@ -97,6 +91,13 @@ public class AermodDTO {
 	public void setCriteria(Map<String, Map<String, Double>> criteria) {
 		this.criteria = criteria;
 	}
+	public RMO getRmo() {
+		return rmo;
+	}
+	public void setRmo(RMO rmo) {
+		this.rmo = rmo;
+	}
+	
 	
 
 	

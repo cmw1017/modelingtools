@@ -12,11 +12,9 @@ public class PolPanel extends JFrame implements PanelTemplete {
 	String base_path;
 	String temp_path;
 	AermodDTO aermodDTO;
-	
-	JFrame frame;
+
 	private Color white = new Color(255,255,255);
 	JPanel aermetjp = new JPanel();
-	ImagePanel title = new ImagePanel(base_path+"\\resource\\Step2.png", 1000, 130);
 	JLabel content = new JLabel();
 	JLabel pol = new JLabel();
 	String[] pollist = {"SO2", "CO", "NO2", "Pb", "Benzene", "PM-10", "Zn", "NH3", "CS2", "Cr", "Hg", "Cu", "Vinylchloride", "H2S", "Dichloromethane", "TCE", "As", "Ni", "Cd", "Br", "F", "HCN", "HCl", "Phenol", "Formaldehyde"};
@@ -24,8 +22,7 @@ public class PolPanel extends JFrame implements PanelTemplete {
 	ArrayList<JLabel> polval = new ArrayList<>();
 	JButton next = new RoundedButton("다음", Color.decode("#BF95BC"), white, 20);
 	
-	public PolPanel(JFrame frame) {
-		this.frame = frame;
+	public PolPanel() {
 	}
 	
 	public void setPanel(String base_path) {
@@ -62,7 +59,7 @@ public class PolPanel extends JFrame implements PanelTemplete {
 	}
 	
 	public void setVisible() {
-		frame.add(aermetjp);
+		AerMain.frame.add(aermetjp);
 		aermetjp.setVisible(true);
 	}
 	

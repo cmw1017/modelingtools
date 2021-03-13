@@ -20,7 +20,6 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	AermodDTO aermodDTO;
 	String sido[] = {"서울특별시","인천광역시","경기도"};
 	
-	JFrame frame;
 	private Color white = new Color(255,255,255);
 	JPanel aerinjp = new JPanel();
 	JLabel content = new JLabel();
@@ -47,10 +46,6 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	JTextField source_txt = new JTextField();
 	JButton source_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
 	JButton next = new RoundedButton("다음", Color.decode("#BF95BC"), white, 20);
-	
-	public InputPanel(JFrame frame) {
-		this.frame = frame;
-	}
 	
 	public void setPanel(String base_path) {
 		
@@ -177,7 +172,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	}
 	
 	public void setVisible() {
-		frame.add(aerinjp);
+		AerMain.frame.add(aerinjp);
 		aerinjp.setVisible(true);
 	}
 	
@@ -260,11 +255,11 @@ class MoveListener implements ActionListener {
 				frames.get("aermet").setVisible();
 				frames.get("aermet").exet(aermodDTO);
 				try {
-					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[0], base_path + "\\temp\\topy.dxf").start();
+					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[0], base_path + "\\run\\topy.dxf").start();
 					process.waitFor();
-					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[1], base_path + "\\temp\\boundary.dxf").start();
+					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[1], base_path + "\\run\\boundary.dxf").start();
 					process.waitFor();
-					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[2], base_path + "\\temp\\source.csv").start();
+					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[2], base_path + "\\run\\source.csv").start();
 					process.waitFor();
 					process.destroy();
 				} catch (InterruptedException e1) {
