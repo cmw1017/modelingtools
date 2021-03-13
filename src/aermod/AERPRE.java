@@ -23,9 +23,9 @@ public class AERPRE {
 	private ArrayList<RMO> rmos; // 기상대 저장 파일
 	private String[] rmo_id = new String[3]; //가장 가까운 기상대 id(기본, 저층, 고층)
 	private Process process;
-	private Map<String, String> inpparam;
+	private Map<String,Map<String,String>> inpparam;
 
-	private String matter;
+
 
 	private String base_path;
 
@@ -34,6 +34,7 @@ public class AERPRE {
 	public AERPRE(AermodDTO aermodDTO) {
 		this.aermodDTO = aermodDTO;
 		this.base_path = aermodDTO.getBase_path();
+		this.inpparam = aermodDTO.getInpparam();
 	}
 
 	public void ReadRMO() { // 기상대 정보를 읽어서 가장 가까운 기상대 정보를 찾아줌
@@ -174,10 +175,10 @@ public class AERPRE {
 	}
 	
 	
-	public void CreateInp() {
+	public void CreateInp(String matter) {
 		try {
 			int ch;
-			Reader inStream = new FileReader(base_path + "\\aermod_.inp");
+			Reader inStream = new FileReader(base_path + "\\resource\\aermod_.inp");
 			BufferedWriter outStream = new BufferedWriter(
 					new FileWriter(base_path + "\\run\\aermod_" + matter + ".inp"));
 			StringBuilder str = new StringBuilder();
@@ -190,13 +191,13 @@ public class AERPRE {
 					if (str.length() != 0) {
 						if (str.toString().contains("@@!1")) {
 							String str2 = str.toString();
-							str2 = str2.replace("@@!1", inpparam.get("@@!1"));
+							str2 = str2.replace("@@!1", inpparam.get(matter).get("@@!1"));
 							outStream.write(str2, 0, str2.length());
 							str = new StringBuilder();
 							continue;
 						} else if (str.toString().contains("@@!2")) {
 							String str2 = str.toString();
-							str2 = str2.replace("@@!2", inpparam.get("@@!2"));
+							str2 = str2.replace("@@!2", inpparam.get(matter).get("@@!2"));
 							outStream.write(str2, 0, str2.length());
 							str = new StringBuilder();
 							continue;
@@ -317,7 +318,7 @@ public class AERPRE {
 		}
 	}
 
-	public void CreateSource() {
+	public void CreateSource(String matter) {
 		try {
 			if (stack_header.indexOf(matter) == -1)
 				System.out.println("에러");
@@ -345,6 +346,7 @@ public class AERPRE {
 				}
 			}
 			outStream.close();
+			System.out.println("complete create Point dat file(" + matter + ")");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -354,7 +356,10 @@ public class AERPRE {
 		ReadRMO();
 		SelectRMO();
 		ReadSource();
-//		CreateInp();
+		for(String matter : matters) {
+			CreateInp(matter);
+			CreateSource(matter);
+		}
 	}
 
 }

@@ -28,38 +28,21 @@ public class AerMain extends JFrame {
 		
 		// 나중에 지워져야할 부분
 		// SO2 CO NO2 Pb Benzene PM-10 Zn NH3 CS2 Cr Hg Cu Vinylchloride H2S Dichloromethane TCE As Ni Cd Br F HCN HCl Phenol Formaldehyde
-//		List<String> matters = new ArrayList<String>();
-//		matters.add("SO2");
-//		matters.add("TSP");
-//		matters.add("CO");
-//		matters.add("PM-10");
-//		matters.add("NH3");
-//		Map<String,Map<String,String>> inpparam = new HashMap<String,Map<String,String>>();
-//		inpparam.put("SO2", new HashMap<String,String>());
-//		inpparam.get("SO2").put("@@!1", "SO2");
-//		inpparam.get("SO2").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
-//		inpparam.get("SO2").put("@@!3", "43168");
-//		inpparam.get("SO2").put("@@!4", "47158");
-//		inpparam.put("TSP", new HashMap<String,String>());
-//		inpparam.get("TSP").put("@@!1", "TSP");
-//		inpparam.get("TSP").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
-//		inpparam.get("TSP").put("@@!3", "43168");
-//		inpparam.get("TSP").put("@@!4", "47158");
-//		inpparam.put("CO", new HashMap<String,String>());
-//		inpparam.get("CO").put("@@!1", "CO");
-//		inpparam.get("CO").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
-//		inpparam.get("CO").put("@@!3", "43168");
-//		inpparam.get("CO").put("@@!4", "47158");
-//		inpparam.put("PM-10", new HashMap<String,String>());
-//		inpparam.get("PM-10").put("@@!1", "PM10");
-//		inpparam.get("PM-10").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
-//		inpparam.get("PM-10").put("@@!3", "43168");
-//		inpparam.get("PM-10").put("@@!4", "47158");
-//		inpparam.put("NH3", new HashMap<String,String>());
-//		inpparam.get("NH3").put("@@!1", "NH3");
-//		inpparam.get("NH3").put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
-//		inpparam.get("NH3").put("@@!3", "43168");
-//		inpparam.get("NH3").put("@@!4", "47158");
+		String[] pollist = { "SO2", "CO", "NO2", "Pb", "Benzene", "PM-10", "Zn", "NH3", "CS2", "Cr", "Hg", "Cu",
+				"Vinylchloride", "H2S", "Dichloromethane", "TCE", "As", "Ni", "Cd", "Br", "F", "HCN", "HCl", "Phenol",
+				"Formaldehyde" };
+		Map<String,Map<String,String>> inpparam = new HashMap<String,Map<String,String>>();
+		for(String matter : pollist) {
+			inpparam.put(matter, new HashMap<String,String>());
+			if(matter == "PM-10") inpparam.get(matter).put("@@!1", "PM10");
+			else inpparam.get(matter).put("@@!1", matter);
+			if(matter == "SO2" || matter == "CO" || matter == "NO2")
+				inpparam.get(matter).put("@@!2", "931780.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
+			else 
+				inpparam.get(matter).put("@@!2", "1000000.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
+		}
+		
+		
 //		Map<String,Map<String,Double>> criteria = new HashMap<String,Map<String,Double>>();
 //		criteria.put("SO2", new HashMap<String, Double>());
 //		criteria.get("SO2").put("1", 100.00);
@@ -84,7 +67,6 @@ public class AerMain extends JFrame {
 //		
 
 //		aermodDTO.setMatters(matters);
-//		aermodDTO.setInpparam(inpparam);
 //		aermodDTO.setCriteria(criteria);
 //		frames.get("arein").exet(aermodDTO);
 		// 나중에 지워져야할 부분
@@ -92,10 +74,11 @@ public class AerMain extends JFrame {
 		
 		AermodDTO aermodDTO = new AermodDTO();
 		aermodDTO.setBase_path(base_path);
+		aermodDTO.setInpparam(inpparam);
 		aermodDTO.setLatitude(35.4213);
 		aermodDTO.setLongitude(127.3965);
-//		frames.get("aerin").setVisible();
-//		frames.get("aerin").exet(aermodDTO);
+		frames.get("aerin").setVisible();
+		frames.get("aerin").exet(aermodDTO);
 		
 		frame.setTitle("AERMOD");
 		frame.setSize(1000, 800);
@@ -104,8 +87,8 @@ public class AerMain extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x 버튼을 눌렀을때 종료
 		
 		
-		frames.get("aerres").setVisible();
-		frames.get("aerres").exet(aermodDTO);
+//		frames.get("aerres").setVisible();
+//		frames.get("aerres").exet(aermodDTO);
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
