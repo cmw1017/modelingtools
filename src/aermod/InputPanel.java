@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -15,8 +17,9 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
 	Map<String, PanelTemplete> frames;
 	private Process process = null;
+	ProcessBuilder processBuilder = null;
 	String base_path;
-	String temp_path[] = new String[3];
+	String temp_path[] = new String[4];
 	AermodDTO aermodDTO;
 	String sido[] = { "서울특별시", "인천광역시", "경기도" };
 
@@ -241,7 +244,15 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		next.setSize(150, 50);
 		next.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		next.addActionListener(new MoveListener());
-
+		
+		company_lat_txt.setText("35.555");
+		company_lon_txt.setText("127.555");
+		topy_txt.setText("D:\\Modeling\\topy.dxf");
+		temp_path[0] = "D:\\Modeling\\topy.dxf";
+		boundary_txt.setText("D:\\Modeling\\boundary.dxf");
+		temp_path[1] = "D:\\Modeling\\boundary.dxf";
+		source_txt.setText("D:\\Modeling\\111.csv");
+		temp_path[3] = "D:\\Modeling\\111.csv";
 	}
 
 	public void setVisible() {
@@ -274,7 +285,14 @@ public class InputPanel extends JFrame implements PanelTemplete {
 			chooser.setAcceptAllFileFilterUsed(true); // Fileter 모든 파일 적용
 			chooser.setDialogTitle("파일 선택"); // 창의 제목
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("dxf", "dxf"); // filter 확장자 추가
+			FileNameExtensionFilter filter;
+			if (e.getSource() == source_load) {
+				filter = new FileNameExtensionFilter("csv", "csv"); // filter 확장자 추가
+			} else if(e.getSource() == dat_load){
+				filter = new FileNameExtensionFilter("dat", "dat"); // filter 확장자 추가
+			} else {
+				filter = new FileNameExtensionFilter("dxf", "dxf"); // filter 확장자 추가
+			}
 			chooser.setFileFilter(filter); // 파일 필터를 추가
 
 			int returnVal = chooser.showOpenDialog(null); // 열기용 창 오픈
@@ -287,9 +305,12 @@ public class InputPanel extends JFrame implements PanelTemplete {
 				} else if (e.getSource() == boundary_load) {
 					boundary_txt.setText(folderPath);
 					temp_path[1] = folderPath;
-				} else if (e.getSource() == source_load) {
-					boundary_txt.setText(folderPath);
+				} else if (e.getSource() == dat_load) {
+					dat_txt.setText(folderPath);
 					temp_path[2] = folderPath;
+				} else if (e.getSource() == source_load) {
+					source_txt.setText(folderPath);
+					temp_path[3] = folderPath;
 				}
 			} else if (returnVal == JFileChooser.CANCEL_OPTION) { // 취소를 클릭
 				System.out.println("cancel");
@@ -306,8 +327,16 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == next) {
-				for (String temp : temp_path) {
-					if (temp == null) {
+				if(terrain_dxf.isSelected() == true) {
+					if(temp_path[0] == null || temp_path[1] == null || temp_path[3] == null)
+					{
+						System.out.println("입력자료가 충분하지 않습니다.");
+						JOptionPane.showMessageDialog(null, "입력자료가 충분하지 않습니다.", "입력자료 오류", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+				} else {
+					if(temp_path[2] == null || temp_path[3] == null)
+					{
 						System.out.println("입력자료가 충분하지 않습니다.");
 						JOptionPane.showMessageDialog(null, "입력자료가 충분하지 않습니다.", "입력자료 오류", JOptionPane.ERROR_MESSAGE);
 						return;
@@ -321,21 +350,70 @@ public class InputPanel extends JFrame implements PanelTemplete {
 					JOptionPane.showMessageDialog(null, "위경도 데이터를 입력해주세요", "입력데이터 오류", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				aermodDTO.setSido(company_sido.getText());
-				aermodDTO.setSigun(company_sigun.getText());
-				aermodDTO.setGu(company_gu.getText());
-				aermodDTO.setSource_path(temp_path[2]);
+				if(terrain_dxf.isSelected() == true) 
+					JOptionPane.showMessageDialog(null, "지형 변환시에는 시간이 오래 소모될수 있습니다(최대 1시간 소요).","주의",JOptionPane.PLAIN_MESSAGE);
+				aermodDTO.setSido(company_sido_txt.getSelectedItem().toString());
+				aermodDTO.setSigun(company_sigun_txt.getSelectedItem().toString());
+				aermodDTO.setGu(company_gu_txt.getSelectedItem().toString());
+				aermodDTO.setSource_path(temp_path[3]);
 				frames.get("aerin").setUnVisible();
 				frames.get("aermet").setVisible();
 				frames.get("aermet").exet(aermodDTO);
+				System.out.println("Move MeteoPanel");
+				System.out.println("Company sido : " + aermodDTO.getSido());
+				System.out.println("Company sigun : " + aermodDTO.getSigun());
+				System.out.println("Company gu : " + aermodDTO.getGu());
+				System.out.println("Company lat : " + aermodDTO.getLatitude());
+				System.out.println("Company lon : " + aermodDTO.getLongitude());
+				System.out.println("Source Path : " + aermodDTO.getSource_path());
+				
 				try {
-					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[0], base_path + "\\temp\\topy.dxf")
-							.start();
-					process.waitFor();
-					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[1], base_path + "\\temp\\boundary.dxf")
-							.start();
-					process.waitFor();
-					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[2], base_path + "\\temp\\source.csv")
+					
+					if(terrain_dxf.isSelected() == true) {
+						process = new ProcessBuilder("cmd", "/c", "copy", temp_path[0], base_path + "\\temp\\topy.dxf")
+								.start();
+						process.waitFor();
+						process = new ProcessBuilder("cmd", "/c", "copy", temp_path[1], base_path + "\\temp\\boundary.dxf")
+								.start();
+						process.waitFor();
+						process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\exe\\terrain.bat", base_path + "\\temp\\terrain.bat")
+								.start();
+						process.waitFor();
+						process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\exe\\0aermod.exe", base_path + "\\temp\\0aermod.exe")
+								.start();
+						process.waitFor();
+						process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\exe\\1aermod.exe", base_path + "\\temp\\1aermod.exe")
+								.start();
+						process.waitFor();
+						process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\exe\\2aermod.exe", base_path + "\\temp\\2aermod.exe")
+								.start();
+						process.waitFor();
+						
+						File terrain = new File(base_path + "\\temp\\terrain.bat");
+						File terraindir = new File(base_path + "\\temp");
+						String terrainsrc = terrain.getAbsolutePath();
+						if (terrain.isFile()) {
+							List<String> cmd = new ArrayList<String>();
+							cmd.add(terrainsrc);
+							processBuilder = new ProcessBuilder(cmd);
+							processBuilder.directory(terraindir);
+							process = processBuilder.start();
+							process.waitFor();
+						} else {
+							System.out.println("에러 : 지형변환 실행파일이 없습니다.(terrain.dat)");
+							return;
+						}
+						process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\temp\\receptor_input.dat", base_path + "\\run\\receptor_input.dat")
+								.start();
+						process.waitFor();
+						
+						
+					} else {
+						process = new ProcessBuilder("cmd", "/c", "copy", temp_path[2], base_path + "\\run\\receptor_input.dat")
+								.start();
+						process.waitFor();
+					}
+					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[3], base_path + "\\run\\source.csv")
 							.start();
 					process.waitFor();
 					process.destroy();
@@ -344,13 +422,6 @@ public class InputPanel extends JFrame implements PanelTemplete {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				System.out.println("Move MeteoPanel");
-				System.out.println("Company sido : " + aermodDTO.getSido());
-				System.out.println("Company sigun : " + aermodDTO.getSigun());
-				System.out.println("Company gu : " + aermodDTO.getGu());
-				System.out.println("Company lat : " + aermodDTO.getLatitude());
-				System.out.println("Company lon : " + aermodDTO.getLongitude());
-				System.out.println("Source Path : " + aermodDTO.getSource_path());
 			}
 
 		}
