@@ -41,15 +41,22 @@ public class AERMOD implements Runnable{
 	public void ReadyProcess() throws InterruptedException, IOException{
 		
 		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\run\\" + matter).start();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\3aermod.exe", base_path + "\\run\\" + matter + "\\").start();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\aermod.bat", base_path + "\\run\\" + matter + "\\").start();
+		process.waitFor();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\exe\\3aermod.exe", base_path + "\\run\\" + matter + "\\").start();
+		process.waitFor();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\exe\\aermod.bat", base_path + "\\run\\" + matter + "\\").start();
+		process.waitFor();
 		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\aermod_" + matter + ".inp", base_path + "\\run\\" + matter + "\\").start();
 		process.waitFor();
 		process = new ProcessBuilder("cmd", "/c", "move", base_path + "\\run\\" +matter + "\\aermod_" + matter + ".inp", base_path + "\\run\\" +matter + "\\aermod.inp").start();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\AERMOD.PFL", base_path + "\\run\\" + matter + "\\").start();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\AERMOD.SFC", base_path + "\\run\\" + matter + "\\").start();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\POINT_" + matter + ".dat", base_path + "\\run\\" + matter + "\\").start();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\receptor_input.dat", base_path + "\\run\\" + matter + "\\").start();
+		process.waitFor();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\AERMOD.PFL", base_path + "\\run\\" + matter + "\\").start();
+		process.waitFor();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\AERMOD.SFC", base_path + "\\run\\" + matter + "\\").start();
+		process.waitFor();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\POINT_" + matter + ".dat", base_path + "\\run\\" + matter + "\\").start();
+		process.waitFor();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\receptor_input.dat", base_path + "\\run\\" + matter + "\\").start();
 		process.waitFor();
 		process.destroy();
 	}
@@ -87,7 +94,7 @@ public class AERMOD implements Runnable{
 	}
 	
 	public void FinishProcess() throws IOException, InterruptedException {
-		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\res\\" + matter).start();
+		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\result\\" + matter).start();
 		process.waitFor();
 		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_an.FIL", base_path + "\\result\\" +matter + "\\" + matter + "_an.FIL").start();
 		process.waitFor();
@@ -116,8 +123,8 @@ public class AERMOD implements Runnable{
 				Thread.sleep(10);
 				FinishProcess();
 				Thread.sleep(10);
-				PostProcess();
-				Thread.sleep(10);
+//				PostProcess();
+//				Thread.sleep(10);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {

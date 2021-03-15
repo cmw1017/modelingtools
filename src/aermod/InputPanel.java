@@ -459,7 +459,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	
 	
 	@Override
-	public void exet(AermodDTO aermodDTO) { // 전 페이지에서 넘어오면서 실행되어
+	public void exet(AermodDTO aermodDTO) { 
 		System.out.println("Set Input Panel");
 		this.aermodDTO = aermodDTO;
 		try {

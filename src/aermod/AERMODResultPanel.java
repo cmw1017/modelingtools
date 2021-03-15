@@ -114,9 +114,9 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 		matters = aermodDTO.getMatters();
 		int length = matters.size();
 		
-		JLabel[][] matters_label = new JLabel[length][3];
+		JLabel[][] matters_label = new JLabel[length][header.length];
 		for(int i = 0; i < length; i++) {
-			for(int j = 0; j < 3; j++) {
+			for(int j = 0; j < header.length; j++) {
 				matters_label[i][j] = new JLabel();
 				matters_label[i][j].setHorizontalAlignment(SwingConstants.CENTER);
 				matters_label[i][j].setOpaque(true);
@@ -130,8 +130,8 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 			}
 		}
 		aerresjp.add(content);
-//		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label);
-//		Thread thread = new Thread(aermain, "aermod_main");
-//		thread.start();
+		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label);
+		Thread thread = new Thread(aermain, "aermod_main");
+		thread.start();
 	}
 }

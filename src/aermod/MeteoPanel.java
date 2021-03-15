@@ -84,7 +84,7 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 		station_info.setLocation(200, 200);
 		station_info.setSize(300, 50);
 		station_info.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		station_info.setText("OO 기상대");
+		station_info.setText("");
 
 		bc.setLocation(50, 275);
 		bc.setSize(200, 50);
@@ -93,7 +93,7 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 		bc_info.setLocation(250, 275);
 		bc_info.setSize(300, 50);
 		bc_info.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		bc_info.setText("OO ~ OO년 기존오염도");
+		bc_info.setText("2017 ~ 2019년 기존오염도");
 
 		ec.setLocation(50, 350);
 		ec.setSize(200, 50);
@@ -247,5 +247,9 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 	public void exet(AermodDTO aermodDTO) {
 		this.aermodDTO = aermodDTO;
 		base_path = aermodDTO.getBase_path();
+		AERPRE aerpre = new AERPRE(aermodDTO);
+		aerpre.RunRMO();
+		RMO rmo = aermodDTO.getRmo();
+		station_info.setText(rmo.getName() + " 기상대");
 	}
 }

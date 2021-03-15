@@ -4,6 +4,8 @@ public class RMO {
 	
 	private String name;		//기상대 이름
 	private String id;			//기상대 id
+	private String sf_id;			//기상대 id
+	private String ua_id;			//기상대 id
 	private Double latitude; 	//위도
 	private Double longitude;	//경도
 	private Double elev;		//고도
@@ -23,6 +25,22 @@ public class RMO {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getSf_id() {
+		return sf_id;
+	}
+
+	public void setSf_id(String sf_id) {
+		this.sf_id = sf_id;
+	}
+
+	public String getUa_id() {
+		return ua_id;
+	}
+
+	public void setUa_id(String ua_id) {
+		this.ua_id = ua_id;
 	}
 
 	public Double getLatitude() {

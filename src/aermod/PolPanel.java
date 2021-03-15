@@ -94,6 +94,7 @@ class MoveListener implements ActionListener {
 			if (e.getSource() == next) {
 				frames.get("aerpol").setUnVisible();
 				frames.get("aerres").setVisible();
+				frames.get("aerres").exet(aermodDTO);
 			} 
 			
 			

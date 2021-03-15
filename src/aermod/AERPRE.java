@@ -20,7 +20,7 @@ public class AERPRE {
 	private List<String> matters; // 모델에 사용할 오염물질들만 모음
 	private ArrayList<String> stack_header; // source 파일의 헤더
 	private ArrayList<Map<String, Double>> stack_info; // source 파일의 내용
-	private ArrayList<RMO> rmos; // 기상대 저장 파일
+//	private ArrayList<RMO> rmos; // 기상대 저장 파일
 	private String[] rmo_id = new String[3]; //가장 가까운 기상대 id(기본, 저층, 고층)
 	private Process process;
 	private Map<String,Map<String,String>> inpparam;
@@ -40,7 +40,7 @@ public class AERPRE {
 	public void ReadRMO() { // 기상대 정보를 읽어서 가장 가까운 기상대 정보를 찾아줌
 		try {
 			System.out.println("Read RMO Data in rmo_info.csv");
-			rmos = new ArrayList<>();
+//			rmos = new ArrayList<>();
 			double distance = 0;
 			double min_distance = -1;
 			int ch;
@@ -77,7 +77,7 @@ public class AERPRE {
 							distance = distance(Double.parseDouble(values[0]), Double.parseDouble(values[1]),
 									aermodDTO.getLatitude(), aermodDTO.getLongitude());
 							rmo.setDistance(distance);
-							rmos.add(rmo);
+//							rmos.add(rmo);
 //							System.out.print(rmo.getLatitude() + " ");
 //							System.out.print(rmo.getLongitude() + " ");
 //							System.out.print(rmo.getElev() + " ");
@@ -88,6 +88,7 @@ public class AERPRE {
 							else if (min_distance > distance) {
 								rmo_id[0] = values[3];
 								min_distance = distance;
+								aermodDTO.setRmo(rmo);
 							}
 							
 						}
@@ -156,6 +157,12 @@ public class AERPRE {
 		}
 		rmo_id[1] = String.valueOf(Integer.parseInt(RMO_info.get(3)));
 		rmo_id[2] = RMO_info.get(5);
+		RMO temprmo = aermodDTO.getRmo();
+		temprmo.setSf_id(rmo_id[2]);
+		temprmo.setUa_id(rmo_id[1]);
+		aermodDTO.setRmo(temprmo);
+		
+		
 		System.out.println("Nearest id is : " + rmo_id[0] + " " + rmo_id[1] + " " + rmo_id[2] + " ");
 
 		try {
@@ -177,6 +184,7 @@ public class AERPRE {
 	
 	public void CreateInp(String matter) {
 		try {
+			RMO temprmo = aermodDTO.getRmo();
 			int ch;
 			Reader inStream = new FileReader(base_path + "\\resource\\aermod_.inp");
 			BufferedWriter outStream = new BufferedWriter(
@@ -203,13 +211,13 @@ public class AERPRE {
 							continue;
 						} else if (str.toString().contains("@@!3")) {
 							String str2 = str.toString();
-							str2 = str2.replace("@@!3", rmo_id[2]);
+							str2 = str2.replace("@@!3", temprmo.getSf_id());
 							outStream.write(str2, 0, str2.length());
 							str = new StringBuilder();
 							continue;
 						} else if (str.toString().contains("@@!4")) {
 							String str2 = str.toString();
-							str2 = str2.replace("@@!4", rmo_id[1]);
+							str2 = str2.replace("@@!4", temprmo.getUa_id());
 							outStream.write(str2, 0, str2.length());
 							str = new StringBuilder();
 							continue;
@@ -353,13 +361,16 @@ public class AERPRE {
 	}
 
 	public void RunProcess() {
-		ReadRMO();
-		SelectRMO();
 		ReadSource();
 		for(String matter : matters) {
 			CreateInp(matter);
 			CreateSource(matter);
 		}
+	}
+	
+	public void RunRMO() {
+		ReadRMO();
+		SelectRMO();
 	}
 
 }
