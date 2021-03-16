@@ -85,12 +85,13 @@ public class AERPRE {
 				}
 			}
 			inStream.close();
-			for(String key : criteria.keySet()) {
-				System.out.println(key);
-				for(String kkey : criteria.get(key).keySet()) {
-					System.out.println(kkey + " : " + criteria.get(key).get(kkey));
-				}
-			}
+			aermodDTO.setCriteria(criteria);
+//			for(String key : criteria.keySet()) {
+//				System.out.println(key);
+//				for(String kkey : criteria.get(key).keySet()) {
+//					System.out.println(kkey + " : " + criteria.get(key).get(kkey));
+//				}
+//			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
