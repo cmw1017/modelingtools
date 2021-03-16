@@ -24,6 +24,7 @@ public class AERPRE {
 	private String[] rmo_id = new String[3]; //가장 가까운 기상대 id(기본, 저층, 고층)
 	private Process process;
 	private Map<String,Map<String,String>> inpparam;
+	Map<String,Map<String,Double>> criteria;
 
 
 
@@ -37,6 +38,64 @@ public class AERPRE {
 		this.inpparam = aermodDTO.getInpparam();
 	}
 
+	public void ReadCriteria() {
+		try {
+			System.out.println("Read criteria Data in criteria.csv");
+			criteria = new HashMap<String, Map<String, Double>>();
+			int ch;
+			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
+			InputStreamReader inStream = new InputStreamReader(
+					new FileInputStream(base_path + "\\resource\\criteria.csv"), "euc-kr");
+			StringBuilder str = new StringBuilder();
+			String[] values = new String[4];
+
+			while (true) {
+				ch = inStream.read();
+				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1 && ch != 44) { // 단어를 구분하는 문자가 아닌 경우
+					str.append((char) ch);
+				} else {
+					if (ch == 44) {
+						series1++;
+						if (series2 != 0) {
+							String value = str.toString();
+							values[series1 - 1] = value;
+						}
+					}
+					if (series1 == 4 || (series1 == 3 && ch == 13)) {
+						if (series2 != 0) {
+							String value = str.toString();
+							values[series1] = value;
+							if(criteria.containsKey(values[0])) {
+								criteria.get(values[0]).put(values[1], Double.parseDouble(values[2]));
+							} else {
+								criteria.put(values[0], new HashMap<String, Double>());
+								criteria.get(values[0]).put(values[1], Double.parseDouble(values[2]));
+							}
+							
+						}
+						series1 = 0;
+						series2++;
+					}
+					if (str.length() != 0) {
+						str = new StringBuilder();
+					}
+					if (ch == -1) {
+						break;
+					}
+				}
+			}
+			inStream.close();
+			for(String key : criteria.keySet()) {
+				System.out.println(key);
+				for(String kkey : criteria.get(key).keySet()) {
+					System.out.println(kkey + " : " + criteria.get(key).get(kkey));
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void ReadRMO() { // 기상대 정보를 읽어서 가장 가까운 기상대 정보를 찾아줌
 		try {
 			System.out.println("Read RMO Data in rmo_info.csv");
