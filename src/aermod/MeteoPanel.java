@@ -228,14 +228,17 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == next) {
-				frames.get("aermet").setUnVisible();
-				frames.get("aerpol").setVisible();
-				frames.get("aerpol").exet(aermodDTO);
 				if(ec_select.isSelected() == true) {
+					System.out.println("use discrete ec_criteria");
 					aermodDTO.setEc_path(temp_path);
+					AERPRE aerpre = new AERPRE(aermodDTO);
+					aerpre.ReadCriteria(temp_path);
 				} else {
 					aermodDTO.setEc_path(null);
 				}
+				frames.get("aermet").setUnVisible();
+				frames.get("aerpol").setVisible();
+				frames.get("aerpol").exet(aermodDTO);
 				System.out.println("Move PolPanel");
 				System.out.println("Ec path : " + aermodDTO.getEc_path());
 			}

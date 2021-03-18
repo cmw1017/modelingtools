@@ -17,7 +17,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	String temp_path;
 	AermodDTO aermodDTO;
 	
-	private String[] header = {"오염물질", "모델 진행도", "모델링 횟수","배출농도","환경기준","통과여부"};
+	private String[] header = {"오염물질", "모델 진행도", "모델링 횟수"};
 	private List<String> matters;
 	
 	private JPanel aerresjp = new JPanel();
@@ -25,7 +25,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	private Color white = new Color(255,255,255);
 	private JLabel content = new JLabel();
 	JLabel pol = new JLabel();
-	private JButton back = new RoundedButton("메인페이지로", Color.decode("#84B1D9"), white, 20);
+	private JButton result = new RoundedButton("결과 다운로드", Color.decode("#84B1D9"), white, 20);
 	private JButton complete = new RoundedButton("완료", Color.decode("#84B1D9"), white, 20);
 	
 	
@@ -41,7 +41,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 		ImagePanel title = new ImagePanel(base_path+"\\resource\\Step3.png", 1000, 130);
 		aerresjp.add(title);
 		aerresjp.add(pol);
-		aerresjp.add(back);
+		aerresjp.add(result);
 		aerresjp.add(complete);
 		
 		
@@ -63,24 +63,23 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 			headers[i].setOpaque(true);
 			headers[i].setBackground(Color.decode("#D0D8DA"));
 			headers[i].setFont(new Font("맑은 고딕", Font.BOLD, 15));
-			headers[i].setLocation(50 + 150*i, 220);
+			headers[i].setLocation(50 + 150 * i, 220);
 			headers[i].setSize(150, 50);
-			headers[i].setText(header[i]);
+			headers[i].setText(header[i % 3]);
 			aerresjp.add(headers[i]);
 		}
 		
 		// 이동 버튼 시작
-		back.setLocation(625, 870);
-		back.setSize(150, 50);
-		back.addActionListener(new MoveListener());
-		back.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		//back.setVisible(false);
+		result.setLocation(600, 870);
+		result.setSize(100, 50);
+		result.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		result.addActionListener(new MoveListener());
+		//result.setVisible(false);
 		complete.setLocation(800, 870);
 		complete.setSize(100, 50);
 		complete.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		complete.addActionListener(new MoveListener());
 		//complete.setVisible(false);
-		System.out.println("setPanel End");
 	}
 	
 	public void setVisible() {
@@ -115,22 +114,25 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 		int length = matters.size();
 		
 		JLabel[][] matters_label = new JLabel[length][header.length];
-		for(int i = 0; i < length; i++) {
-			for(int j = 0; j < header.length; j++) {
+		for(int i = 0, k = 0, y = 0; i < length; i++, y++) {
+			for(int j = 0; j < 3; j++) {
 				matters_label[i][j] = new JLabel();
 				matters_label[i][j].setHorizontalAlignment(SwingConstants.CENTER);
 				matters_label[i][j].setOpaque(true);
 				matters_label[i][j].setBackground(Color.decode("#D0D8DA"));
 				matters_label[i][j].setFont(new Font("맑은 고딕", Font.BOLD, 15));
-				matters_label[i][j].setLocation(50 + 150 * j, 260 + 30 * i);
+				matters_label[i][j].setLocation(50 + 450 * k + 150 * j, 260 + 30 * y);
 				matters_label[i][j].setSize(150, 50);
 				if(j ==0) matters_label[i][j].setText(matters.get(i));
 				else matters_label[i][j].setText("0");
 				aerresjp.add(matters_label[i][j]);
 			}
+			if(i == 10) {
+				k++; y=-1;
+			}
 		}
 		aerresjp.add(content);
-		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label);
+		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label, complete);
 		Thread thread = new Thread(aermain, "aermod_main");
 		thread.start();
 	}

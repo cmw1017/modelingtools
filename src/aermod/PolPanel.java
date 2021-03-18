@@ -113,9 +113,9 @@ class MoveListener implements ActionListener {
 		int x = 0;
 		int y = 0;
 		int z = 1;
-		for (int i = 1; i < pollist.length+1; i++) {
+		for (int i = 1, k = 1; i < pollist.length+1; i++, k++) {
 			polname.add(new JLabel());
-			polname.get(i-1).setLocation(50 + 300 * x, 200 + 50 * y);
+			polname.get(i-1).setLocation(50 + 320 * x, 200 + 40 * y);
 			polname.get(i-1).setSize(150, 50);
 			polname.get(i-1).setFont(new Font("맑은 고딕", Font.BOLD, 15));
 			polname.get(i-1).setText(pollist[i-1]);
@@ -124,12 +124,12 @@ class MoveListener implements ActionListener {
 				if(criteria.get(pollist[i-1]).containsKey(hourlist[j-1]))
 				{
 					poltime.add(new JLabel());
-					poltime.get(z-1).setLocation(150 + 300 * x, 200 + 50 * y);
+					poltime.get(z-1).setLocation(200 + 320 * x, 200 + 40 * y);
 					poltime.get(z-1).setSize(150, 50);
 					poltime.get(z-1).setFont(new Font("맑은 고딕", Font.BOLD, 15));
 					poltime.get(z-1).setText(hourlist[j-1]);
 					polval.add(new JLabel());
-					polval.get(z-1).setLocation(200 + 300 * x, 200 + 50 * y);
+					polval.get(z-1).setLocation(250 + 320 * x, 200 + 40 * y);
 					polval.get(z-1).setSize(150, 50);
 					polval.get(z-1).setFont(new Font("맑은 고딕", Font.BOLD, 15));
 					polval.get(z-1).setText(String.valueOf(criteria.get(pollist[i-1]).get(hourlist[j-1])));
@@ -139,8 +139,8 @@ class MoveListener implements ActionListener {
 					z++;
 				}
 			}
-			if((x != 1 && i % 7 == 0) || (x == 1 && i % 10 == 0)) {
-				x++; y=0;
+			if((x != 2 && k % 8 == 0) || (x == 2 && k % 12 == 0)) {
+				x++; y=0; k=1;
 			}
 		}
 		aermetjp.add(content);

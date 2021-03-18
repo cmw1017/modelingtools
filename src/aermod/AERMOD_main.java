@@ -4,8 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-
-import javax.swing.JLabel;
+import javax.swing.*;
 
 public class AERMOD_main implements Runnable{
 	
@@ -17,7 +16,7 @@ public class AERMOD_main implements Runnable{
 	private JLabel[][] matters_label;
 	private String base_path;
 	
-	public AERMOD_main(AermodDTO aermodDTO, JLabel[][] matters_label) {
+	public AERMOD_main(AermodDTO aermodDTO, JLabel[][] matters_label, JButton complete) {
 		this.base_path = aermodDTO.getBase_path();
 		this.matters = aermodDTO.getMatters();
 		this.matters_label = matters_label;

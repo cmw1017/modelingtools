@@ -247,10 +247,9 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		
 		company_lat_txt.setText("35.555");
 		company_lon_txt.setText("127.555");
-		topy_txt.setText("D:\\Modeling\\topy.dxf");
-		temp_path[0] = "D:\\Modeling\\topy.dxf";
-		boundary_txt.setText("D:\\Modeling\\boundary.dxf");
-		temp_path[1] = "D:\\Modeling\\boundary.dxf";
+		terrain_dat.setSelected(true);
+		dat_txt.setText("D:\\Modeling\\receptor_input.dat");
+		temp_path[2] = "D:\\Modeling\\receptor_input.dat";
 		source_txt.setText("D:\\Modeling\\111.csv");
 		temp_path[3] = "D:\\Modeling\\111.csv";
 	}

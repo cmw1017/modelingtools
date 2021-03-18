@@ -38,14 +38,19 @@ public class AERPRE {
 		this.inpparam = aermodDTO.getInpparam();
 	}
 
-	public void ReadCriteria() {
+	public void ReadCriteria(String EC_path) {
 		try {
 			System.out.println("Read criteria Data in criteria.csv");
 			criteria = new HashMap<String, Map<String, Double>>();
 			int ch;
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
-			InputStreamReader inStream = new InputStreamReader(
+			InputStreamReader inStream;
+			if(EC_path == null)
+				inStream = new InputStreamReader(
 					new FileInputStream(base_path + "\\resource\\criteria.csv"), "euc-kr");
+			else 
+				inStream = new InputStreamReader(
+						new FileInputStream(EC_path), "euc-kr");
 			StringBuilder str = new StringBuilder();
 			String[] values = new String[4];
 
