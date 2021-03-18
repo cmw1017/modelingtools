@@ -25,6 +25,7 @@ public class AERPRE {
 	private Process process;
 	private Map<String,Map<String,String>> inpparam;
 	Map<String,Map<String,Double>> criteria;
+	Map<String,Map<String,Double>> result;
 
 
 
@@ -42,6 +43,7 @@ public class AERPRE {
 		try {
 			System.out.println("Read criteria Data in criteria.csv");
 			criteria = new HashMap<String, Map<String, Double>>();
+			result = new HashMap<String, Map<String, Double>>();
 			int ch;
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
 			InputStreamReader inStream;
@@ -72,9 +74,12 @@ public class AERPRE {
 							values[series1] = value;
 							if(criteria.containsKey(values[0])) {
 								criteria.get(values[0]).put(values[1], Double.parseDouble(values[2]));
+								result.get(values[0]).put(values[1], Double.parseDouble(values[2]));
 							} else {
 								criteria.put(values[0], new HashMap<String, Double>());
 								criteria.get(values[0]).put(values[1], Double.parseDouble(values[2]));
+								result.put(values[0], new HashMap<String, Double>());
+								result.get(values[0]).put(values[1], Double.parseDouble(values[2]));
 							}
 							
 						}
@@ -91,6 +96,7 @@ public class AERPRE {
 			}
 			inStream.close();
 			aermodDTO.setCriteria(criteria);
+			aermodDTO.setResult(result);
 //			for(String key : criteria.keySet()) {
 //				System.out.println(key);
 //				for(String kkey : criteria.get(key).keySet()) {

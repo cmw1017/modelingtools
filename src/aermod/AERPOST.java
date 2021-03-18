@@ -4,7 +4,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,12 +12,12 @@ public class AERPOST {
 	String base_path;
 	String matter;
 	String[] series = {"1", "24", "an"};
-	Map<String, Double> criteria;
+	private Map<String,Map<String,Double>> result;
 	
-	public AERPOST(String base_path, String matter, Map<String, Double> criteria) {
-		this.base_path = base_path;
+	public AERPOST(AermodDTO aermodDTO, String matter) {
+		this.base_path = aermodDTO.getBase_path();
 		this.matter = matter;
-		this.criteria = criteria;
+		this.result = aermodDTO.getResult();
 	}
 	
 	public double ReadData(String series) {
@@ -78,8 +77,14 @@ public class AERPOST {
 	}
 	
 	public boolean RunProcess() {
-		for(String time : series) {
-			if(ReadData(time) > criteria.get(time)) return true;
+		for(String key : result.keySet()) {
+			if(key.equals(matter)) {
+				for(String time : series) {
+					if(result.get(matter).containsKey(time)) {
+						result.get(matter).replace(time, ReadData(time));
+					}
+				}
+			}
 		}
 		return false;
 		

@@ -18,6 +18,7 @@ public class AermodDTO {
 	private List<String> matters;
 	private Map<String,Map<String,String>> inpparam;
 	private Map<String,Map<String,Double>> criteria;
+	private Map<String,Map<String,Double>> result;
 	
 	public String getBase_path() {
 		return base_path;
@@ -96,6 +97,12 @@ public class AermodDTO {
 	}
 	public void setRmo(RMO rmo) {
 		this.rmo = rmo;
+	}
+	public Map<String, Map<String, Double>> getResult() {
+		return result;
+	}
+	public void setResult(Map<String, Map<String, Double>> result) {
+		this.result = result;
 	}
 	
 	

@@ -15,22 +15,21 @@ public class AERMOD implements Runnable{
 	ProcessBuilder processBuilder = null;
 	ThreadInfo t_info;
 	int index_thread;
-	Map<String, Double> criteria;
 	Queue<String> queue;
+	AermodDTO aermodDTO;
 	
 	// base_path : 기본 파일이 넣어져 있는 경로(에어모드 실행파일, inp base 파일 등..)
 	// matter : 모델링 할 물질 명
-	// criteria : 모델링 후 다시 모델링 해야할지 정해지는 기준
 	// produce : 진행 상태를 알려주는 상자
 	// count : 현재 모델링 진행 횟수를 알려주는 상자
 	// t_info : 모든 쓰레드의 정보 및 상태를 가지고 있는 클래스
 	// index_thread : 쓰레드의 사용 상태를 알려주는 변수
 	// queue : 모델링 해야할 물질을 저장
-	public AERMOD(String base_path, String matter, Map<String, Double> criteria, JLabel  produce, JLabel count, 
+	public AERMOD(AermodDTO aermodDTO, String matter, JLabel  produce, JLabel count, 
 			ThreadInfo t_info, int index_thread, Queue<String> queue) {
-		this.base_path = base_path;
+		this.aermodDTO = aermodDTO;
+		this.base_path = aermodDTO.getBase_path();
 		this.matter = matter;
-		this.criteria = criteria;
 		this.produce = produce;
 		this.count = count;
 		this.t_info = t_info;
@@ -110,8 +109,17 @@ public class AERMOD implements Runnable{
 	}
 	
 	public void PostProcess() {
-		AERPOST aerpost = new AERPOST(base_path, matter, criteria);
-		if(aerpost.RunProcess()) queue.add(matter);
+		AERPOST aerpost = new AERPOST(aermodDTO, matter);
+		aerpost.RunProcess();
+		boolean end = true;
+		for(int i = 0; i < t_info.index.length; i++) {
+			if(t_info.index[i] == true) { 
+				end = false; // 실행중인 쓰래드가 한개라도 있으면 false로 변환
+			}
+		}
+		if(end) {
+			System.out.println("Modeling ALL END");
+		}
 	}
 
 	@Override
@@ -123,8 +131,8 @@ public class AERMOD implements Runnable{
 				Thread.sleep(10);
 				FinishProcess();
 				Thread.sleep(10);
-//				PostProcess();
-//				Thread.sleep(10);
+				PostProcess();
+				Thread.sleep(10);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
