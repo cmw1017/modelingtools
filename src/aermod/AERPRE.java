@@ -20,15 +20,13 @@ public class AERPRE {
 	private List<String> matters; // 모델에 사용할 오염물질들만 모음
 	private ArrayList<String> stack_header; // source 파일의 헤더
 	private ArrayList<Map<String, Double>> stack_info; // source 파일의 내용
-//	private ArrayList<RMO> rmos; // 기상대 저장 파일
-	private String[] rmo_id = new String[3]; //가장 가까운 기상대 id(기본, 저층, 고층)
+	private String[] rmo_id = new String[3]; // 가장 가까운 기상대 id(기본, 저층, 고층)
 	private Process process;
-	private Map<String,Map<String,String>> inpparam;
-	Map<String,Map<String,Double>> criteria;
-	Map<String,Map<String,Double>> result;
-
-
-
+	private Map<String, Map<String, String>> inpparam;	// inp 생성시 필요한 값들
+	private Map<String, Map<String, Double>> criteria;	// 환경기준
+	private Map<String, Map<String, Double>> result;	// 모델링 결과 저장
+	private Map<String, Map<String, Map<String, Map<String, Double>>>> air_list; // 기존오염도
+	
 	private String base_path;
 
 	private AermodDTO aermodDTO;
@@ -47,12 +45,10 @@ public class AERPRE {
 			int ch;
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
 			InputStreamReader inStream;
-			if(EC_path == null)
-				inStream = new InputStreamReader(
-					new FileInputStream(base_path + "\\resource\\criteria.csv"), "euc-kr");
-			else 
-				inStream = new InputStreamReader(
-						new FileInputStream(EC_path), "euc-kr");
+			if (EC_path == null)
+				inStream = new InputStreamReader(new FileInputStream(base_path + "\\resource\\criteria.csv"), "euc-kr");
+			else
+				inStream = new InputStreamReader(new FileInputStream(EC_path), "euc-kr");
 			StringBuilder str = new StringBuilder();
 			String[] values = new String[4];
 
@@ -72,7 +68,7 @@ public class AERPRE {
 						if (series2 != 0) {
 							String value = str.toString();
 							values[series1] = value;
-							if(criteria.containsKey(values[0])) {
+							if (criteria.containsKey(values[0])) {
 								criteria.get(values[0]).put(values[1], Double.parseDouble(values[2]));
 								result.get(values[0]).put(values[1], Double.parseDouble(values[2]));
 							} else {
@@ -81,7 +77,7 @@ public class AERPRE {
 								result.put(values[0], new HashMap<String, Double>());
 								result.get(values[0]).put(values[1], Double.parseDouble(values[2]));
 							}
-							
+
 						}
 						series1 = 0;
 						series2++;
@@ -107,16 +103,145 @@ public class AERPRE {
 			e.printStackTrace();
 		}
 	}
+
+	public void ReadAirInfo() {
+		try {
+			System.out.println("Read criteria Data in airinfo.csv");
+			air_list = new HashMap<String, Map<String, Map<String, Map<String, Double>>>>();
+			int ch;
+			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
+			InputStreamReader inStream;
+			inStream = new InputStreamReader(new FileInputStream(base_path + "\\resource\\AirInfoKorea.csv"), "euc-kr");
+			StringBuilder str = new StringBuilder();
+			String[] values = new String[5];
+			while (true) {
+				ch = inStream.read();
+				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1 && ch != 44) { // 단어를 구분하는 문자가 아닌 경우
+					str.append((char) ch);
+				} else {
+					if (ch == 44) {
+						series1++;
+						if (series2 != 0) {
+							String value = str.toString();
+							values[series1 - 1] = value;
+						}
+					}
+					if (series1 == 5 || (series1 == 4 && ch == 13)) {
+						if (series2 != 0) {
+							String value = str.toString();
+							values[series1] = value;
+							if (air_list.containsKey(values[0])) {
+								if (air_list.get(values[0]).containsKey(values[1])) {
+									if (air_list.get(values[0]).get(values[1]).containsKey(values[2])) {
+										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
+										}
+										else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										}
+									} else {
+										air_list.get(values[0]).get(values[1]).put(values[2], new HashMap<String, Double>());
+										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
+										}
+										else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										}
+									}
+								} else {
+									air_list.get(values[0]).put(values[1], new HashMap<String, Map<String, Double>>());
+									if (air_list.get(values[0]).get(values[1]).containsKey(values[2])) {
+										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
+										}
+										else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										}
+									} else {
+										air_list.get(values[0]).get(values[1]).put(values[2], new HashMap<String, Double>());
+										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
+										}
+										else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										}
+									}
+								}
+							} else {
+								air_list.put(values[0], new HashMap<String, Map<String, Map<String, Double>>>());
+								if (air_list.get(values[0]).containsKey(values[1])) {
+									if (air_list.get(values[0]).get(values[1]).containsKey(values[2])) {
+										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
+										}
+										else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										}
+									} else {
+										air_list.get(values[0]).get(values[1]).put(values[2], new HashMap<String, Double>());
+										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
+										}
+										else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										}
+									}
+								} else {
+									air_list.get(values[0]).put(values[1], new HashMap<String, Map<String, Double>>());
+									if (air_list.get(values[0]).get(values[1]).containsKey(values[2])) {
+										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
+										}
+										else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										}
+									} else {
+										air_list.get(values[0]).get(values[1]).put(values[2], new HashMap<String, Double>());
+										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
+										}
+										else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										}
+									}
+								}
+							}
+						}
+						series1 = 0;
+						series2++;
+					}
+					if (str.length() != 0) {
+						str = new StringBuilder();
+					}
+					if (ch == -1) {
+						break;
+					}
+				}
+			}
+			inStream.close();
+			for (String sido : air_list.keySet()) {
+				for (String sigun : air_list.get(sido).keySet()) {
+					for (String gu : air_list.get(sido).get(sigun).keySet()) {
+						for (String pol : air_list.get(sido).get(sigun).get(gu).keySet()) {
+							System.out.println(sido + "/" +sigun + "/" +gu + "/" +pol + "/" +air_list.get(sido).get(sigun).get(gu).get(pol));
+						}
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void ReadRMO() { // 기상대 정보를 읽어서 가장 가까운 기상대 정보를 찾아줌
 		try {
 			System.out.println("Read RMO Data in rmo_info.csv");
-//			rmos = new ArrayList<>();
 			double distance = 0;
 			double min_distance = -1;
 			int ch;
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
-			InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\resource\\rmo_info.csv"), "euc-kr");
+			InputStreamReader inStream = new InputStreamReader(
+					new FileInputStream(base_path + "\\resource\\rmo_info.csv"), "euc-kr");
 			StringBuilder str = new StringBuilder();
 			String[] values = new String[5];
 
@@ -129,7 +254,7 @@ public class AERPRE {
 						series1++;
 						if (series2 != 0) {
 							String value = str.toString();
-							values[series1-1] = value;
+							values[series1 - 1] = value;
 						}
 					}
 					if (series1 == 5 || (series1 == 4 && ch == 13)) {
@@ -140,32 +265,32 @@ public class AERPRE {
 							rmo.setLatitude(Double.parseDouble(values[0]));
 							rmo.setLongitude(Double.parseDouble(values[1]));
 							rmo.setElev(Double.parseDouble(values[2]));
-							if(values[3].length() == 2)
-								rmo.setId("0"+values[3]);
-							else 
+							if (values[3].length() == 2)
+								rmo.setId("0" + values[3]);
+							else
 								rmo.setId(values[3]);
 							rmo.setName(values[4]);
 							distance = distance(Double.parseDouble(values[0]), Double.parseDouble(values[1]),
 									aermodDTO.getLatitude(), aermodDTO.getLongitude());
 							rmo.setDistance(distance);
-//							rmos.add(rmo);
 //							System.out.print(rmo.getLatitude() + " ");
 //							System.out.print(rmo.getLongitude() + " ");
 //							System.out.print(rmo.getElev() + " ");
 //							System.out.print(rmo.getId() + " ");
 //							System.out.print(rmo.getName() + " ");
 //							System.out.println(rmo.getDistance() + " ");
-							if(min_distance == -1) min_distance = distance;
+							if (min_distance == -1)
+								min_distance = distance;
 							else if (min_distance > distance) {
 								rmo_id[0] = values[3];
 								min_distance = distance;
 								aermodDTO.setRmo(rmo);
 							}
-							
+
 						}
 						series1 = 0;
 						series2++;
-						
+
 					}
 					if (str.length() != 0) {
 						str = new StringBuilder();
@@ -180,26 +305,26 @@ public class AERPRE {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Double deg2rad(double deg) {
 		return (deg * 3.14159265358979 / 180);
 	}
-	
+
 	public Double rad2deg(double rad) {
 		return (rad * 180 / 3.14159265358979);
 	}
-	
+
 	public Double distance(double lat1, double lon1, double lat2, double lon2) {
-		
+
 		double num = lon1 - lon2;
-		double num1 = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(num));
+		double num1 = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2))
+				+ Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(num));
 		num1 = Math.acos(num1);
 		num1 = rad2deg(num1) * 60 * 1.1515;
 		return num1 * 1.609344;
 	}
 
-	
-	public void SelectRMO() { //가장 가까운 기상대 정보를 temp 폴더에 옮겨주고 내부의 저층, 고층의 ID를 추출
+	public void SelectRMO() { // 가장 가까운 기상대 정보를 temp 폴더에 옮겨주고 내부의 저층, 고층의 ID를 추출
 		System.out.println("Select nearst RMO");
 		ArrayList<String> RMO_info = new ArrayList<>();
 		try {
@@ -232,18 +357,17 @@ public class AERPRE {
 		temprmo.setSf_id(rmo_id[2]);
 		temprmo.setUa_id(rmo_id[1]);
 		aermodDTO.setRmo(temprmo);
-		
-		
+
 		System.out.println("Nearest id is : " + rmo_id[0] + " " + rmo_id[1] + " " + rmo_id[2] + " ");
 
 		try {
 			process = new ProcessBuilder("cmd", "/c", "copy",
-					base_path + "\\resource\\RMO_decrypt\\" + rmo_id[0] + "_AERMOD.PFL", base_path + "\\run\\AERMOD.PFL")
-							.start();
+					base_path + "\\resource\\RMO_decrypt\\" + rmo_id[0] + "_AERMOD.PFL",
+					base_path + "\\run\\AERMOD.PFL").start();
 			process.waitFor();
 			process = new ProcessBuilder("cmd", "/c", "copy",
-					base_path + "\\resource\\RMO_decrypt\\" + rmo_id[0] + "_AERMOD.SFC", base_path + "\\run\\AERMOD.SFC")
-							.start();
+					base_path + "\\resource\\RMO_decrypt\\" + rmo_id[0] + "_AERMOD.SFC",
+					base_path + "\\run\\AERMOD.SFC").start();
 			process.waitFor();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -251,8 +375,7 @@ public class AERPRE {
 			e2.printStackTrace();
 		}
 	}
-	
-	
+
 	public void CreateInp(String matter) {
 		try {
 			RMO temprmo = aermodDTO.getRmo();
@@ -433,12 +556,12 @@ public class AERPRE {
 
 	public void RunProcess() {
 		ReadSource();
-		for(String matter : matters) {
+		for (String matter : matters) {
 			CreateInp(matter);
 			CreateSource(matter);
 		}
 	}
-	
+
 	public void RunRMO() {
 		ReadRMO();
 		SelectRMO();

@@ -12,6 +12,7 @@ import javax.swing.*;
 
 public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
+	@SuppressWarnings("unused")
 	private Map<String, PanelTemplete> frames;
 	String base_path;
 	String temp_path;

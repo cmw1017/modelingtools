@@ -5,8 +5,8 @@ import java.util.*;
 
 import javax.swing.JLabel;
 
-public class AERMOD implements Runnable{
-	
+public class AERMOD implements Runnable {
+
 	String matter;
 	String base_path;
 	JLabel produce;
@@ -17,7 +17,7 @@ public class AERMOD implements Runnable{
 	int index_thread;
 	Queue<String> queue;
 	AermodDTO aermodDTO;
-	
+
 	// base_path : 기본 파일이 넣어져 있는 경로(에어모드 실행파일, inp base 파일 등..)
 	// matter : 모델링 할 물질 명
 	// produce : 진행 상태를 알려주는 상자
@@ -25,8 +25,8 @@ public class AERMOD implements Runnable{
 	// t_info : 모든 쓰레드의 정보 및 상태를 가지고 있는 클래스
 	// index_thread : 쓰레드의 사용 상태를 알려주는 변수
 	// queue : 모델링 해야할 물질을 저장
-	public AERMOD(AermodDTO aermodDTO, String matter, JLabel  produce, JLabel count, 
-			ThreadInfo t_info, int index_thread, Queue<String> queue) {
+	public AERMOD(AermodDTO aermodDTO, String matter, JLabel produce, JLabel count, ThreadInfo t_info, int index_thread,
+			Queue<String> queue) {
 		this.aermodDTO = aermodDTO;
 		this.base_path = aermodDTO.getBase_path();
 		this.matter = matter;
@@ -36,31 +36,40 @@ public class AERMOD implements Runnable{
 		this.index_thread = index_thread;
 		this.queue = queue;
 	}
-	
-	public void ReadyProcess() throws InterruptedException, IOException{
-		
+
+	public void ReadyProcess() throws InterruptedException, IOException {
+
 		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\run\\" + matter).start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\exe\\3aermod.exe", base_path + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\exe\\3aermod.exe",
+				base_path + "\\run\\" + matter + "\\").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\exe\\aermod.bat", base_path + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\exe\\aermod.bat",
+				base_path + "\\run\\" + matter + "\\").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\aermod_" + matter + ".inp", base_path + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\aermod_" + matter + ".inp",
+				base_path + "\\run\\" + matter + "\\").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "move", base_path + "\\run\\" +matter + "\\aermod_" + matter + ".inp", base_path + "\\run\\" +matter + "\\aermod.inp").start();
+		process = new ProcessBuilder("cmd", "/c", "move",
+				base_path + "\\run\\" + matter + "\\aermod_" + matter + ".inp",
+				base_path + "\\run\\" + matter + "\\aermod.inp").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\AERMOD.PFL", base_path + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\AERMOD.PFL",
+				base_path + "\\run\\" + matter + "\\").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\AERMOD.SFC", base_path + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\AERMOD.SFC",
+				base_path + "\\run\\" + matter + "\\").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\POINT_" + matter + ".dat", base_path + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\POINT_" + matter + ".dat",
+				base_path + "\\run\\" + matter + "\\").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\receptor_input.dat", base_path + "\\run\\" + matter + "\\").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\receptor_input.dat",
+				base_path + "\\run\\" + matter + "\\").start();
 		process.waitFor();
 		process.destroy();
 	}
-	public void RunProcess() throws IOException, InterruptedException {
 
+	public void RunProcess() throws IOException, InterruptedException {
 
 		File aermod = new File(base_path + "\\run\\" + matter + "\\aermod.bat");
 		File aermoddir = new File(base_path + "\\run\\" + matter);
@@ -75,8 +84,8 @@ public class AERMOD implements Runnable{
 			processBuilder.directory(aermoddir);
 			process = processBuilder.start();
 			BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			
-			while((str = stdOut.readLine()) != null) {
+
+			while ((str = stdOut.readLine()) != null) {
 				if (str.contains("+Now Processing Data For Day No.")) {
 					str = str.substring(str.lastIndexOf("No.") + 5, str.length());
 					str = str.substring(0, 3);
@@ -91,52 +100,66 @@ public class AERMOD implements Runnable{
 			return;
 		}
 	}
-	
+
 	public void FinishProcess() throws IOException, InterruptedException {
 		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\result\\" + matter).start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_an.FIL", base_path + "\\result\\" +matter + "\\" + matter + "_an.FIL").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" + matter + "\\" + matter + "_an.FIL",
+				base_path + "\\result\\" + matter + "\\" + matter + "_an.FIL").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_24.FIL", base_path + "\\result\\" +matter + "\\" + matter + "_24.FIL").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" + matter + "\\" + matter + "_24.FIL",
+				base_path + "\\result\\" + matter + "\\" + matter + "_24.FIL").start();
 		process.waitFor();
-		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" +matter + "\\" + matter + "_1.FIL", base_path + "\\result\\" +matter + "\\" + matter + "_1.FIL").start();
+		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" + matter + "\\" + matter + "_1.FIL",
+				base_path + "\\result\\" + matter + "\\" + matter + "_1.FIL").start();
 		process.waitFor();
 		process.destroy();
-		
+
 		t_info.index[index_thread] = false;
 		t_info.current_thread_count--;
 		System.out.println("< aermod complete(" + matter + ") >");
 	}
-	
+
 	public void PostProcess() {
 		AERPOST aerpost = new AERPOST(aermodDTO, matter);
 		aerpost.RunProcess();
 		boolean end = true;
-		for(int i = 0; i < t_info.index.length; i++) {
-			if(t_info.index[i] == true) { 
+		for (int i = 0; i < t_info.index.length; i++) {
+			if (t_info.index[i] == true) {
 				end = false; // 실행중인 쓰래드가 한개라도 있으면 false로 변환
 			}
 		}
-		if(end) {
+		if (end) { // 최종 결과 출력
 			System.out.println("Modeling ALL END");
+			System.out.println("<-------Modeling REPORT--------->");
+			System.out.println("Polutant	Series	Criteria	Result");
+			Map<String,Map<String,Double>> criteria = aermodDTO.getCriteria();
+			Map<String,Map<String,Double>> result = aermodDTO.getResult();
+			List<String> matters = aermodDTO.getMatters();
+			for (String matter : matters) {
+				for (String series : criteria.get(matter).keySet()) {
+					System.out.println(matter + "		" + series + "	" + criteria.get(matter).get(series) + "	"
+							+ result.get(matter).get(series));
+				}
+			}
 		}
 	}
 
 	@Override
 	public void run() {
-			try {
-				ReadyProcess();
-				Thread.sleep(10);
-				RunProcess();
-				Thread.sleep(10);
-				FinishProcess();
-				Thread.sleep(10);
-				PostProcess();
-				Thread.sleep(10);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} 
+		try {
+			ReadyProcess();
+			Thread.sleep(10);
+			RunProcess();
+			Thread.sleep(10);
+			FinishProcess();
+			Thread.sleep(10);
+			PostProcess();
+			Thread.sleep(10);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

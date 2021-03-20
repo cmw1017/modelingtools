@@ -17,7 +17,6 @@ public class AerMain extends JFrame {
 		frames.put("aerres", new AERMODResultPanel());
 		String base_path = "C:\\Users\\cmw10\\OneDrive\\aermod";
 //		String base_path = "C:\\Users\\DELL\\OneDrive\\aermod";
-		
 		Iterator<String> iter = frames.keySet().iterator();
 		while(iter.hasNext()) {
 			PanelTemplete frame = frames.get(iter.next());
@@ -25,7 +24,10 @@ public class AerMain extends JFrame {
 			frame.setUnVisible();
 			frame.setFrames(frames);
 		}
-
+		
+		
+		// 기본입력 데이터 설정
+		AermodDTO aermodDTO = new AermodDTO();
 		// SO2 CO NO2 Pb Benzene PM-10 Zn NH3 CS2 Cr Hg Cu Vinylchloride H2S Dichloromethane TCE As Ni Cd Br F HCN HCl Phenol Formaldehyde
 		String[] pollist = { "SO2", "CO", "NO2", "Pb", "Benzene", "PM-10", "Zn", "NH3", "CS2", "Cr", "Hg", "Cu",
 				"Vinylchloride", "H2S", "Dichloromethane", "TCE", "As", "Ni", "Cd", "Br", "F", "HCN", "HCl", "Phenol",
@@ -40,14 +42,15 @@ public class AerMain extends JFrame {
 				inpparam.get(matter).put("@@!2", "1000000.000 (GRAMS/(SEC-M**2)) micrograms/cubic-meter ");
 		}
 		
-		AermodDTO aermodDTO = new AermodDTO();
-		aermodDTO.setBase_path(base_path);
-		aermodDTO.setInpparam(inpparam);	
-		frames.get("aerin").setVisible();
-		frames.get("aerin").exet(aermodDTO);
 		
+		aermodDTO.setBase_path(base_path);
+		aermodDTO.setInpparam(inpparam);
 		AERPRE aerpre = new AERPRE(aermodDTO);
 		aerpre.ReadCriteria(null);
+		aerpre.ReadAirInfo();
+		
+		frames.get("aerin").setVisible();
+		frames.get("aerin").exet(aermodDTO);
 		frame.setTitle("AERMOD");
 		frame.setSize(1000, 800);
 		frame.setResizable(false);
