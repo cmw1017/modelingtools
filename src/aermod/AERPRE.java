@@ -133,37 +133,47 @@ public class AERPRE {
 							if (air_list.containsKey(values[0])) {
 								if (air_list.get(values[0]).containsKey(values[1])) {
 									if (air_list.get(values[0]).get(values[1]).containsKey(values[2])) {
-										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
-											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
-										}
-										else {
-											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										if (air_list.get(values[0]).get(values[1]).get(values[2])
+												.containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],
+													Double.parseDouble(values[4]));
+										} else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],
+													Double.parseDouble(values[4]));
 										}
 									} else {
-										air_list.get(values[0]).get(values[1]).put(values[2], new HashMap<String, Double>());
-										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
-											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
-										}
-										else {
-											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										air_list.get(values[0]).get(values[1]).put(values[2],
+												new HashMap<String, Double>());
+										if (air_list.get(values[0]).get(values[1]).get(values[2])
+												.containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],
+													Double.parseDouble(values[4]));
+										} else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],
+													Double.parseDouble(values[4]));
 										}
 									}
 								} else {
 									air_list.get(values[0]).put(values[1], new HashMap<String, Map<String, Double>>());
 									if (air_list.get(values[0]).get(values[1]).containsKey(values[2])) {
-										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
-											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
-										}
-										else {
-											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										if (air_list.get(values[0]).get(values[1]).get(values[2])
+												.containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],
+													Double.parseDouble(values[4]));
+										} else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],
+													Double.parseDouble(values[4]));
 										}
 									} else {
-										air_list.get(values[0]).get(values[1]).put(values[2], new HashMap<String, Double>());
-										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
-											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
-										}
-										else {
-											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										air_list.get(values[0]).get(values[1]).put(values[2],
+												new HashMap<String, Double>());
+										if (air_list.get(values[0]).get(values[1]).get(values[2])
+												.containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],
+													Double.parseDouble(values[4]));
+										} else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],
+													Double.parseDouble(values[4]));
 										}
 									}
 								}
@@ -171,37 +181,47 @@ public class AERPRE {
 								air_list.put(values[0], new HashMap<String, Map<String, Map<String, Double>>>());
 								if (air_list.get(values[0]).containsKey(values[1])) {
 									if (air_list.get(values[0]).get(values[1]).containsKey(values[2])) {
-										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
-											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
-										}
-										else {
-											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										if (air_list.get(values[0]).get(values[1]).get(values[2])
+												.containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],
+													Double.parseDouble(values[4]));
+										} else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],
+													Double.parseDouble(values[4]));
 										}
 									} else {
-										air_list.get(values[0]).get(values[1]).put(values[2], new HashMap<String, Double>());
-										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
-											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
-										}
-										else {
-											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										air_list.get(values[0]).get(values[1]).put(values[2],
+												new HashMap<String, Double>());
+										if (air_list.get(values[0]).get(values[1]).get(values[2])
+												.containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],
+													Double.parseDouble(values[4]));
+										} else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],
+													Double.parseDouble(values[4]));
 										}
 									}
 								} else {
 									air_list.get(values[0]).put(values[1], new HashMap<String, Map<String, Double>>());
 									if (air_list.get(values[0]).get(values[1]).containsKey(values[2])) {
-										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
-											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
-										}
-										else {
-											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										if (air_list.get(values[0]).get(values[1]).get(values[2])
+												.containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],
+													Double.parseDouble(values[4]));
+										} else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],
+													Double.parseDouble(values[4]));
 										}
 									} else {
-										air_list.get(values[0]).get(values[1]).put(values[2], new HashMap<String, Double>());
-										if (air_list.get(values[0]).get(values[1]).get(values[2]).containsKey(values[3])) {
-											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],Double.parseDouble(values[4]));
-										}
-										else {
-											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],Double.parseDouble(values[4]));
+										air_list.get(values[0]).get(values[1]).put(values[2],
+												new HashMap<String, Double>());
+										if (air_list.get(values[0]).get(values[1]).get(values[2])
+												.containsKey(values[3])) {
+											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],
+													Double.parseDouble(values[4]));
+										} else {
+											air_list.get(values[0]).get(values[1]).get(values[2]).put(values[3],
+													Double.parseDouble(values[4]));
 										}
 									}
 								}
@@ -219,15 +239,22 @@ public class AERPRE {
 				}
 			}
 			inStream.close();
-			for (String sido : air_list.keySet()) {
-				for (String sigun : air_list.get(sido).keySet()) {
-					for (String gu : air_list.get(sido).get(sigun).keySet()) {
-						for (String pol : air_list.get(sido).get(sigun).get(gu).keySet()) {
-							System.out.println(sido + "/" +sigun + "/" +gu + "/" +pol + "/" +air_list.get(sido).get(sigun).get(gu).get(pol));
-						}
-					}
-				}
-			}
+//			OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(base_path + "\\run\\tttt.csv"), "euc-kr");
+//			for (String sido : air_list.keySet()) {
+//				for (String sigun : air_list.get(sido).keySet()) {
+//					for (String gu : air_list.get(sido).get(sigun).keySet()) {
+//						for (String pol : air_list.get(sido).get(sigun).get(gu).keySet()) {
+//							String tempstr = sido + "," + sigun + "," + gu + "," + pol + ","
+//									+ air_list.get(sido).get(sigun).get(gu).get(pol) + "\n";
+//							System.out.println(sido + "," + sigun + "," + gu + "," + pol + ","
+//									+ air_list.get(sido).get(sigun).get(gu).get(pol));
+//							outStream.write(tempstr, 0, tempstr.length());
+//						}
+//					}
+//				}
+//			}
+//			outStream.close();
+			aermodDTO.setAir_list(air_list);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

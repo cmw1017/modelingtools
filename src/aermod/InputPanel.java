@@ -11,52 +11,50 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
-import calpuff.RoundedButton;
-
 public class InputPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
-	Map<String, PanelTemplete> frames;
+	private Map<String, PanelTemplete> frames;
 	private Process process = null;
-	ProcessBuilder processBuilder = null;
-	String base_path;
-	String temp_path[] = new String[4];
-	AermodDTO aermodDTO;
-	String sido[] = { "서울특별시", "인천광역시", "경기도" };
+	private ProcessBuilder processBuilder = null;
+	private String base_path;
+	private String temp_path[] = new String[4];
+	private AermodDTO aermodDTO;
+	private Map<String, Map<String, Map<String, Map<String, Double>>>> air_list; // 기존오염도
 
 	private Color white = new Color(255, 255, 255);
-	JPanel aerinjp = new JPanel();
-	JLabel content = new JLabel();
-	JLabel company = new JLabel();
-	JLabel company_lat = new JLabel();
-	JLabel company_lon = new JLabel();
-	JTextField company_lat_txt = new JTextField();
-	JTextField company_lon_txt = new JTextField();
-	JLabel company_sido = new JLabel();
-	JLabel company_sigun = new JLabel();
-	JLabel company_gu = new JLabel();
-	JComboBox<String> company_sido_txt = new JComboBox<String>(sido);
-	JComboBox<String> company_sigun_txt = new JComboBox<String>(sido);
-	JComboBox<String> company_gu_txt = new JComboBox<String>(sido);
-	JLabel ksic = new JLabel();
-	JLabel terrain = new JLabel();
-	JLabel terrain_dxf_info = new JLabel();
-	JRadioButton terrain_dxf = new JRadioButton();
-	JLabel terrain_dat_info = new JLabel();
-	JRadioButton terrain_dat = new JRadioButton();
-	ButtonGroup terrain_group = new ButtonGroup();
-	JLabel topy = new JLabel();
-	JTextField topy_txt = new JTextField();
-	JButton topy_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
-	JLabel boundary = new JLabel();
-	JTextField boundary_txt = new JTextField();
-	JButton boundary_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
-	JLabel dat = new JLabel();
-	JTextField dat_txt = new JTextField();
-	JButton dat_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
-	JLabel source = new JLabel();
-	JTextField source_txt = new JTextField();
-	JButton source_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
-	JButton next = new RoundedButton("다음", Color.decode("#BF95BC"), white, 20);
+	private JPanel aerinjp = new JPanel();
+	private JLabel content = new JLabel();
+	private JLabel company = new JLabel();
+	private JLabel company_lat = new JLabel();
+	private JLabel company_lon = new JLabel();
+	private JTextField company_lat_txt = new JTextField();
+	private JTextField company_lon_txt = new JTextField();
+	private JLabel company_sido = new JLabel();
+	private JLabel company_sigun = new JLabel();
+	private JLabel company_gu = new JLabel();
+	private JComboBox<String> company_sido_txt = new JComboBox<String>();
+	private JComboBox<String> company_sigun_txt = new JComboBox<String>();
+	private JComboBox<String> company_gu_txt = new JComboBox<String>();
+	private JLabel ksic = new JLabel();
+	private JLabel terrain = new JLabel();
+	private JLabel terrain_dxf_info = new JLabel();
+	private JRadioButton terrain_dxf = new JRadioButton();
+	private JLabel terrain_dat_info = new JLabel();
+	private JRadioButton terrain_dat = new JRadioButton();
+	private ButtonGroup terrain_group = new ButtonGroup();
+	private JLabel topy = new JLabel();
+	private JTextField topy_txt = new JTextField();
+	private JButton topy_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
+	private JLabel boundary = new JLabel();
+	private JTextField boundary_txt = new JTextField();
+	private JButton boundary_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
+	private JLabel dat = new JLabel();
+	private JTextField dat_txt = new JTextField();
+	private JButton dat_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
+	private JLabel source = new JLabel();
+	private JTextField source_txt = new JTextField();
+	private JButton source_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
+	private JButton next = new RoundedButton("다음", Color.decode("#BF95BC"), white, 20);
 
 	public void setPanel(String base_path) {
 
@@ -144,6 +142,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		company_sido_txt.setLocation(200, 260);
 		company_sido_txt.setSize(150, 30);
 		company_sido_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		company_sido_txt.addItemListener(new SelectListener_combo());
 		company_sigun.setLocation(400, 250);
 		company_sigun.setSize(50, 50);
 		company_sigun.setFont(new Font("맑은 고딕", Font.BOLD, 15));
@@ -151,6 +150,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		company_sigun_txt.setLocation(460, 260);
 		company_sigun_txt.setSize(150, 30);
 		company_sigun_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		company_sigun_txt.addItemListener(new SelectListener_combo());
 		company_gu.setLocation(650, 250);
 		company_gu.setSize(50, 50);
 		company_gu.setFont(new Font("맑은 고딕", Font.BOLD, 15));
@@ -176,7 +176,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		terrain_dxf.setLocation(380, 385);
 		terrain_dxf.setSize(25, 25);
 		terrain_dxf.setBackground(Color.decode("#D0D8DA"));
-		terrain_dxf.addActionListener(new SelectListener());
+		terrain_dxf.addActionListener(new SelectListener_buttom());
 		terrain_dxf.setSelected(true);
 		terrain_dat_info.setLocation(450, 380);
 		terrain_dat_info.setSize(200, 30);
@@ -185,7 +185,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		terrain_dat.setLocation(580, 380);
 		terrain_dat.setSize(25, 25);
 		terrain_dat.setBackground(Color.decode("#D0D8DA"));
-		terrain_dat.addActionListener(new SelectListener());
+		terrain_dat.addActionListener(new SelectListener_buttom());
 
 		topy.setLocation(150, 440);
 		topy.setSize(200, 30);
@@ -426,7 +426,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		}
 	}
 	
-	class SelectListener implements ActionListener {
+	class SelectListener_buttom implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -456,11 +456,36 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		}
 	}
 	
+	class SelectListener_combo implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			List<String> list;
+			if(e.getSource() == company_sido_txt) {
+				company_sigun_txt.removeAllItems();
+				list = new ArrayList<>(air_list.get(company_sido_txt.getSelectedItem().toString()).keySet());
+				list.sort(null);
+				for(String sigun : list)
+					company_sigun_txt.addItem(sigun);
+			} else if(e.getSource() == company_sigun_txt) {
+				company_gu_txt.removeAllItems();
+				list = new ArrayList<>(air_list.get(company_sido_txt.getSelectedItem().toString()).get(company_sigun_txt.getSelectedItem().toString()).keySet());
+				if (company_sigun_txt.getSelectedItem() != null)
+					list.sort(null);
+					for (String sigun : air_list.get(company_sido_txt.getSelectedItem().toString())
+							.get(company_sigun_txt.getSelectedItem().toString()).keySet())
+						company_gu_txt.addItem(sigun);
+			}
+		}
+	}
 	
 	@Override
 	public void exet(AermodDTO aermodDTO) { 
 		System.out.println("Set Input Panel");
 		this.aermodDTO = aermodDTO;
+		air_list = aermodDTO.getAir_list();
+		for(String sido : air_list.keySet())
+			company_sido_txt.addItem(sido);
 		try {
 			process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\run").start();
 			process.waitFor();
