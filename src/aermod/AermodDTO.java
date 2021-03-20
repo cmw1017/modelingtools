@@ -8,7 +8,6 @@ public class AermodDTO {
 
 	private String base_path; 	//실행파일이 있는 위치 경로
 	private String load_path;
-	private String source_path; //배출원(굴뚝) 정보가 저장된 위치 경로
 	private Double latitude; 	//위도
 	private Double longitude;	//경도
 	private String sido; 		//시도
@@ -37,12 +36,6 @@ public class AermodDTO {
 	}
 	public void setLoad_path(String load_path) {
 		this.load_path = load_path;
-	}
-	public String getSource_path() {
-		return source_path;
-	}
-	public void setSource_path(String source_path) {
-		this.source_path = source_path;
 	}
 	public Double getLatitude() {
 		return latitude;

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -100,6 +101,21 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	class MoveListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == "complete") {
+				Process process = null;
+				try {
+					process = new ProcessBuilder("cmd", "/c", "rmdir", "/s", "/p", base_path + "\\run").start();
+					process.waitFor();
+					process = new ProcessBuilder("cmd", "/c", "rmdir", "/s", "/p", base_path + "\\temp").start();
+					process.waitFor();
+					process.destroy();
+					System.exit(0);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -122,7 +138,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 				matters_label[i][j].setOpaque(true);
 				matters_label[i][j].setBackground(Color.decode("#D0D8DA"));
 				matters_label[i][j].setFont(new Font("맑은 고딕", Font.BOLD, 15));
-				matters_label[i][j].setLocation(50 + 450 * k + 150 * j, 260 + 30 * y);
+				matters_label[i][j].setLocation(50 + 450 * k + 150 * j, 260 + 50 * y);
 				matters_label[i][j].setSize(150, 50);
 				if(j ==0) matters_label[i][j].setText(matters.get(i));
 				else matters_label[i][j].setText("0");

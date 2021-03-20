@@ -50,7 +50,7 @@ public class AERMOD_main implements Runnable{
 						t_info.current_thread_count++;
 					}
 				}
-				Thread.sleep(1000);
+				Thread.sleep(3000);
 				System.out.print("WAIT_" + "current thread count : " + t_info.current_thread_count + " / queue size : " + queue.size());
 				for(int i = 0; i < max_thread; i++)
 					System.out.print("/ thread[" + i + "] : " + (t_info.index[i] ? "is used" : "none"));

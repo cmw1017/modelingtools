@@ -244,14 +244,6 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		next.setSize(150, 50);
 		next.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		next.addActionListener(new MoveListener());
-		
-		company_lat_txt.setText("35.555");
-		company_lon_txt.setText("127.555");
-		terrain_dat.setSelected(true);
-		dat_txt.setText("D:\\Modeling\\receptor_input.dat");
-		temp_path[2] = "D:\\Modeling\\receptor_input.dat";
-		source_txt.setText("D:\\Modeling\\111.csv");
-		temp_path[3] = "D:\\Modeling\\111.csv";
 	}
 
 	public void setVisible() {
@@ -354,7 +346,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 				aermodDTO.setSido(company_sido_txt.getSelectedItem().toString());
 				aermodDTO.setSigun(company_sigun_txt.getSelectedItem().toString());
 				aermodDTO.setGu(company_gu_txt.getSelectedItem().toString());
-				aermodDTO.setSource_path(temp_path[3]);
+//				aermodDTO.setSource_path(temp_path[3]);
 				frames.get("aerin").setUnVisible();
 				frames.get("aermet").setVisible();
 				frames.get("aermet").exet(aermodDTO);
@@ -364,7 +356,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 				System.out.println("Company gu : " + aermodDTO.getGu());
 				System.out.println("Company lat : " + aermodDTO.getLatitude());
 				System.out.println("Company lon : " + aermodDTO.getLongitude());
-				System.out.println("Source Path : " + aermodDTO.getSource_path());
+				System.out.println("Source Path : " + temp_path[3]);
 				
 				try {
 					
@@ -460,7 +452,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-			List<String> list;
+			List<String> list = null;
 			if(e.getSource() == company_sido_txt) {
 				company_sigun_txt.removeAllItems();
 				list = new ArrayList<>(air_list.get(company_sido_txt.getSelectedItem().toString()).keySet());
@@ -469,12 +461,13 @@ public class InputPanel extends JFrame implements PanelTemplete {
 					company_sigun_txt.addItem(sigun);
 			} else if(e.getSource() == company_sigun_txt) {
 				company_gu_txt.removeAllItems();
-				list = new ArrayList<>(air_list.get(company_sido_txt.getSelectedItem().toString()).get(company_sigun_txt.getSelectedItem().toString()).keySet());
-				if (company_sigun_txt.getSelectedItem() != null)
+				if (company_sigun_txt.getSelectedItem() != null) {
+					list = new ArrayList<>(air_list.get(company_sido_txt.getSelectedItem().toString()).get(company_sigun_txt.getSelectedItem().toString()).keySet());
 					list.sort(null);
 					for (String sigun : air_list.get(company_sido_txt.getSelectedItem().toString())
 							.get(company_sigun_txt.getSelectedItem().toString()).keySet())
 						company_gu_txt.addItem(sigun);
+				}
 			}
 		}
 	}

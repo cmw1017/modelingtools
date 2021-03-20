@@ -467,7 +467,7 @@ public class AERPRE {
 			stack_info = new ArrayList<>();
 			int ch;
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
-			InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\111.csv"), "euc-kr");
+			InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\run\\source.csv"), "euc-kr");
 			StringBuilder str = new StringBuilder();
 
 			while (true) {
@@ -540,6 +540,7 @@ public class AERPRE {
 			for (String pol : matters) {
 				System.out.print(pol + " ");
 			}
+			System.out.println();
 			aermodDTO.setMatters(matters);
 
 		} catch (IOException e) {
@@ -557,19 +558,19 @@ public class AERPRE {
 				if (temp_map.get(matter) != 0) {
 					String source1 = "SO LOCATION  "
 							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0)))))
-							+ "    POINT" + String.format("%11.2f", temp_map.get(stack_header.get(1)))
-							+ String.format("%11.2f", temp_map.get(stack_header.get(2)))
-							+ String.format("%4d",
+							+ "    POINT" + String.format(" %11.2f", temp_map.get(stack_header.get(1)))
+							+ String.format(" %11.2f", temp_map.get(stack_header.get(2)))
+							+ String.format(" %4d",
 									Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(3))))))
 							+ "\n";
 					String source2 = "SO SRCPARAM  "
 							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0))))) + "    "
-							+ String.format("%7.4f",
+							+ String.format(" %7.8f",
 									temp_map.get(stack_header.get(9)) * temp_map.get(matter) / 1000 / 60)
-							+ String.format("%8.2f", temp_map.get(stack_header.get(5)))
-							+ String.format("%8.2f", temp_map.get(stack_header.get(6)) + 273.15)
-							+ String.format("%10.5f", temp_map.get(stack_header.get(7)))
-							+ String.format("%5.1f", temp_map.get(stack_header.get(8))) + "\n";
+							+ String.format(" %8.2f", temp_map.get(stack_header.get(5)) + temp_map.get(stack_header.get(4)))
+							+ String.format(" %8.2f", temp_map.get(stack_header.get(6)) + 273.15)
+							+ String.format(" %6.2f", temp_map.get(stack_header.get(7)))
+							+ String.format(" %5.3f", temp_map.get(stack_header.get(8))) + "\n";
 					outStream.write(source1, 0, source1.length());
 					outStream.write(source2, 0, source2.length());
 				}

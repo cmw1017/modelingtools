@@ -132,14 +132,21 @@ public class AERMOD implements Runnable {
 		if (end) { // 최종 결과 출력
 			System.out.println("Modeling ALL END");
 			System.out.println("<-------Modeling REPORT--------->");
-			System.out.println("Polutant	Series	Criteria	Result");
+			System.out.println("Polutant	Series	Criteria		Result		air		air+reuslt");
 			Map<String,Map<String,Double>> criteria = aermodDTO.getCriteria();
 			Map<String,Map<String,Double>> result = aermodDTO.getResult();
 			List<String> matters = aermodDTO.getMatters();
+			String sido = aermodDTO.getSido();
+			String sigun = aermodDTO.getSigun();
+			String gu = aermodDTO.getGu();
+			Map<String, Map<String, Map<String, Map<String, Double>>>> air_list =aermodDTO.getAir_list();
 			for (String matter : matters) {
 				for (String series : criteria.get(matter).keySet()) {
-					System.out.println(matter + "		" + series + "	" + criteria.get(matter).get(series) + "	"
-							+ result.get(matter).get(series));
+					Double criteria_val = criteria.get(matter).get(series);
+					Double result_val = result.get(matter).get(series);
+					Double air_val = air_list.get(sido).get(sigun).get(gu).get(matter);
+					System.out.println(matter + "		" + series + "	" + criteria_val + "		"
+							+ result_val + "		" + air_val + "		" + (result_val + air_val));
 				}
 			}
 		}
