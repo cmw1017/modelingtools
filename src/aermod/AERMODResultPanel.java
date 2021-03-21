@@ -148,6 +148,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) { // 열기를 클릭
 				folderPath = chooser.getSelectedFile().toString();
+				folderPath = folderPath.substring(0, folderPath.lastIndexOf("."));
 				try {
 					process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\result\\report.csv",
 							folderPath + ".csv").start();
