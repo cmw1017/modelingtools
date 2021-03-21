@@ -13,11 +13,15 @@ public class AERMOD_main implements Runnable{
 	private List<String> matters;
 	private JLabel[][] matters_label;
 	AermodDTO aermodDTO;
+	JButton result_bt;
+	JButton complete_bt;
 	
-	public AERMOD_main(AermodDTO aermodDTO, JLabel[][] matters_label, JButton complete) {
+	public AERMOD_main(AermodDTO aermodDTO, JLabel[][] matters_label, JButton result_bt, JButton complete_bt) {
 		this.aermodDTO = aermodDTO;
 		this.matters = aermodDTO.getMatters();
 		this.matters_label = matters_label;
+		this.result_bt = result_bt;
+		this.complete_bt = complete_bt;
 	}
 
 	@Override
@@ -44,7 +48,8 @@ public class AERMOD_main implements Runnable{
 						}
 					}
 					if (index_thread != -1) {
-						AERMOD aermod = new AERMOD(aermodDTO, matter, matters_label[num][1], matters_label[num][2], t_info, index_thread, queue);
+						AERMOD aermod = new AERMOD(aermodDTO, matter, matters_label[num][1], matters_label[num][2],
+								t_info, index_thread, queue, result_bt, complete_bt);
 						threads[index_thread] = new Thread(aermod, matter);
 						threads[index_thread].start();
 						t_info.current_thread_count++;

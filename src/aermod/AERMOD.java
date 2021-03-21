@@ -3,6 +3,7 @@ package aermod;
 import java.io.*;
 import java.util.*;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 
 public class AERMOD implements Runnable {
@@ -17,6 +18,8 @@ public class AERMOD implements Runnable {
 	int index_thread;
 	Queue<String> queue;
 	AermodDTO aermodDTO;
+	JButton result_bt;
+	JButton complete_bt;
 
 	// base_path : 기본 파일이 넣어져 있는 경로(에어모드 실행파일, inp base 파일 등..)
 	// matter : 모델링 할 물질 명
@@ -26,7 +29,7 @@ public class AERMOD implements Runnable {
 	// index_thread : 쓰레드의 사용 상태를 알려주는 변수
 	// queue : 모델링 해야할 물질을 저장
 	public AERMOD(AermodDTO aermodDTO, String matter, JLabel produce, JLabel count, ThreadInfo t_info, int index_thread,
-			Queue<String> queue) {
+			Queue<String> queue, JButton result_bt, JButton complete_bt) {
 		this.aermodDTO = aermodDTO;
 		this.base_path = aermodDTO.getBase_path();
 		this.matter = matter;
@@ -35,6 +38,8 @@ public class AERMOD implements Runnable {
 		this.t_info = t_info;
 		this.index_thread = index_thread;
 		this.queue = queue;
+		this.result_bt = result_bt;
+		this.complete_bt = complete_bt;
 	}
 
 	public void ReadyProcess() throws InterruptedException, IOException {
@@ -131,8 +136,7 @@ public class AERMOD implements Runnable {
 		}
 		if (end) { // 최종 결과 출력
 			System.out.println("Modeling ALL END");
-			System.out.println("<-------Modeling REPORT--------->");
-			System.out.println("Polutant	Series	Criteria		Result		air		air+reuslt");
+			System.out.println("Modeling REPORT");
 			Map<String,Map<String,Double>> criteria = aermodDTO.getCriteria();
 			Map<String,Map<String,Double>> result = aermodDTO.getResult();
 			List<String> matters = aermodDTO.getMatters();
@@ -140,15 +144,27 @@ public class AERMOD implements Runnable {
 			String sigun = aermodDTO.getSigun();
 			String gu = aermodDTO.getGu();
 			Map<String, Map<String, Map<String, Map<String, Double>>>> air_list =aermodDTO.getAir_list();
-			for (String matter : matters) {
-				for (String series : criteria.get(matter).keySet()) {
-					Double criteria_val = criteria.get(matter).get(series);
-					Double result_val = result.get(matter).get(series);
-					Double air_val = air_list.get(sido).get(sigun).get(gu).get(matter);
-					System.out.println(matter + "		" + series + "	" + criteria_val + "		"
-							+ result_val + "		" + air_val + "		" + (result_val + air_val));
+			try {
+				OutputStreamWriter outStream = new OutputStreamWriter(
+						new FileOutputStream(base_path + "\\result\\report.csv"), "euc-kr");
+				String tempstr = "오염물질,시간,환경기준,기존오염도(BC),추가오염도(PC),총오염도(PEC)\n";
+				outStream.write(tempstr, 0, tempstr.length());
+				for (String matter : matters) {
+					for (String series : criteria.get(matter).keySet()) {
+						Double criteria_val = criteria.get(matter).get(series);
+						Double result_val = result.get(matter).get(series);
+						Double air_val = air_list.get(sido).get(sigun).get(gu).get(matter);
+						tempstr = matter + "," + series + "," + criteria_val + "," + air_val 
+								+ "," + result_val + "," + (result_val + air_val) + "\n";
+						outStream.write(tempstr, 0, tempstr.length());
+					}
 				}
+				outStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+			result_bt.setVisible(true);
+			complete_bt.setVisible(true);
 		}
 	}
 
