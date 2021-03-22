@@ -6,8 +6,8 @@ import java.util.Map;
 
 public class AermodDTO {
 
+	private Integer thread_num; //쓰레드 개수
 	private String base_path; 	//실행파일이 있는 위치 경로
-	private String load_path;
 	private Double latitude; 	//위도
 	private Double longitude;	//경도
 	private String sido; 		//시도
@@ -25,17 +25,17 @@ public class AermodDTO {
 	private Map<String,Map<String,Double>> result;
 	
 	
+	public Integer getThread_num() {
+		return thread_num;
+	}
+	public void setThread_num(Integer thread_num) {
+		this.thread_num = thread_num;
+	}
 	public String getBase_path() {
 		return base_path;
 	}
 	public void setBase_path(String base_path) {
 		this.base_path = base_path;
-	}
-	public String getLoad_path() {
-		return load_path;
-	}
-	public void setLoad_path(String load_path) {
-		this.load_path = load_path;
 	}
 	public Double getLatitude() {
 		return latitude;

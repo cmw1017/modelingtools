@@ -54,6 +54,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	private JLabel source = new JLabel();
 	private JTextField source_txt = new JTextField();
 	private JButton source_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
+	private JButton source_download = new RoundedButton("예시 다운로드", Color.decode("#BF95BC"), white, 20);
 	private JButton next = new RoundedButton("다음", Color.decode("#BF95BC"), white, 20);
 
 	public void setPanel(String base_path) {
@@ -100,6 +101,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		aerinjp.add(source);
 		aerinjp.add(source_txt);
 		aerinjp.add(source_load);
+		aerinjp.add(source_download);
 
 		aerinjp.add(next);
 
@@ -235,10 +237,14 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		source_txt.setSize(350, 30);
 		source_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		source_txt.setText("");
-		source_load.setLocation(750, 585);
-		source_load.setSize(150, 30);
+		source_load.setLocation(710, 585);
+		source_load.setSize(110, 30);
 		source_load.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		source_load.addActionListener(new loadListener());
+		source_download.setLocation(830, 585);
+		source_download.setSize(110, 30);
+		source_download.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		source_download.addActionListener(new DownloadListener());
 
 		next.setLocation(800, 670);
 		next.setSize(150, 50);
@@ -310,6 +316,51 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		}
 
 	}
+	
+	// 파일 다운로드창
+		class DownloadListener implements ActionListener {
+
+			JFileChooser chooser;
+
+			DownloadListener() {
+				chooser = new JFileChooser();
+			}
+
+			public void actionPerformed(ActionEvent e) {
+				String folderPath = "";
+
+				JFileChooser chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); // 디렉토리 설정
+				chooser.setCurrentDirectory(new File("/")); // 현재 사용 디렉토리를 지정
+				chooser.setAcceptAllFileFilterUsed(true); // Fileter 모든 파일 적용
+				chooser.setDialogTitle("배출원 다운로드"); // 창의 제목
+				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("xlsx", "xlsx"); // filter 확장자 추가
+				chooser.setFileFilter(filter); // 파일 필터를 추가
+
+				int returnVal = chooser.showSaveDialog(null); // 열기용 창 오픈
+
+				if (returnVal == JFileChooser.APPROVE_OPTION) { // 열기를 클릭
+					folderPath = chooser.getSelectedFile().toString();
+					if(folderPath.lastIndexOf(".") != -1)
+						folderPath = folderPath.substring(0, folderPath.lastIndexOf("."));
+					try {
+						process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\resource\\source.xlsx",
+								folderPath + ".xlsx").start();
+						process.waitFor();
+						process.destroy();
+						JOptionPane.showMessageDialog(null, "다운로드가 완료되었습니다.", "다운로드 완료", JOptionPane.PLAIN_MESSAGE);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				} else if (returnVal == JFileChooser.CANCEL_OPTION) { // 취소를 클릭
+					System.out.println("cancel");
+					folderPath = "";
+				}
+			}
+
+		}
 
 	// 페이지 이동
 	class MoveListener implements ActionListener {

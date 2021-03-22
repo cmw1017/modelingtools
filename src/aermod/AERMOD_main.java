@@ -8,7 +8,7 @@ import javax.swing.*;
 public class AERMOD_main implements Runnable{
 	
 	private Queue<String> queue = new LinkedList<>();
-	private final int max_thread = 3; // 최대 동시 계산 개수
+	private int max_thread = 3; // 최대 동시 계산 개수
 	
 	private List<String> matters;
 	private JLabel[][] matters_label;
@@ -16,12 +16,13 @@ public class AERMOD_main implements Runnable{
 	JButton result_bt;
 	JButton complete_bt;
 	
-	public AERMOD_main(AermodDTO aermodDTO, JLabel[][] matters_label, JButton result_bt, JButton complete_bt) {
+	public AERMOD_main(AermodDTO aermodDTO, JLabel[][] matters_label, JButton result_bt, JButton complete_bt, Integer max_thread) {
 		this.aermodDTO = aermodDTO;
 		this.matters = aermodDTO.getMatters();
 		this.matters_label = matters_label;
 		this.result_bt = result_bt;
 		this.complete_bt = complete_bt;
+		this.max_thread = max_thread;
 	}
 
 	@Override

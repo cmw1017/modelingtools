@@ -30,7 +30,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	private JLabel[] headers = new JLabel[6];
 	private Color white = new Color(255, 255, 255);
 	private JLabel content = new JLabel();
-	JLabel pol = new JLabel();
+	private JLabel pol = new JLabel();
 	private JButton result = new RoundedButton("결과 다운로드", Color.decode("#84B1D9"), white, 20);
 	private JButton complete = new RoundedButton("완료", Color.decode("#84B1D9"), white, 20);
 
@@ -75,18 +75,18 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 			headers[i].setText(header[i % 3]);
 			aerresjp.add(headers[i]);
 		}
-
+		
 		// 이동 버튼 시작
 		result.setLocation(600, 870);
 		result.setSize(100, 50);
 		result.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		result.addActionListener(new DownloadListener());
-		 result.setVisible(false);
+		result.setVisible(false);
 		complete.setLocation(800, 870);
 		complete.setSize(100, 50);
 		complete.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		complete.addActionListener(new MoveListener());
-		 complete.setVisible(false);
+		complete.setVisible(false);
 	}
 
 	public void setVisible() {
@@ -112,7 +112,6 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 					process.waitFor();
 					process = new ProcessBuilder("cmd", "/c", "rmdir", "/s", "/q", base_path + "\\temp").start();
 					process.waitFor();
-
 					process.destroy();
 					System.exit(0);
 				} catch (IOException e1) {
@@ -148,7 +147,8 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) { // 열기를 클릭
 				folderPath = chooser.getSelectedFile().toString();
-				folderPath = folderPath.substring(0, folderPath.lastIndexOf("."));
+				if(folderPath.lastIndexOf(".") != -1)
+					folderPath = folderPath.substring(0, folderPath.lastIndexOf("."));
 				try {
 					process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\result\\report.csv",
 							folderPath + ".csv").start();
@@ -201,7 +201,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 			}
 		}
 		aerresjp.add(content);
-		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label,result,complete);
+		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label,result,complete,aermodDTO.getThread_num());
 		Thread thread = new Thread(aermain, "aermod_main");
 		thread.start();
 	}

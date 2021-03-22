@@ -8,22 +8,26 @@ import javax.swing.*;
 
 public class PolPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
-	Map<String, PanelTemplete> frames;
+	private Map<String, PanelTemplete> frames;
 	String base_path;
 	String temp_path;
-	AermodDTO aermodDTO;
-	Map<String,Map<String,Double>> criteria;
+	private AermodDTO aermodDTO;
+	private String[] pollist = { "SO2", "CO", "NO2", "Pb", "Benzene", "PM-10", "Zn", "NH3", "CS2", "Cr", "Hg", "Cu",
+			"Vinylchloride", "H2S", "Dichloromethane", "TCE", "As", "Ni", "Cd", "Br", "F", "HCN", "HCl", "Phenol",
+			"Formaldehyde" };
+	private String[] hourlist = {"1","8","24","an"};
+	private Map<String,Map<String,Double>> criteria;
 
 	private Color white = new Color(255,255,255);
-	JPanel aermetjp = new JPanel();
-	JLabel content = new JLabel();
-	JLabel pol = new JLabel();
-	String[] pollist = {"SO2", "CO", "NO2", "Pb", "Benzene", "PM-10", "Zn", "NH3", "CS2", "Cr", "Hg", "Cu", "Vinylchloride", "H2S", "Dichloromethane", "TCE", "As", "Ni", "Cd", "Br", "F", "HCN", "HCl", "Phenol", "Formaldehyde"};
-	String[] hourlist = {"1","8","24","an"};
-	ArrayList<JLabel> polname = new ArrayList<>();
-	ArrayList<JLabel> poltime = new ArrayList<>();
-	ArrayList<JLabel> polval = new ArrayList<>();
-	JButton next = new RoundedButton("다음", Color.decode("#BF95BC"), white, 20);
+	private JPanel aermetjp = new JPanel();
+	private JLabel content = new JLabel();
+	private JLabel pol = new JLabel();
+	private JLabel thread = new JLabel();
+	private JTextField thread_txt = new JTextField();
+	private ArrayList<JLabel> polname = new ArrayList<>();
+	private ArrayList<JLabel> poltime = new ArrayList<>();
+	private ArrayList<JLabel> polval = new ArrayList<>();
+	private JButton next = new RoundedButton("다음", Color.decode("#BF95BC"), white, 20);
 	
 	public PolPanel() {
 	}
@@ -39,6 +43,8 @@ public class PolPanel extends JFrame implements PanelTemplete {
 		
 		aermetjp.add(pol);
 		aermetjp.add(next);
+		aermetjp.add(thread);
+		aermetjp.add(thread_txt);
 		
 
 		
@@ -54,7 +60,14 @@ public class PolPanel extends JFrame implements PanelTemplete {
 		pol.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 		pol.setText("환경기준 정보");
 		
-		
+		thread.setLocation(200, 870);
+		thread.setSize(200, 50);
+		thread.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		thread.setText("동시 모델링 횟수 : ");
+		thread_txt.setLocation(400, 870);
+		thread_txt.setSize(100, 50);
+		thread_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		thread_txt.setText("3");
 		next.setLocation(800, 870); next.setSize(150, 50);
 		next.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		next.addActionListener(new MoveListener());
@@ -95,6 +108,7 @@ class MoveListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
 			if (e.getSource() == next) {
+				aermodDTO.setThread_num(Integer.parseInt(thread_txt.getText()));
 				frames.get("aerpol").setUnVisible();
 				frames.get("aerres").setVisible();
 				frames.get("aerres").exet(aermodDTO);
