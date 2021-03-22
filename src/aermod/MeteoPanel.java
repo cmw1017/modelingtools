@@ -9,7 +9,6 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
-import calpuff.RoundedButton;
 
 public class MeteoPanel extends JFrame implements PanelTemplete {
 	private static final long serialVersionUID = 1L;
