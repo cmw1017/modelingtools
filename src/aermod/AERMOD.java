@@ -136,33 +136,9 @@ public class AERMOD implements Runnable {
 		}
 		if (end) { // 최종 결과 출력
 			System.out.println("Modeling ALL END");
-			System.out.println("Modeling REPORT");
-			Map<String,Map<String,Double>> criteria = aermodDTO.getCriteria();
-			Map<String,Map<String,Double>> result = aermodDTO.getResult();
-			List<String> matters = aermodDTO.getMatters();
-			String sido = aermodDTO.getSido();
-			String sigun = aermodDTO.getSigun();
-			String gu = aermodDTO.getGu();
-			Map<String, Map<String, Map<String, Map<String, Double>>>> air_list =aermodDTO.getAir_list();
-			try {
-				OutputStreamWriter outStream = new OutputStreamWriter(
-						new FileOutputStream(base_path + "\\result\\report.csv"), "euc-kr");
-				String tempstr = "오염물질,시간,환경기준,기존오염도(BC),추가오염도(PC),총오염도(PEC)\n";
-				outStream.write(tempstr, 0, tempstr.length());
-				for (String matter : matters) {
-					for (String series : criteria.get(matter).keySet()) {
-						Double criteria_val = criteria.get(matter).get(series);
-						Double result_val = result.get(matter).get(series);
-						Double air_val = air_list.get(sido).get(sigun).get(gu).get(matter);
-						tempstr = matter + "," + series + "," + criteria_val + "," + air_val 
-								+ "," + result_val + "," + (result_val + air_val) + "\n";
-						outStream.write(tempstr, 0, tempstr.length());
-					}
-				}
-				outStream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			System.out.println("Start Modeling REPORT");
+			Functions fn = new Functions();
+			fn.result_post(aermodDTO);
 			result_bt.setVisible(true);
 			complete_bt.setVisible(true);
 		}

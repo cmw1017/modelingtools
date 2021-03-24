@@ -80,8 +80,8 @@ public class AERPOST {
 		for(String key : result.keySet()) {
 			if(key.equals(matter)) {
 				for(String time : series) {
-					if(result.get(matter).containsKey(time)) {
-						result.get(matter).replace(time, ReadData(time));
+					if(result.get(matter).containsKey((time.equals("24") && matter.equals("CO")) ? "8" : time)) { //CO에만 8시간이 있으므로 예외처리
+						result.get(matter).replace((time.equals("24") && matter.equals("CO")) ? "8" : time, ReadData(time));
 					}
 				}
 			}
