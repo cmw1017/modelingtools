@@ -15,9 +15,9 @@ public class AerMain extends JFrame {
 		frames.put("aermet", new MeteoPanel());
 		frames.put("aerpol", new PolPanel());
 		frames.put("aerres", new AERMODResultPanel());
-		String base_path = ".\\";
-//		String base_path = "C:\\Users\\cmw10\\OneDrive\\aermod";
-//		String base_path = "C:\\Users\\DELL\\OneDrive\\aermod";
+//		String base_path = ".\\";
+		String base_path = "C:\\Users\\cmw10\\OneDrive\\aermod RELEASE 1.1";
+//		String base_path = "C:\\Users\\DELL\\OneDrive\\aermod RELEASE 1.1";
 		Iterator<String> iter = frames.keySet().iterator();
 		while(iter.hasNext()) {
 			PanelTemplete frame = frames.get(iter.next());
