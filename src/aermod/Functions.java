@@ -108,7 +108,7 @@ public class Functions {
 					} else if (series.equals("an")) {
 						tempstr += (step1_an == -1.0 ? ",," : step1_an + "," + (step1_an_judge == 1 ? "통과," : "미통과,"));
 						tempstr += (step2_an == -1.0 ? ",," : step2_an + "," + (step2_an_judge == 1 ? "통과," : "미통과,"));
-						tempstr += ",,,,";
+						tempstr += ",,,";
 					}
 					tempstr += ((step1_an_judge != -1 && step1_an_judge == 1) ? "통과" : 
 						(step2_judge != -1 && step2_judge == 1) ? "통과" : "미통과");
