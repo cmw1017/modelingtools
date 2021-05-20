@@ -40,24 +40,26 @@ public class AERPRE {
 	public void ReadCriteria(String EC_path) {
 		try {
 			System.out.println("Read criteria Data in criteria.csv");
-			criteria = new HashMap<String, Map<String, Double>>();
-			result = new HashMap<String, Map<String, Double>>();
-			int ch;
+			criteria = new HashMap<String, Map<String, Double>>(); // 기준 값을 넣는 맵
+			result = new HashMap<String, Map<String, Double>>(); // 나중에 결과 값을 넣는 맵을 미리 만들어 놓음
+			int ch; // 한 단어씩 읽어옴
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
 			InputStreamReader inStream;
+			// 파라미터가 없는 경우 디폴트 경로 파일 읽음
 			if (EC_path == null)
 				inStream = new InputStreamReader(new FileInputStream(base_path + "\\resource\\criteria.csv"), "euc-kr");
 			else
 				inStream = new InputStreamReader(new FileInputStream(EC_path), "euc-kr");
-			StringBuilder str = new StringBuilder();
-			String[] values = new String[4];
 
+
+			StringBuilder str = new StringBuilder(); // 하나의 단어를 형성하기 위한 틀
+			String[] values = new String[4]; // 한 줄의 값을 저장하는 배열
 			while (true) {
 				ch = inStream.read();
 				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1 && ch != 44) { // 단어를 구분하는 문자가 아닌 경우
 					str.append((char) ch);
 				} else {
-					if (ch == 44) {
+					if (ch == 44) { // 쉼표를 만났을 경우 데이터를 배열에 집어넣음
 						series1++;
 						if (series2 != 0) {
 							String value = str.toString();
@@ -65,7 +67,8 @@ public class AERPRE {
 						}
 					}
 					if (series1 == 4 || (series1 == 3 && ch == 13)) {
-						if (series2 != 0) {
+						// 한 줄에 받는 값을 다 받거나 끝에 오는 문자인 경우 맵에 넣음(기준+결과)
+						if (series2 != 0) { // 첫번째는 헤더이기에 넣지 않음
 							String value = str.toString();
 							values[series1] = value;
 							if (criteria.containsKey(values[0])) {
@@ -105,6 +108,7 @@ public class AERPRE {
 	}
 
 	public void ReadAirInfo() {
+		// 기존 오염도를 읽어옴
 		try {
 			System.out.println("Read criteria Data in airinfo.csv");
 			air_list = new HashMap<String, Map<String, Map<String, Map<String, Double>>>>();
@@ -119,7 +123,7 @@ public class AERPRE {
 				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1 && ch != 44) { // 단어를 구분하는 문자가 아닌 경우
 					str.append((char) ch);
 				} else {
-					if (ch == 44) {
+					if (ch == 44) { // 쉼표를 만났을 경우 데이터를 배열에 집어넣음
 						series1++;
 						if (series2 != 0) {
 							String value = str.toString();
