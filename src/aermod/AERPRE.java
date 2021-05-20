@@ -37,6 +37,7 @@ public class AERPRE {
 		this.inpparam = aermodDTO.getInpparam();
 	}
 
+	// 환경기준 읽는 함수
 	public void ReadCriteria(String EC_path) {
 		try {
 			System.out.println("Read criteria Data in criteria.csv");
@@ -107,8 +108,8 @@ public class AERPRE {
 		}
 	}
 
+	// 기존 오염도 읽는 함수
 	public void ReadAirInfo() {
-		// 기존 오염도를 읽어옴
 		try {
 			System.out.println("Read criteria Data in airinfo.csv");
 			air_list = new HashMap<String, Map<String, Map<String, Map<String, Double>>>>();
@@ -131,14 +132,15 @@ public class AERPRE {
 						}
 					}
 					if (series1 == 5 || (series1 == 4 && ch == 13)) {
-						if (series2 != 0) {
+						// 한 줄에 받는 값을 다 받거나 끝에 오는 문자인 경우 맵에 넣음
+						if (series2 != 0) { // 첫번째는 헤더이기에 넣지 않음
 							String value = str.toString();
 							values[series1] = value;
-							if (air_list.containsKey(values[0])) {
-								if (air_list.get(values[0]).containsKey(values[1])) {
-									if (air_list.get(values[0]).get(values[1]).containsKey(values[2])) {
+							if (air_list.containsKey(values[0])) { // 시도 수준에서 중복 값이 있는지 확인
+								if (air_list.get(values[0]).containsKey(values[1])) { // 시군 수준에서 중복 값이 있는지 확인
+									if (air_list.get(values[0]).get(values[1]).containsKey(values[2])) { // 구 수준에서 중복 값이 있는지 확인
 										if (air_list.get(values[0]).get(values[1]).get(values[2])
-												.containsKey(values[3])) {
+												.containsKey(values[3])) { // 오염물질 수준에서 중복 값이 있는지 확인
 											air_list.get(values[0]).get(values[1]).get(values[2]).replace(values[3],
 													Double.parseDouble(values[4]));
 										} else {
@@ -263,8 +265,9 @@ public class AERPRE {
 			e.printStackTrace();
 		}
 	}
-	
-	public void ReadRMO() { // 기상대 정보를 읽어서 가장 가까운 기상대 정보를 찾아줌
+
+	// 기상대 정보를 읽어서 가장 가까운 기상대 정보를 찾아줌
+	public void ReadRMO() {
 		try {
 			System.out.println("Read RMO Data in rmo_info.csv");
 			double distance = 0;
@@ -281,7 +284,7 @@ public class AERPRE {
 				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1 && ch != 44) { // 단어를 구분하는 문자가 아닌 경우
 					str.append((char) ch);
 				} else {
-					if (ch == 44) {
+					if (ch == 44) { // 쉼표를 만났을 경우 데이터를 배열에 집어넣음
 						series1++;
 						if (series2 != 0) {
 							String value = str.toString();
@@ -289,18 +292,22 @@ public class AERPRE {
 						}
 					}
 					if (series1 == 5 || (series1 == 4 && ch == 13)) {
-						if (series2 != 0) {
+						// 한 줄에 받는 값을 다 받거나 끝에 오는 문자인 경우 맵에 넣음
+						if (series2 != 0) { // 첫번째는 헤더이기에 넣지 않음
 							String value = str.toString();
 							values[series1] = value;
+							// 기상대 정보를 저장
 							RMO rmo = new RMO();
 							rmo.setLatitude(Double.parseDouble(values[0]));
 							rmo.setLongitude(Double.parseDouble(values[1]));
 							rmo.setElev(Double.parseDouble(values[2]));
-							if (values[3].length() == 2)
+							if (values[3].length() == 2) // 자릿수 맞추기 위함
 								rmo.setId("0" + values[3]);
 							else
 								rmo.setId(values[3]);
 							rmo.setName(values[4]);
+
+							// 처음에 입력한 위경도 좌표와 거리가 얼마나 되는지 저장
 							distance = distance(Double.parseDouble(values[0]), Double.parseDouble(values[1]),
 									aermodDTO.getLatitude(), aermodDTO.getLongitude());
 							rmo.setDistance(distance);
@@ -310,10 +317,11 @@ public class AERPRE {
 //							System.out.print(rmo.getId() + " ");
 //							System.out.print(rmo.getName() + " ");
 //							System.out.println(rmo.getDistance() + " ");
+							// 최소 거리와 비교하여 가장 가까운 기상대를 찾음
 							if (min_distance == -1)
 								min_distance = distance;
 							else if (min_distance > distance) {
-								rmo_id[0] = values[3];
+								rmo_id[0] = values[3]; // 기본 기상대 등록
 								min_distance = distance;
 								aermodDTO.setRmo(rmo);
 							}
@@ -355,7 +363,8 @@ public class AERPRE {
 		return num1 * 1.609344;
 	}
 
-	public void SelectRMO() { // 가장 가까운 기상대 정보를 temp 폴더에 옮겨주고 내부의 저층, 고층의 ID를 추출
+	// ReadRMO에서 가져온 가장 가까운 기상대 정보를 temp 폴더에 옮겨주고 내부의 저층, 고층의 ID를 추출
+	public void SelectRMO() {
 		System.out.println("Select nearst RMO");
 		ArrayList<String> RMO_info = new ArrayList<>();
 		try {
@@ -382,15 +391,16 @@ public class AERPRE {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		rmo_id[1] = String.valueOf(Integer.parseInt(RMO_info.get(3)));
-		rmo_id[2] = RMO_info.get(5);
-		RMO temprmo = aermodDTO.getRmo();
-		temprmo.setSf_id(rmo_id[2]);
-		temprmo.setUa_id(rmo_id[1]);
+		rmo_id[1] = String.valueOf(Integer.parseInt(RMO_info.get(3))); // 기상대 정보가 있는 위치의 단어를 추출
+		rmo_id[2] = RMO_info.get(5); // 기상대 정보가 있는 위치의 단어를 추출
+		RMO temprmo = aermodDTO.getRmo(); // 데이터 수정을 위해 가져옴
+		temprmo.setSf_id(rmo_id[2]); // 고층 기상대 정보 입력
+		temprmo.setUa_id(rmo_id[1]); // 저층 기상대 정보 입력
 		aermodDTO.setRmo(temprmo);
 
 		System.out.println("Nearest id is : " + rmo_id[0] + " " + rmo_id[1] + " " + rmo_id[2] + " ");
 
+		// run 폴더에 이동하여 모델링에서 사용
 		try {
 			process = new ProcessBuilder("cmd", "/c", "copy",
 					base_path + "\\resource\\RMO_decrypt\\" + rmo_id[0] + "_AERMOD.PFL",
@@ -407,40 +417,43 @@ public class AERPRE {
 		}
 	}
 
+	// Input 파일을 만들어줌
 	public void CreateInp(String matter) {
 		try {
 			RMO temprmo = aermodDTO.getRmo();
 			int ch;
+			// 베이스 파일을 읽어옴
 			Reader inStream = new FileReader(base_path + "\\resource\\aermod_.inp");
 			BufferedWriter outStream = new BufferedWriter(
 					new FileWriter(base_path + "\\run\\aermod_" + matter + ".inp"));
 			StringBuilder str = new StringBuilder();
 
+			// 지정된 자리에 맞는 파라미터를 채워 넣음
 			while (true) {
 				ch = inStream.read();
 				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1) { // 단어를 구분하는 문자가 아닌 경우
 					str.append((char) ch);
 				} else {
 					if (str.length() != 0) {
-						if (str.toString().contains("@@!1")) {
+						if (str.toString().contains("@@!1")) { // 오염물질 입력
 							String str2 = str.toString();
 							str2 = str2.replace("@@!1", inpparam.get(matter).get("@@!1"));
 							outStream.write(str2, 0, str2.length());
 							str = new StringBuilder();
 							continue;
-						} else if (str.toString().contains("@@!2")) {
+						} else if (str.toString().contains("@@!2")) { // 오염물질 입력
 							String str2 = str.toString();
 							str2 = str2.replace("@@!2", inpparam.get(matter).get("@@!2"));
 							outStream.write(str2, 0, str2.length());
 							str = new StringBuilder();
 							continue;
-						} else if (str.toString().contains("@@!3")) {
+						} else if (str.toString().contains("@@!3")) { // 지표 기상대 아이디 입력
 							String str2 = str.toString();
 							str2 = str2.replace("@@!3", temprmo.getSf_id());
 							outStream.write(str2, 0, str2.length());
 							str = new StringBuilder();
 							continue;
-						} else if (str.toString().contains("@@!4")) {
+						} else if (str.toString().contains("@@!4")) { // 고층 기상대 아이디 입력
 							String str2 = str.toString();
 							str2 = str2.replace("@@!4", temprmo.getUa_id());
 							outStream.write(str2, 0, str2.length());
@@ -465,6 +478,7 @@ public class AERPRE {
 		}
 	}
 
+	// 배출원 입력 파일을 읽어옴
 	public void ReadSource() {
 		try {
 			stack_header = new ArrayList<>();
@@ -479,7 +493,7 @@ public class AERPRE {
 				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1 && ch != 44) { // 단어를 구분하는 문자가 아닌 경우
 					str.append((char) ch);
 				} else {
-					if (ch == 44) {
+					if (ch == 44) { // 쉼표를 만났을 경우
 						series1++;
 						if (series2 == 0)
 							stack_header.add(str.toString()); // 처음 한줄을 스택 정보 종류를 읽어서 저장
@@ -552,10 +566,13 @@ public class AERPRE {
 		}
 	}
 
+	// ReadSource에서 읽은 배출원 입력 파일을 가지고 배출원 정보 파일을 만듬
 	public void CreateSource(String matter) {
 		try {
-			if (stack_header.indexOf(matter) == -1)
-				System.out.println("에러");
+			if (stack_header.indexOf(matter) == -1) {
+				System.out.println("파일 에러(해당 오염물질이 입력되지 않음)");
+				return;
+			}
 			BufferedWriter outStream = new BufferedWriter(
 					new FileWriter(base_path + "\\run\\POINT_" + matter + ".dat"));
 			for (Map<String, Double> temp_map : stack_info) {
@@ -581,7 +598,7 @@ public class AERPRE {
 			}
 			outStream.close();
 			System.out.println("complete create Point dat file(" + matter + ")");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
