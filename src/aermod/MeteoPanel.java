@@ -161,7 +161,7 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 	        chooser.setAcceptAllFileFilterUsed(true);   // Fileter 모든 파일 적용 
 	        chooser.setDialogTitle("파일 선택"); // 창의 제목
 	        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
-	        FileNameExtensionFilter filter = new FileNameExtensionFilter("xlsx", "xlsx"); // filter 확장자 추가
+	        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv", "csv"); // filter 확장자 추가
 	        chooser.setFileFilter(filter); // 파일 필터를 추가
 	        
 	        int returnVal = chooser.showSaveDialog(null); // 열기용 창 오픈
@@ -171,7 +171,7 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 	            if(folderPath.lastIndexOf(".") != -1)
 					folderPath = folderPath.substring(0, folderPath.lastIndexOf("."));
 				try {
-					process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\resource\\criteria.xlsx", folderPath+".xlsx").start();
+					process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\resource\\criteria.csv", folderPath+".csv").start();
 					process.waitFor();
 					process.destroy();
 					JOptionPane.showMessageDialog(null, "다운로드가 완료되었습니다.","다운로드 완료",JOptionPane.PLAIN_MESSAGE);

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AERPRE {
-
+	// 모델링 구동 전 필요한 전처리 파일을 만들어주는 클래스
 	private String[] pollist = { "SO2", "CO", "NO2", "Pb", "Benzene", "PM-10", "Zn", "NH3", "CS2", "Cr", "Hg", "Cu",
 			"Vinylchloride", "H2S", "Dichloromethane", "TCE", "As", "Ni", "Cd", "Br", "F", "HCN", "HCl", "Phenol",
 			"Formaldehyde" };
@@ -27,7 +27,7 @@ public class AERPRE {
 	private Map<String, Map<String, Double>> result;	// 모델링 결과 저장
 	private Map<String, Map<String, Map<String, Map<String, Double>>>> air_list; // 기존오염도
 	
-	private String base_path;
+	private String base_path; //메인 폴더 경로
 
 	private AermodDTO aermodDTO;
 
@@ -41,8 +41,8 @@ public class AERPRE {
 	public void ReadCriteria(String EC_path) {
 		try {
 			System.out.println("Read criteria Data in criteria.csv");
-			criteria = new HashMap<String, Map<String, Double>>(); // 기준 값을 넣는 맵
-			result = new HashMap<String, Map<String, Double>>(); // 나중에 결과 값을 넣는 맵을 미리 만들어 놓음
+			criteria = new HashMap<String, Map<String, Double>>(); // 기준 값을 넣는 맵 HashMap<오염물질명, Map<시간, 값>>
+			result = new HashMap<String, Map<String, Double>>(); // 나중에 결과 값을 넣는 맵을 미리 만들어 놓음, 기준 값을 넣을때 한번 훑기 때문
 			int ch; // 한 단어씩 읽어옴
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
 			InputStreamReader inStream;
@@ -586,12 +586,12 @@ public class AERPRE {
 							+ "\n";
 					String source2 = "SO SRCPARAM  "
 							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0))))) + "    "
-							+ String.format(" %7.8f",
+							+ String.format("%13.11f",
 									temp_map.get(stack_header.get(9)) * temp_map.get(matter) / 1000 / 60)
-							+ String.format(" %8.2f", temp_map.get(stack_header.get(5)) + temp_map.get(stack_header.get(4)))
-							+ String.format(" %8.2f", temp_map.get(stack_header.get(6)) + 273.15)
-							+ String.format(" %6.2f", temp_map.get(stack_header.get(7)))
-							+ String.format(" %5.3f", temp_map.get(stack_header.get(8))) + "\n";
+							+ String.format(" %12.6f", temp_map.get(stack_header.get(5)) + temp_map.get(stack_header.get(4)))
+							+ String.format(" %12.6f", temp_map.get(stack_header.get(6)) + 273.15)
+							+ String.format(" %10.6f", temp_map.get(stack_header.get(7)))
+							+ String.format(" %8.6f", temp_map.get(stack_header.get(8))) + "\n";
 					outStream.write(source1, 0, source1.length());
 					outStream.write(source2, 0, source2.length());
 				}

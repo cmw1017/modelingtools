@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 
 
 public class AerMain extends JFrame {
+	// 프로그램 메인 클래스
 	private static final long serialVersionUID = 1L;
 	Map<String, PanelTemplete> frames;
 	static JFrame frame = new JFrame();
@@ -16,10 +17,13 @@ public class AerMain extends JFrame {
 		frames.put("aermet", new MeteoPanel());
 		frames.put("aerpol", new PolPanel());
 		frames.put("aerres", new AERMODResultPanel());
-		// 경로별 설정
+
+		// 경로별 설정(테스트 환경에 따라 경로가 달라짐)
 //		String base_path = ".\\";
 //		String base_path = "C:\\Users\\cmw10\\OneDrive\\aermod RELEASE 1.2";
-		String base_path = "C:\\Users\\DELL\\OneDrive\\aermod RELEASE 1.2";
+		String base_path = "E:\\cmw\\aermod RELEASE 1.2";
+
+		// 프레임을 하나씩 돌면서 세팅을 진행하고 보이지 않게 숨김(페이지가 많지 않기에 가능함)
 		Iterator<String> iter = frames.keySet().iterator();
 		while(iter.hasNext()) {
 			PanelTemplete frame = frames.get(iter.next());
@@ -30,12 +34,15 @@ public class AerMain extends JFrame {
 		
 		
 		// 기본입력 데이터 설정
-		AermodDTO aermodDTO = new AermodDTO();
-		// 오염물질 순서 SO2 CO NO2 Pb Benzene PM-10 Zn NH3 CS2 Cr Hg Cu Vinylchloride H2S Dichloromethane TCE As Ni Cd Br F HCN HCl Phenol Formaldehyde
+		AermodDTO aermodDTO = new AermodDTO(); // 모델링 프로그램이 구동되는 동안에 필요한 데이터를 가지고 있음
+		// 모델링 오염물질
+		// 순서 SO2 CO NO2 Pb Benzene PM-10 Zn NH3 CS2 Cr Hg Cu Vinylchloride H2S Dichloromethane TCE As Ni Cd Br F HCN HCl Phenol Formaldehyde
 		String[] pollist = { "SO2", "CO", "NO2", "Pb", "Benzene", "PM-10", "Zn", "NH3", "CS2", "Cr", "Hg", "Cu",
 				"Vinylchloride", "H2S", "Dichloromethane", "TCE", "As", "Ni", "Cd", "Br", "F", "HCN", "HCl", "Phenol",
 				"Formaldehyde" };
-		Map<String,Map<String,String>> inpparam = new HashMap<String,Map<String,String>>(); // inp 파일의 파라미터 설정
+
+		// inp 파일의 파라미터 설정, 추후에 오염물질별 inp 파일 생성할때 사용되는 데이터
+		Map<String,Map<String,String>> inpparam = new HashMap<String,Map<String,String>>();
 		for(String matter : pollist) {
 			inpparam.put(matter, new HashMap<String,String>());
 			inpparam.get(matter).put("@@!1", matter);
