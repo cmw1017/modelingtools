@@ -23,7 +23,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	AermodDTO aermodDTO;
 	Process process = null;
 
-	private String[] header = { "오염물질", "모델 진행도", "모델링 횟수" };
+	private String[] header = { "오염물질", "모델 진행도", "진행 상태" };
 	private List<String> matters;
 
 	private JPanel aerresjp = new JPanel();
@@ -192,7 +192,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 				if (j == 0)
 					matters_label[i][j].setText(matters.get(i));
 				else
-					matters_label[i][j].setText("0");
+					matters_label[i][j].setText("대기");
 				aerresjp.add(matters_label[i][j]);
 			}
 			if (i == 10) {
@@ -201,7 +201,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 			}
 		}
 		aerresjp.add(content);
-		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label,result,complete,aermodDTO.getThread_num());
+		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label, result, complete, aermodDTO.getThread_num());
 		Thread thread = new Thread(aermain, "aermod_main");
 		thread.start();
 	}

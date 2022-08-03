@@ -11,7 +11,7 @@ public class AERMOD implements Runnable {
 	String matter;
 	String base_path;
 	JLabel produce;
-	JLabel count;
+	JLabel state;
 	Process process = null;
 	ProcessBuilder processBuilder = null;
 	ThreadInfo t_info;
@@ -28,13 +28,13 @@ public class AERMOD implements Runnable {
 	// t_info : 모든 쓰레드의 정보 및 상태를 가지고 있는 클래스
 	// index_thread : 쓰레드의 사용 상태를 알려주는 변수
 	// queue : 모델링 해야할 물질을 저장
-	public AERMOD(AermodDTO aermodDTO, String matter, JLabel produce, JLabel count, ThreadInfo t_info, int index_thread,
+	public AERMOD(AermodDTO aermodDTO, String matter, JLabel produce, JLabel state, ThreadInfo t_info, int index_thread,
 			Queue<String> queue, JButton result_bt, JButton complete_bt) {
 		this.aermodDTO = aermodDTO;
 		this.base_path = aermodDTO.getBase_path();
 		this.matter = matter;
 		this.produce = produce;
-		this.count = count;
+		this.state = state;
 		this.t_info = t_info;
 		this.index_thread = index_thread;
 		this.queue = queue;
@@ -89,7 +89,8 @@ public class AERMOD implements Runnable {
 			processBuilder.directory(aermoddir);
 			process = processBuilder.start();
 			BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
+			
+			state.setText("진행중");
 			while ((str = stdOut.readLine()) != null) {
 				if (str.contains("+Now Processing Data For Day No.")) {
 					str = str.substring(str.lastIndexOf("No.") + 5, str.length());
@@ -99,7 +100,7 @@ public class AERMOD implements Runnable {
 			}
 			process.waitFor();
 			process.destroy();
-			count.setText(String.valueOf(Integer.parseInt(count.getText()) + 1));
+			state.setText("완료");
 		} else {
 			System.out.println("에러 : 모델링 실행파일이 없습니다.(3aermod.exe)");
 			return;
