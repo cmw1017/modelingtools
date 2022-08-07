@@ -112,6 +112,8 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 					process.waitFor();
 					process = new ProcessBuilder("cmd", "/c", "rmdir", "/s", "/q", base_path + "\\temp").start();
 					process.waitFor();
+					process = new ProcessBuilder("cmd", "/c", "rmdir", "/s", "/q", base_path + "\\result").start();
+					process.waitFor();
 					process.destroy();
 					System.exit(0);
 				} catch (IOException e1) {

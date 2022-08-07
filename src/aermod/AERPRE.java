@@ -484,7 +484,7 @@ public class AERPRE {
 			stack_header = new ArrayList<>();
 			stack_info = new ArrayList<>();
 			int ch;
-			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
+			int series1 = 0, series2 = 0; // series1 : 열의 개수(그 이상은 읽지 않음) series2 : 행번호
 			InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\run\\source.csv"), "euc-kr");
 			StringBuilder str = new StringBuilder();
 
