@@ -496,7 +496,16 @@ public class AERPRE {
 					if (ch == 44) { // 쉼표를 만났을 경우
 						series1++;
 						if (series2 == 0)
-							stack_header.add(str.toString()); // 처음 한줄을 스택 정보 종류를 읽어서 저장
+							if(str.toString().equals("SO₂"))
+								stack_header.add("SO2");
+							else if(str.toString().equals("NO₂"))
+								stack_header.add("NO2");
+							else if(str.toString().equals("CS₂"))
+								stack_header.add("CS2");
+							else if(str.toString().equals("H₂S"))
+								stack_header.add("H2S");
+							else
+								stack_header.add(str.toString()); // 처음 한줄을 스택 정보 종류를 읽어서 저장
 						else if (series2 != 0) {
 							String number = str.toString();
 							if (number.length() == 0)
