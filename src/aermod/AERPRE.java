@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -588,19 +589,19 @@ public class AERPRE {
 				if (temp_map.get(matter) != 0) {
 					String source1 = "SO LOCATION  "
 							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0)))))
-							+ "    POINT" + String.format(" %11.2f", temp_map.get(stack_header.get(1)))
-							+ String.format(" %11.2f", temp_map.get(stack_header.get(2)))
-							+ String.format(" %4d",
+							+ "    POINT" + String.format(" %13.4f", temp_map.get(stack_header.get(1)))
+							+ String.format(" %13.4f", temp_map.get(stack_header.get(2)))
+							+ String.format(" %5d",
 									Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(3))))))
 							+ "\n";
 					String source2 = "SO SRCPARAM  "
 							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0))))) + "    "
-							+ String.format("%13.11f",
-									temp_map.get(stack_header.get(9)) * temp_map.get(matter) / 1000 / 60)
-							+ String.format(" %12.6f", temp_map.get(stack_header.get(5)) + temp_map.get(stack_header.get(4)))
-							+ String.format(" %12.6f", temp_map.get(stack_header.get(6)) + 273.15)
-							+ String.format(" %10.6f", temp_map.get(stack_header.get(7)))
-							+ String.format(" %8.6f", temp_map.get(stack_header.get(8))) + "\n";
+							+ new BigDecimal(String.format("%.6g",
+									temp_map.get(stack_header.get(9)) * temp_map.get(matter) / 1000 / 60)).toString()
+							+ String.format(" %9.3f", temp_map.get(stack_header.get(5)) + temp_map.get(stack_header.get(4)))
+							+ String.format(" %11.3f", temp_map.get(stack_header.get(6)) + 273.15)
+							+ String.format(" %8.3f", temp_map.get(stack_header.get(7)))
+							+ String.format(" %8.3f", temp_map.get(stack_header.get(8))) + "\n";
 					outStream.write(source1, 0, source1.length());
 					outStream.write(source2, 0, source2.length());
 				}

@@ -203,8 +203,8 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 			}
 		}
 		aerresjp.add(content);
-//		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label, result, complete, aermodDTO.getThread_num());
-//		Thread thread = new Thread(aermain, "aermod_main");
-//		thread.start();
+		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label, result, complete, aermodDTO.getThread_num());
+		Thread thread = new Thread(aermain, "aermod_main");
+		thread.start();
 	}
 }
