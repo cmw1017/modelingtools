@@ -8,10 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AERPRE {
 	// 모델링 구동 전 필요한 전처리 파일을 만들어주는 클래스
@@ -113,7 +110,7 @@ public class AERPRE {
 	public void ReadAirInfo() {
 		try {
 			System.out.println("Read criteria Data in airinfo.csv");
-			air_list = new HashMap<String, Map<String, Map<String, Map<String, Double>>>>();
+			air_list = new LinkedHashMap<String, Map<String, Map<String, Map<String, Double>>>>();
 			int ch;
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
 			InputStreamReader inStream;
