@@ -483,8 +483,10 @@ public class AERPRE {
 			stack_info = new ArrayList<>();
 			int ch;
 			int series1 = 0, series2 = 0; // series1 : 열의 개수(그 이상은 읽지 않음) series2 : 행번호
+			int stack_read_check = 1, data_read_check = 1; // stack_read_check : 굴뚝 전체의 읽기 여부, 오염물질 데이터 읽기 여부 체크
 			InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\run\\source.csv"), "euc-kr");
 			StringBuilder str = new StringBuilder();
+			ArrayList<Integer> valid_stack_list = new ArrayList<>(); // 배열에 저장된 순서와 가져오는 데이터의 열번호를 맞추는 배열
 
 			while (true) {
 				ch = inStream.read();
@@ -493,37 +495,46 @@ public class AERPRE {
 				} else {
 					if (ch == 44) { // 쉼표를 만났을 경우
 						series1++;
-						if (series2 == 0)
-							if(str.toString().equals("SO₂"))
+//						System.out.print(series1 + ": ");
+						boolean row_check = series1 == 1 || (series1 >= 4 && series1 <= 12) || (series1 >= 13 && (series1 % 2 == 0)); // 필요한 데이터가 있는 열을 구분
+						if (series2 == 0 && series1 <= 62 && (row_check)) {
+//							System.out.print(str.toString() + "/ ");
+							if (str.toString().equals("SO₂"))
 								stack_header.add("SO2");
-							else if(str.toString().equals("NO₂"))
+							else if (str.toString().equals("NO₂"))
 								stack_header.add("NO2");
-							else if(str.toString().equals("CS₂"))
+							else if (str.toString().equals("CS₂"))
 								stack_header.add("CS2");
-							else if(str.toString().equals("H₂S"))
+							else if (str.toString().equals("H₂S"))
 								stack_header.add("H2S");
 							else
 								stack_header.add(str.toString()); // 처음 한줄을 스택 정보 종류를 읽어서 저장
-						else if (series2 != 0) {
+							valid_stack_list.add(series1);
+						}
+						else if (series2 != 0 && series1 <= 62) {
+							System.out.print(str.toString() + "/ ");
 							String number = str.toString();
-							if (number.length() == 0)
-								number = "0";
-							stack_info.get(series2 - 1).put(stack_header.get(series1 - 1), Double.parseDouble(number));
+							if (row_check) { // 필요한 데이터가 있는 열만 가져와서 Stack 정보에 넣음
+								if (number.length() == 0 || !(stack_read_check == 1 && data_read_check == 1)) // 선택이 0인 경우 체크
+									number = "0";
+								stack_info.get(series2 - 1).put(stack_header.get(valid_stack_list.indexOf(series1)), Double.parseDouble(number));
+							}
+							else if (series1 != 3) { // 선택이 0인 경우 체크
+								if (number.equals("0") && series1==2) stack_read_check=0;
+								else if (number.equals("0") && series1!=2) data_read_check=0;
+								else if (number.equals("1") && series1==2) stack_read_check=1;
+								else if (number.equals("1") && series1!=2) data_read_check=1;
+							}
 						}
 						// 다음부터는 스택의 정보를 저장, 그에 맞는 이름은 위에서 읽은 스택 정보 종류와 연결시킴
 					}
-					if (series1 == 35 || (series1 == 34 && ch == 13)) {
-						if (series2 == 0)
-							stack_header.add(str.toString()); // 처음 한줄을 스택 정보 종류를 읽어서 저장
-						else if (series2 != 0) {
-							String number = str.toString();
-							if (number.length() == 0)
-								number = "0";
-							stack_info.get(series2 - 1).put(stack_header.get(series1), Double.parseDouble(number));
-						}
+					if (series1 == 76 || ch == 13) {
 						series1 = 0;
 						series2++;
+						stack_read_check = 1;
+						data_read_check = 1;
 						stack_info.add(new HashMap<String, Double>());
+						System.out.println();
 					}
 					if (str.length() != 0) {
 						str = new StringBuilder();
