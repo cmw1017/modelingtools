@@ -1,16 +1,8 @@
 package aermod;
 
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class AERPRE {
 	// 모델링 구동 전 필요한 전처리 파일을 만들어주는 클래스
@@ -60,18 +52,16 @@ public class AERPRE {
 				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1 && ch != 44) { // 단어를 구분하는 문자가 아닌 경우
 					str.append((char) ch);
 				} else {
-					if (ch == 44) { // 쉼표를 만났을 경우 데이터를 배열에 집어넣음
+					if (ch == 44 || ch == 10 || ch == 13) { // 쉼표, 개행문자, 복귀를 만났을 경우 데이터를 배열에 집어넣음
 						series1++;
-						if (series2 != 0) {
+						if (series2 != 0 && ch != 10) { //마지막에 개행문자를 만나면 series1이 5가 되므로 배열범위를 벗어나게됨
 							String value = str.toString();
 							values[series1 - 1] = value;
 						}
 					}
-					if (series1 == 4 || (series1 == 3 && ch == 13)) {
+					if (series1 == 5) { // series1이 4인 13에서는 데이터를 받고, series1이 5인 10에서는 받은 데이터를 배열에서 입력
 						// 한 줄에 받는 값을 다 받거나 끝에 오는 문자인 경우 맵에 넣음(기준+결과)
 						if (series2 != 0) { // 첫번째는 헤더이기에 넣지 않음
-							String value = str.toString();
-							values[series1] = value;
 							if (criteria.containsKey(values[0])) {
 								criteria.get(values[0]).put(values[1], Double.parseDouble(values[2]));
 								result.get(values[0]).put(values[1], Double.parseDouble(values[2]));
@@ -112,7 +102,7 @@ public class AERPRE {
 	public void ReadAirInfo() {
 		try {
 			System.out.println("Read criteria Data in airinfo.csv");
-			air_list = new HashMap<String, Map<String, Map<String, Map<String, Double>>>>();
+			air_list = new LinkedHashMap<String, Map<String, Map<String, Map<String, Double>>>>();
 			int ch;
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
 			InputStreamReader inStream;
@@ -124,18 +114,19 @@ public class AERPRE {
 				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1 && ch != 44) { // 단어를 구분하는 문자가 아닌 경우
 					str.append((char) ch);
 				} else {
-					if (ch == 44) { // 쉼표를 만났을 경우 데이터를 배열에 집어넣음
+					if (ch == 44 || ch == 10 || ch == 13) { // 쉼표, 개행문자, 복귀를 만났을 경우 데이터를 배열에 집어넣음
 						series1++;
-						if (series2 != 0) {
+						if (series2 != 0 && ch != 10) { //마지막에 개행문자를 만나면 series1이 5가 되므로 배열범위를 벗어나게됨
 							String value = str.toString();
 							values[series1 - 1] = value;
 						}
 					}
-					if (series1 == 5 || (series1 == 4 && ch == 13)) {
+					if (series1 == 6) { // series1이 5인 13에서는 데이터를 받고, series1이 6인 10에서는 받은 데이터를 배열에서 입력
 						// 한 줄에 받는 값을 다 받거나 끝에 오는 문자인 경우 맵에 넣음
+//						for (String temp : values)
+//							System.out.print("value : " + temp);
+//						System.out.println();
 						if (series2 != 0) { // 첫번째는 헤더이기에 넣지 않음
-							String value = str.toString();
-							values[series1] = value;
 							if (air_list.containsKey(values[0])) { // 시도 수준에서 중복 값이 있는지 확인
 								if (air_list.get(values[0]).containsKey(values[1])) { // 시군 수준에서 중복 값이 있는지 확인
 									if (air_list.get(values[0]).get(values[1]).containsKey(values[2])) { // 구 수준에서 중복 값이 있는지 확인
@@ -284,18 +275,19 @@ public class AERPRE {
 				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1 && ch != 44) { // 단어를 구분하는 문자가 아닌 경우
 					str.append((char) ch);
 				} else {
-					if (ch == 44) { // 쉼표를 만났을 경우 데이터를 배열에 집어넣음
+					if (ch == 44 || ch == 10 || ch == 13) { // 쉼표, 개행문자, 복귀를 만났을 경우 데이터를 배열에 집어넣음
 						series1++;
-						if (series2 != 0) {
+						if (series2 != 0 && ch != 10) { //마지막에 개행문자를 만나면 series1이 5가 되므로 배열범위를 벗어나게됨
 							String value = str.toString();
 							values[series1 - 1] = value;
 						}
 					}
-					if (series1 == 5 || (series1 == 4 && ch == 13)) {
+					if (series1 == 6) { // series1이 5인 13에서는 데이터를 받고, series1이 6인 10에서는 받은 데이터를 배열에서 입력
 						// 한 줄에 받는 값을 다 받거나 끝에 오는 문자인 경우 맵에 넣음
+//						for (String temp : values)
+//							System.out.print("value : " + temp);
+//						System.out.println();
 						if (series2 != 0) { // 첫번째는 헤더이기에 넣지 않음
-							String value = str.toString();
-							values[series1] = value;
 							// 기상대 정보를 저장
 							RMO rmo = new RMO();
 							rmo.setLatitude(Double.parseDouble(values[0]));
@@ -484,39 +476,58 @@ public class AERPRE {
 			stack_header = new ArrayList<>();
 			stack_info = new ArrayList<>();
 			int ch;
-			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
+			int series1 = 0, series2 = 0; // series1 : 열의 개수(그 이상은 읽지 않음) series2 : 행번호
+			int stack_read_check = 1, data_read_check = 1; // stack_read_check : 굴뚝 전체의 읽기 여부, 오염물질 데이터 읽기 여부 체크
 			InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\run\\source.csv"), "euc-kr");
 			StringBuilder str = new StringBuilder();
+			ArrayList<Integer> valid_stack_list = new ArrayList<>(); // 배열에 저장된 순서와 가져오는 데이터의 열번호를 맞추는 배열
 
 			while (true) {
 				ch = inStream.read();
 				if (ch != ' ' && ch != 10 && ch != 13 && ch != -1 && ch != 44) { // 단어를 구분하는 문자가 아닌 경우
 					str.append((char) ch);
 				} else {
-					if (ch == 44) { // 쉼표를 만났을 경우
+					if (ch == 44 || ch == 10 || ch == 13) { // 쉼표, 개행문자, 복귀를 만났을 경우 데이터를 배열에 집어넣음
 						series1++;
-						if (series2 == 0)
-							stack_header.add(str.toString()); // 처음 한줄을 스택 정보 종류를 읽어서 저장
-						else if (series2 != 0) {
+//						System.out.print(series1 + ": ");
+						boolean row_check = series1 == 1 || (series1 >= 4 && series1 <= 12) || (series1 >= 13 && (series1 % 2 == 0)); // 필요한 데이터가 있는 열을 구분
+						if (series2 == 0 && series1 <= 62 && (row_check)) {
+							if (str.toString().equals("SO₂"))
+								stack_header.add("SO2");
+							else if (str.toString().equals("NO₂"))
+								stack_header.add("NO2");
+							else if (str.toString().equals("CS₂"))
+								stack_header.add("CS2");
+							else if (str.toString().equals("H₂S"))
+								stack_header.add("H2S");
+							else
+								stack_header.add(str.toString()); // 처음 한줄을 스택 정보 종류를 읽어서 저장
+							valid_stack_list.add(series1);
+						}
+						else if (series2 != 0 && series1 <= 62) {
+							System.out.print(str.toString() + "/ ");
 							String number = str.toString();
-							if (number.length() == 0)
-								number = "0";
-							stack_info.get(series2 - 1).put(stack_header.get(series1 - 1), Double.parseDouble(number));
+							if (row_check) { // 필요한 데이터가 있는 열만 가져와서 Stack 정보에 넣음
+								if (number.length() == 0 || !(stack_read_check == 1 && data_read_check == 1)) // 선택이 0인 경우 체크
+									number = "0";
+								stack_info.get(series2 - 1).put(stack_header.get(valid_stack_list.indexOf(series1)), Double.parseDouble(number));
+							}
+							else if (series1 != 3) { // 선택이 0인 경우 체크
+								if (number.equals("0") && series1==2) stack_read_check=0;
+								else if (number.equals("0") && series1!=2) data_read_check=0;
+								else if (number.equals("1") && series1==2) stack_read_check=1;
+								else if (number.equals("1") && series1!=2) data_read_check=1;
+							}
 						}
 						// 다음부터는 스택의 정보를 저장, 그에 맞는 이름은 위에서 읽은 스택 정보 종류와 연결시킴
 					}
-					if (series1 == 35 || (series1 == 34 && ch == 13)) {
-						if (series2 == 0)
-							stack_header.add(str.toString()); // 처음 한줄을 스택 정보 종류를 읽어서 저장
-						else if (series2 != 0) {
-							String number = str.toString();
-							if (number.length() == 0)
-								number = "0";
-							stack_info.get(series2 - 1).put(stack_header.get(series1), Double.parseDouble(number));
-						}
+					if (series1 == 76 || ch == 10) {
 						series1 = 0;
 						series2++;
+						stack_read_check = 1;
+						data_read_check = 1;
 						stack_info.add(new HashMap<String, Double>());
+						System.out.println();
 					}
 					if (str.length() != 0) {
 						str = new StringBuilder();
@@ -579,19 +590,19 @@ public class AERPRE {
 				if (temp_map.get(matter) != 0) {
 					String source1 = "SO LOCATION  "
 							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0)))))
-							+ "    POINT" + String.format(" %11.2f", temp_map.get(stack_header.get(1)))
-							+ String.format(" %11.2f", temp_map.get(stack_header.get(2)))
-							+ String.format(" %4d",
+							+ "    POINT" + String.format(" %13.4f", temp_map.get(stack_header.get(1)))
+							+ String.format(" %13.4f", temp_map.get(stack_header.get(2)))
+							+ String.format(" %5d",
 									Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(3))))))
 							+ "\n";
 					String source2 = "SO SRCPARAM  "
 							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0))))) + "    "
-							+ String.format("%13.11f",
-									temp_map.get(stack_header.get(9)) * temp_map.get(matter) / 1000 / 60)
-							+ String.format(" %12.6f", temp_map.get(stack_header.get(5)) + temp_map.get(stack_header.get(4)))
-							+ String.format(" %12.6f", temp_map.get(stack_header.get(6)) + 273.15)
-							+ String.format(" %10.6f", temp_map.get(stack_header.get(7)))
-							+ String.format(" %8.6f", temp_map.get(stack_header.get(8))) + "\n";
+							+ new BigDecimal(String.format("%.6g",
+									temp_map.get(stack_header.get(9)) * temp_map.get(matter) / 1000 / 60)).toString()
+							+ String.format(" %9.3f", temp_map.get(stack_header.get(5)) + temp_map.get(stack_header.get(4)))
+							+ String.format(" %11.3f", temp_map.get(stack_header.get(6)) + 273.15)
+							+ String.format(" %8.3f", temp_map.get(stack_header.get(7)))
+							+ String.format(" %8.3f", temp_map.get(stack_header.get(8))) + "\n";
 					outStream.write(source1, 0, source1.length());
 					outStream.write(source2, 0, source2.length());
 				}
