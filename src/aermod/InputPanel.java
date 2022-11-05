@@ -2,8 +2,7 @@ package aermod;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,9 @@ public class InputPanel extends JFrame implements PanelTemplete {
 	private JComboBox<String> company_sido_txt = new JComboBox<String>();
 	private JComboBox<String> company_sigun_txt = new JComboBox<String>();
 	private JComboBox<String> company_gu_txt = new JComboBox<String>();
-	private JLabel ksic = new JLabel();
+	private JLabel company_info = new JLabel();
+	private JTextField company_info_txt = new JTextField();
+	private JButton company_info_load = new RoundedButton("파일 불러오기", Color.decode("#BF95BC"), white, 20);
 	private JLabel terrain = new JLabel();
 	private JLabel terrain_dxf_info = new JLabel();
 	private JRadioButton terrain_dxf = new JRadioButton();
@@ -77,8 +78,10 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		aerinjp.add(company_sigun_txt);
 		aerinjp.add(company_gu);
 		aerinjp.add(company_gu_txt);
+		aerinjp.add(company_info);
+		aerinjp.add(company_info_txt);
+		aerinjp.add(company_info_load);
 
-		aerinjp.add(ksic);
 
 		aerinjp.add(terrain);
 		aerinjp.add(terrain_dxf_info);
@@ -160,11 +163,18 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		company_gu_txt.setLocation(680, 260);
 		company_gu_txt.setSize(150, 30);
 		company_gu_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-
-		ksic.setLocation(150, 300);
-		ksic.setSize(150, 50);
-		ksic.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		ksic.setText("산업 분류 선택");
+		company_info.setLocation(150, 300);
+		company_info.setSize(200, 30);
+		company_info.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		company_info.setText("사업장 정보 업로드(.dat)");
+		company_info_txt.setLocation(350, 300);
+		company_info_txt.setSize(350, 30);
+		company_info_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		company_info_txt.setText("");
+		company_info_load.setLocation(710, 300);
+		company_info_load.setSize(110, 30);
+		company_info_load.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		company_info_load.addActionListener(new loadListener());
 
 		terrain.setLocation(50, 380);
 		terrain.setSize(200, 30);
@@ -283,9 +293,11 @@ public class InputPanel extends JFrame implements PanelTemplete {
 			chooser.setDialogTitle("파일 선택"); // 창의 제목
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
 			FileNameExtensionFilter filter;
-			if (e.getSource() == source_load) {
+			if(e.getSource() == company_info_load) {
+				filter = new FileNameExtensionFilter("dat", "dat"); // filter 확장자 추가
+			} else if (e.getSource() == source_load) {
 				filter = new FileNameExtensionFilter("csv", "csv"); // filter 확장자 추가
-			} else if(e.getSource() == dat_load){
+			} else if(e.getSource() == dat_load) {
 				filter = new FileNameExtensionFilter("dat", "dat"); // filter 확장자 추가
 			} else {
 				filter = new FileNameExtensionFilter("dxf", "dxf"); // filter 확장자 추가
@@ -296,7 +308,38 @@ public class InputPanel extends JFrame implements PanelTemplete {
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) { // 열기를 클릭
 				folderPath = chooser.getSelectedFile().toString();
-				if (e.getSource() == topy_load) {
+				if (e.getSource() == company_info_load) {
+					int ch; // 한 단어씩 읽어옴
+					StringBuilder str = new StringBuilder();
+					ArrayList<String> company_info_list = new ArrayList<>();
+					try {
+						InputStreamReader inStream = new InputStreamReader(new FileInputStream(folderPath), "UTF-8");
+						while(true){ // 회사 정보 파일 읽기
+							ch = inStream.read(); // 한 문자씩 읽기
+							if(ch == 124){ // 구분문자 "|"가 나오면 문자열 저장
+								String value = str.toString();
+								company_info_list.add(value);
+								str = new StringBuilder();
+							} else if(ch != -1) { // 구분문자가 아니면 문자열 형성
+								str.append((char) ch);
+							}
+							if (ch == -1) {
+								String value = str.toString();
+								company_info_list.add(value);
+								break;
+							}
+						}
+						company_lat_txt.setText(String.valueOf(Double.parseDouble(company_info_list.get(4))/10000)); // 위도 값 지정
+						company_lon_txt.setText(String.valueOf(Double.parseDouble(company_info_list.get(13))/10000)); // 경도 값 지정
+						company_sido_txt.setSelectedItem(company_info_list.get(2));
+						company_sigun_txt.setSelectedItem(company_info_list.get(3));
+						company_gu_txt.setSelectedItem(company_info_list.get(14));
+						
+						
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				} else if (e.getSource() == topy_load) {
 					topy_txt.setText(folderPath);
 					temp_path[0] = folderPath;
 				} else if (e.getSource() == boundary_load) {
