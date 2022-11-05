@@ -491,7 +491,7 @@ public class AERPRE {
 						series1++;
 //						System.out.print(series1 + ": ");
 						boolean row_check = series1 == 1 || (series1 >= 4 && series1 <= 12) || (series1 >= 13 && (series1 % 2 == 0)); // 필요한 데이터가 있는 열을 구분
-						if (series2 == 0 && series1 <= 62 && (row_check)) {
+						if (ch != 10 && series2 == 0 && series1 <= 62 && (row_check)) {
 							if (str.toString().equals("SO₂"))
 								stack_header.add("SO2");
 							else if (str.toString().equals("NO₂"))
@@ -504,7 +504,7 @@ public class AERPRE {
 								stack_header.add(str.toString()); // 처음 한줄을 스택 정보 종류를 읽어서 저장
 							valid_stack_list.add(series1);
 						}
-						else if (series2 != 0 && series1 <= 62) {
+						else if (ch != 10 && series2 != 0 && series1 <= 62) {
 							System.out.print(str.toString() + "/ ");
 							String number = str.toString();
 							if (row_check) { // 필요한 데이터가 있는 열만 가져와서 Stack 정보에 넣음
@@ -521,7 +521,7 @@ public class AERPRE {
 						}
 						// 다음부터는 스택의 정보를 저장, 그에 맞는 이름은 위에서 읽은 스택 정보 종류와 연결시킴
 					}
-					if (series1 == 76 || ch == 10) {
+					if (ch == 10) {
 						series1 = 0;
 						series2++;
 						stack_read_check = 1;
@@ -542,10 +542,12 @@ public class AERPRE {
 			stack_info.remove(series2 - 1);
 
 			// 출력예시
+			System.out.println("Print Stack Header");
 			for (String temp_str : stack_header) {
 				System.out.print(temp_str + " ");
 			}
 			System.out.println();
+			System.out.println("Print Stack Info");
 			for (Map<String, Double> temp_map : stack_info) {
 				for (String temp_str : stack_header) {
 					System.out.print(temp_map.get(temp_str) + " ");
