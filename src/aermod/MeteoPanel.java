@@ -92,7 +92,7 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 		bc_info.setLocation(250, 275);
 		bc_info.setSize(300, 50);
 		bc_info.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		bc_info.setText("2018 ~ 2020년 기존오염도");
+		bc_info.setText("2019 ~ 2021년 기존오염도");
 
 		ec.setLocation(50, 350);
 		ec.setSize(200, 50);
