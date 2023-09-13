@@ -591,20 +591,35 @@ public class AERPRE {
 			for (Map<String, Double> temp_map : stack_info) {
 				if (temp_map.get(matter) != 0) {
 					String source1 = "SO LOCATION  "
-							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0)))))
-							+ "    POINT" + String.format(" %13.4f", temp_map.get(stack_header.get(1)))
-							+ String.format(" %13.4f", temp_map.get(stack_header.get(2)))
-							+ String.format(" %5d",
-									Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(3))))))
+							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0))))) // 굴뚝 번호
+
+							+ "    POINT" + String.format(" %" + (getDecimal(temp_map.get(stack_header.get(1))) + 6) + "." + getDecimal(temp_map.get(stack_header.get(1))) + "f",
+									temp_map.get(stack_header.get(1))) // X 좌표(TM)
+
+							+ " "  + String.format(" %" + (getDecimal(temp_map.get(stack_header.get(2))) + 6) + "." + getDecimal(temp_map.get(stack_header.get(2))) + "f",
+									temp_map.get(stack_header.get(2))) // Y 좌표(TM)
+
+							+ " "  + String.format(" %" + (getDecimal(temp_map.get(stack_header.get(3))) + 5) + "." + getDecimal(temp_map.get(stack_header.get(3))) + "f",
+									temp_map.get(stack_header.get(3))) // 표고
 							+ "\n";
 					String source2 = "SO SRCPARAM  "
-							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0))))) + "    "
+							+ Integer.parseInt(String.valueOf(Math.round(temp_map.get(stack_header.get(0))))) + "    " // 굴뚝 번호
 							+ new BigDecimal(String.format("%.6g",
-									temp_map.get(stack_header.get(9)) * temp_map.get(matter) / 1000 / 60)).toString()
-							+ String.format(" %9.3f", temp_map.get(stack_header.get(5)) + temp_map.get(stack_header.get(4)))
-							+ String.format(" %11.3f", temp_map.get(stack_header.get(6)) + 273.15)
-							+ String.format(" %8.3f", temp_map.get(stack_header.get(7)))
-							+ String.format(" %8.3f", temp_map.get(stack_header.get(8))) + "\n";
+									temp_map.get(stack_header.get(9)) * temp_map.get(matter) / 1000 / 60)).toString() // 배출량(g/s)
+
+							+ " "  + String.format(" %" + (Math.max(getDecimal(temp_map.get(stack_header.get(4))), getDecimal(temp_map.get(stack_header.get(5)))) + 6) // 더 긴 소수점으로 처리
+													+ "." + Math.max(getDecimal(temp_map.get(stack_header.get(4))), getDecimal(temp_map.get(stack_header.get(5)))) + "f",
+									temp_map.get(stack_header.get(5)) + temp_map.get(stack_header.get(4))) //굴뚝 높이
+
+							+ " "  + String.format(" %" + (Math.max(getDecimal(temp_map.get(stack_header.get(6))), 2) + 6) // 더 긴 소수점으로 처리
+													+ "." + Math.max(getDecimal(temp_map.get(stack_header.get(6))), 2) + "f",
+									temp_map.get(stack_header.get(6)) + 273.15) // 온도(K)
+
+							+ " "  + String.format(" %" + (getDecimal(temp_map.get(stack_header.get(7))) + 5) + "." + getDecimal(temp_map.get(stack_header.get(7))) + "f",
+									temp_map.get(stack_header.get(7))) // 유속
+
+							+ " " + String.format(" %" + (getDecimal(temp_map.get(stack_header.get(8))) + 5) + "." + getDecimal(temp_map.get(stack_header.get(8))) + "f",
+									temp_map.get(stack_header.get(8))) + "\n"; // 내경
 					outStream.write(source1, 0, source1.length());
 					outStream.write(source2, 0, source2.length());
 				}
@@ -614,6 +629,12 @@ public class AERPRE {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public int getDecimal(double val) {
+		String val_str = String.valueOf(val);
+		val_str = val_str.substring(val_str.indexOf("."));
+		return val_str.length()-1;
 	}
 
 	public void RunProcess() {

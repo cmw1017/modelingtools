@@ -288,7 +288,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 			String folderPath = "";
 
 			JFileChooser chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); // 디렉토리 설정
-			chooser.setCurrentDirectory(new File("/")); // 현재 사용 디렉토리를 지정
+			chooser.setCurrentDirectory(new File(aermodDTO.getSelected_file_path())); // 현재 사용 디렉토리를 지정
 			chooser.setAcceptAllFileFilterUsed(true); // Fileter 모든 파일 적용
 			chooser.setDialogTitle("파일 선택"); // 창의 제목
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
@@ -352,9 +352,10 @@ public class InputPanel extends JFrame implements PanelTemplete {
 					source_txt.setText(folderPath);
 					temp_path[3] = folderPath;
 				}
+				aermodDTO.setSelected_file_path(folderPath);
 			} else if (returnVal == JFileChooser.CANCEL_OPTION) { // 취소를 클릭
 				System.out.println("cancel");
-				folderPath = "";
+				folderPath = "/";
 			}
 		}
 
@@ -373,7 +374,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 				String folderPath = "";
 
 				JFileChooser chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); // 디렉토리 설정
-				chooser.setCurrentDirectory(new File("/")); // 현재 사용 디렉토리를 지정
+				chooser.setCurrentDirectory(new File(aermodDTO.getSelected_file_path())); // 현재 사용 디렉토리를 지정
 				chooser.setAcceptAllFileFilterUsed(true); // Fileter 모든 파일 적용
 				chooser.setDialogTitle("배출원 다운로드"); // 창의 제목
 				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
@@ -397,9 +398,10 @@ public class InputPanel extends JFrame implements PanelTemplete {
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
+					aermodDTO.setSelected_file_path(folderPath);
 				} else if (returnVal == JFileChooser.CANCEL_OPTION) { // 취소를 클릭
 					System.out.println("cancel");
-					folderPath = "";
+					folderPath = "/";
 				}
 			}
 
