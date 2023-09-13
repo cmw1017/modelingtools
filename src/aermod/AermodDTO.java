@@ -23,6 +23,7 @@ public class AermodDTO {
 	private Map<String,Map<String,String>> inpparam;
 	private Map<String,Map<String,Double>> criteria;
 	private Map<String,Map<String,Double>> result;
+	private String selected_file_path = "/"; //업로드 하고 있는 파일 위치
 	
 	
 	public Integer getThread_num() {
@@ -127,5 +128,6 @@ public class AermodDTO {
 	public void setResult(Map<String, Map<String, Double>> result) {
 		this.result = result;
 	}
-	
+	public String getSelected_file_path() {return selected_file_path;}
+	public void setSelected_file_path(String selected_file_path) {this.selected_file_path = selected_file_path;}
 }
