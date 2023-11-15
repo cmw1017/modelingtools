@@ -656,15 +656,19 @@ public class AERPRE {
 	}
 
 	public static String findCharsetWithFile(String path) throws Exception{ // 여기에만 적용되는 것
-		InputStreamReader inStream = new InputStreamReader(new FileInputStream(path), "UTF-8");
-		int ch = inStream.read();
-		if(ch == 65279) {// UTF-8로 읽으면 처음에 65279가 나옴
-			System.out.println("Charset : UTF-8");
-			return "UTF-8";
-		} else {
-			System.out.println("Charset : EUC-KR");
-			return "EUC-KR";
+		InputStreamReader inStream = new InputStreamReader(new FileInputStream(path), "CP949");
+		int ch;
+		while (true) {
+			ch = inStream.read();
+			if(ch == 30308 || ch == 65533) {// UTF-8로 읽으면 처음에 65279가 나옴
+				System.out.println("Charset : UTF-8");
+				return "UTF-8";
+			} else if(ch == -1) {
+				System.out.println("Charset : EUC-KR");
+				return "EUC-KR";
+			}
 		}
+//		System.out.println("Charset : " + ch);
 	}
 
 	public void RunProcess() {
