@@ -313,7 +313,8 @@ public class InputPanel extends JFrame implements PanelTemplete {
 					StringBuilder str = new StringBuilder();
 					ArrayList<String> company_info_list = new ArrayList<>();
 					try {
-						InputStreamReader inStream = new InputStreamReader(new FileInputStream(folderPath), "UTF-8");
+						String charset = AERPRE.findCharsetWithFile(folderPath);
+						InputStreamReader inStream = new InputStreamReader(new FileInputStream(folderPath), charset);
 						while(true){ // 회사 정보 파일 읽기
 							ch = inStream.read(); // 한 문자씩 읽기
 							if(ch == 124){ // 구분문자 "|"가 나오면 문자열 저장
