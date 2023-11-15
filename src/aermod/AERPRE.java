@@ -110,7 +110,8 @@ public class AERPRE {
 			int ch;
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
 			InputStreamReader inStream;
-			inStream = new InputStreamReader(new FileInputStream(base_path + "\\resource\\AirInfoKorea.csv"), "euc-kr");
+			String charset = AERPRE.findCharsetWithFile(base_path + "\\resource\\AirInfoKorea.csv");
+			inStream = new InputStreamReader(new FileInputStream(base_path + "\\resource\\AirInfoKorea.csv"), charset);
 			StringBuilder str = new StringBuilder();
 			String[] values = new String[5];
 			while (true) {
@@ -256,7 +257,7 @@ public class AERPRE {
 //			}
 //			outStream.close();
 			aermodDTO.setAir_list(air_list);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -269,8 +270,9 @@ public class AERPRE {
 			double min_distance = -1;
 			int ch;
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
-			InputStreamReader inStream = new InputStreamReader(
-					new FileInputStream(base_path + "\\resource\\rmo_info.csv"), "euc-kr");
+
+			String charset = AERPRE.findCharsetWithFile(base_path + "\\resource\\AirInfoKorea.csv");
+			InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\resource\\rmo_info.csv"), charset);
 			StringBuilder str = new StringBuilder();
 			String[] values = new String[5];
 
@@ -336,7 +338,7 @@ public class AERPRE {
 				}
 			}
 			inStream.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -365,8 +367,8 @@ public class AERPRE {
 		ArrayList<String> RMO_info = new ArrayList<>();
 		try {
 			int ch;
-			InputStreamReader inStream = new InputStreamReader(
-					new FileInputStream(base_path + "\\resource\\RMO_decrypt\\" + rmo_id[0] + "_AERMOD.SFC"), "euc-kr");
+			String charset = AERPRE.findCharsetWithFile(base_path + "\\resource\\RMO_decrypt\\" + rmo_id[0] + "_AERMOD.SFC");
+			InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\resource\\RMO_decrypt\\" + rmo_id[0] + "_AERMOD.SFC"), "euc-kr");
 			StringBuilder str = new StringBuilder();
 			while (true) {
 				ch = inStream.read();
@@ -384,7 +386,7 @@ public class AERPRE {
 				}
 			}
 			inStream.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		rmo_id[1] = String.valueOf(Integer.parseInt(RMO_info.get(3))); // 기상대 정보가 있는 위치의 단어를 추출
@@ -494,7 +496,6 @@ public class AERPRE {
 			int series1 = 0, series2 = 0; // series1 : 열의 개수(그 이상은 읽지 않음) series2 : 행번호
 			int stack_read_check = 1, data_read_check = 1; // stack_read_check : 굴뚝 전체의 읽기 여부, 오염물질 데이터 읽기 여부 체크
 			String charset = AERPRE.findCharsetWithFile(base_path + "\\run\\source.csv");
-
 			InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\run\\source.csv"), charset);
 			StringBuilder str = new StringBuilder();
 			ArrayList<Integer> valid_stack_list = new ArrayList<>(); // 배열에 저장된 순서와 가져오는 데이터의 열번호를 맞추는 배열
@@ -655,12 +656,19 @@ public class AERPRE {
 	}
 
 	public static String findCharsetWithFile(String path) throws Exception{ // 여기에만 적용되는 것
-		InputStreamReader inStream = new InputStreamReader(new FileInputStream(path), "UTF-8");
-		int ch = inStream.read();
-		if(ch == 65279) // UTF-8로 읽으면 처음에 65279가 나옴
-			return "UTF-8";
-		else
-			return "EUC-KR";
+		InputStreamReader inStream = new InputStreamReader(new FileInputStream(path), "CP949");
+		int ch;
+		while (true) {
+			ch = inStream.read();
+			if(ch == 30308 || ch == 65533) {// UTF-8로 읽으면 처음에 65279가 나옴
+				System.out.println("Charset : UTF-8");
+				return "UTF-8";
+			} else if(ch == -1) {
+				System.out.println("Charset : EUC-KR");
+				return "EUC-KR";
+			}
+		}
+//		System.out.println("Charset : " + ch);
 	}
 
 	public void RunProcess() {
