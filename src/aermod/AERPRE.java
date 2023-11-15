@@ -38,11 +38,15 @@ public class AERPRE {
 			int ch; // 한 단어씩 읽어옴
 			int series1 = 0, series2 = 0; // series : 열의 개수(그 이상은 읽지 않음)
 			InputStreamReader inStream;
+			String charset;
 			// 파라미터가 없는 경우 디폴트 경로 파일 읽음
-			if (EC_path == null)
-				inStream = new InputStreamReader(new FileInputStream(base_path + "\\resource\\criteria.csv"), "euc-kr");
-			else
-				inStream = new InputStreamReader(new FileInputStream(EC_path), "euc-kr");
+			if (EC_path == null) {
+				charset = AERPRE.findCharsetWithFile(base_path + "\\resource\\criteria.csv");
+				inStream = new InputStreamReader(new FileInputStream(base_path + "\\resource\\criteria.csv"), charset);
+			} else {
+				charset = AERPRE.findCharsetWithFile(EC_path);
+				inStream = new InputStreamReader(new FileInputStream(EC_path), charset);
+			}
 
 
 			StringBuilder str = new StringBuilder(); // 하나의 단어를 형성하기 위한 틀
@@ -93,7 +97,7 @@ public class AERPRE {
 //					System.out.println(kkey + " : " + criteria.get(key).get(kkey));
 //				}
 //			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -392,8 +396,9 @@ public class AERPRE {
 
 		System.out.println("Nearest id is : " + rmo_id[0] + " " + rmo_id[1] + " " + rmo_id[2] + " ");
 
-		// run 폴더에 이동하여 모델링에서 사용
+
 		try {
+			// run 폴더에 복사하여 모델링에서 사용
 			process = new ProcessBuilder("cmd", "/c", "copy",
 					base_path + "\\resource\\RMO_decrypt\\" + rmo_id[0] + "_AERMOD.PFL",
 					base_path + "\\run\\AERMOD.PFL").start();
@@ -401,6 +406,16 @@ public class AERPRE {
 			process = new ProcessBuilder("cmd", "/c", "copy",
 					base_path + "\\resource\\RMO_decrypt\\" + rmo_id[0] + "_AERMOD.SFC",
 					base_path + "\\run\\AERMOD.SFC").start();
+			process.waitFor();
+
+			// result 폴더에도 복사하여 결과창에서 다운로드 가능하게 함
+			process = new ProcessBuilder("cmd", "/c", "copy",
+					base_path + "\\resource\\RMO_decrypt\\" + rmo_id[0] + "_AERMOD.PFL",
+					base_path + "\\result\\PFL.dat").start();
+			process.waitFor();
+			process = new ProcessBuilder("cmd", "/c", "copy",
+					base_path + "\\resource\\RMO_decrypt\\" + rmo_id[0] + "_AERMOD.SFC",
+					base_path + "\\result\\SFC.dat").start();
 			process.waitFor();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -478,7 +493,9 @@ public class AERPRE {
 			int ch;
 			int series1 = 0, series2 = 0; // series1 : 열의 개수(그 이상은 읽지 않음) series2 : 행번호
 			int stack_read_check = 1, data_read_check = 1; // stack_read_check : 굴뚝 전체의 읽기 여부, 오염물질 데이터 읽기 여부 체크
-			InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\run\\source.csv"), "euc-kr");
+			String charset = AERPRE.findCharsetWithFile(base_path + "\\run\\source.csv");
+
+			InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\run\\source.csv"), charset);
 			StringBuilder str = new StringBuilder();
 			ArrayList<Integer> valid_stack_list = new ArrayList<>(); // 배열에 저장된 순서와 가져오는 데이터의 열번호를 맞추는 배열
 
@@ -574,7 +591,7 @@ public class AERPRE {
 			System.out.println();
 			aermodDTO.setMatters(matters);
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -635,6 +652,15 @@ public class AERPRE {
 		String val_str = String.valueOf(val);
 		val_str = val_str.substring(val_str.indexOf("."));
 		return val_str.length()-1;
+	}
+
+	public static String findCharsetWithFile(String path) throws Exception{ // 여기에만 적용되는 것
+		InputStreamReader inStream = new InputStreamReader(new FileInputStream(path), "UTF-8");
+		int ch = inStream.read();
+		if(ch == 65279) // UTF-8로 읽으면 처음에 65279가 나옴
+			return "UTF-8";
+		else
+			return "EUC-KR";
 	}
 
 	public void RunProcess() {

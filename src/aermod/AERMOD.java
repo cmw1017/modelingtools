@@ -18,8 +18,7 @@ public class AERMOD implements Runnable {
 	int index_thread;
 	Queue<String> queue;
 	AermodDTO aermodDTO;
-	JButton result_bt;
-	JButton complete_bt;
+	JButton[] btnList;
 
 	// base_path : 기본 파일이 넣어져 있는 경로(에어모드 실행파일, inp base 파일 등..)
 	// matter : 모델링 할 물질 명
@@ -29,7 +28,7 @@ public class AERMOD implements Runnable {
 	// index_thread : 쓰레드의 사용 상태를 알려주는 변수
 	// queue : 모델링 해야할 물질을 저장
 	public AERMOD(AermodDTO aermodDTO, String matter, JLabel produce, JLabel state, ThreadInfo t_info, int index_thread,
-			Queue<String> queue, JButton result_bt, JButton complete_bt) {
+			Queue<String> queue, JButton[] btnList) {
 		this.aermodDTO = aermodDTO;
 		this.base_path = aermodDTO.getBase_path();
 		this.matter = matter;
@@ -38,8 +37,7 @@ public class AERMOD implements Runnable {
 		this.t_info = t_info;
 		this.index_thread = index_thread;
 		this.queue = queue;
-		this.result_bt = result_bt;
-		this.complete_bt = complete_bt;
+		this.btnList = btnList;
 	}
 
 	public void ReadyProcess() throws InterruptedException, IOException {
@@ -108,16 +106,19 @@ public class AERMOD implements Runnable {
 	}
 
 	public void FinishProcess() throws IOException, InterruptedException {
-		process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\result\\" + matter).start();
-		process.waitFor();
+		File recepterResult = new File(base_path + "\\result\\recepters");
+		if(!recepterResult.exists()) {
+			process = new ProcessBuilder("cmd", "/c", "mkdir", base_path + "\\result\\recepters").start();
+			process.waitFor();
+		}
 		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" + matter + "\\" + matter + "_an.FIL",
-				base_path + "\\result\\" + matter + "\\" + matter + "_an.FIL").start();
+				base_path + "\\result\\recepters\\" + matter + "_an.FIL").start();
 		process.waitFor();
 		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" + matter + "\\" + matter + "_24.FIL",
-				base_path + "\\result\\" + matter + "\\" + matter + "_24.FIL").start();
+				base_path + "\\result\\recepters\\" + matter + "_24.FIL").start();
 		process.waitFor();
 		process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\run\\" + matter + "\\" + matter + "_1.FIL",
-				base_path + "\\result\\" + matter + "\\" + matter + "_1.FIL").start();
+				base_path + "\\result\\recepters\\" + matter + "_1.FIL").start();
 		process.waitFor();
 		process.destroy();
 
@@ -140,8 +141,8 @@ public class AERMOD implements Runnable {
 			System.out.println("Start Modeling REPORT");
 			Functions fn = new Functions();
 			fn.result_post(aermodDTO);
-			result_bt.setVisible(true);
-			complete_bt.setVisible(true);
+			for(int i = 0 ; i < btnList.length ; i++)
+				btnList[i].setVisible(true);
 		}
 	}
 

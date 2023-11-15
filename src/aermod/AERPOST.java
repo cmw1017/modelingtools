@@ -25,7 +25,7 @@ public class AERPOST {
 		try {
 			int ch, series1 = 0, series2 = 0; // serise1 : 데이터 종류 구분, series2 : 데이터 개수 구분
 			int flag = 0; // 데이터 읽기 시작 플래그
-			Reader inStream = new FileReader(base_path + "\\result\\" +matter + "\\" + matter + "_"+ series+".FIL");
+			Reader inStream = new FileReader(base_path + "\\result\\recepters\\" + matter + "_"+ series+".FIL");
 			StringBuilder str = new StringBuilder();
 			List<Double> conc = new ArrayList<Double>();
 			

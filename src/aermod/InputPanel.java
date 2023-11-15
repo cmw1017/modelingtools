@@ -184,7 +184,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		terrain_dxf_info.setLocation(250, 380);
 		terrain_dxf_info.setSize(200, 30);
 		terrain_dxf_info.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		terrain_dxf_info.setText(".dxf 파일 업로드 ");
+		terrain_dxf_info.setText("DXF파일 업로드");
 		terrain_dxf.setLocation(380, 385);
 		terrain_dxf.setSize(25, 25);
 		terrain_dxf.setBackground(Color.decode("#D0D8DA"));
@@ -193,7 +193,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		terrain_dat_info.setLocation(450, 380);
 		terrain_dat_info.setSize(200, 30);
 		terrain_dat_info.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		terrain_dat_info.setText(".dat 파일 업로드 ");
+		terrain_dat_info.setText("변환자료 업로드 ");
 		terrain_dat.setLocation(580, 380);
 		terrain_dat.setSize(25, 25);
 		terrain_dat.setBackground(Color.decode("#D0D8DA"));
@@ -202,7 +202,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		topy.setLocation(150, 440);
 		topy.setSize(200, 30);
 		topy.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		topy.setText("지형도(.dxf)");
+		topy.setText("지형도(topy.dxf)");
 		topy_txt.setLocation(350, 440);
 		topy_txt.setSize(350, 30);
 		topy_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
@@ -213,8 +213,8 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		topy_load.addActionListener(new loadListener());
 		boundary.setLocation(150, 495);
 		boundary.setSize(200, 30);
-		boundary.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		boundary.setText("부지 경계(.dxf)");
+		boundary.setFont(new Font("맑은 고딕", Font.BOLD, 13));
+		boundary.setText("사업부지경계(boundary.dxf)");
 		boundary_txt.setLocation(350, 495);
 		boundary_txt.setSize(350, 30);
 		boundary_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
@@ -226,7 +226,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 		dat.setLocation(150, 440);
 		dat.setSize(200, 30);
 		dat.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		dat.setText("지형데이터(.dat)");
+		dat.setText("지형데이터(.sav,.dat)");
 		dat.setVisible(false);
 		dat_txt.setLocation(350, 440);
 		dat_txt.setSize(350, 30);
@@ -298,7 +298,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 			} else if (e.getSource() == source_load) {
 				filter = new FileNameExtensionFilter("csv", "csv"); // filter 확장자 추가
 			} else if(e.getSource() == dat_load) {
-				filter = new FileNameExtensionFilter("dat", "dat"); // filter 확장자 추가
+				filter = new FileNameExtensionFilter("sav or dat", "sav", "dat"); // filter 확장자 추가
 			} else {
 				filter = new FileNameExtensionFilter("dxf", "dxf"); // filter 확장자 추가
 			}
@@ -334,9 +334,8 @@ public class InputPanel extends JFrame implements PanelTemplete {
 						company_sido_txt.setSelectedItem(company_info_list.get(2));
 						company_sigun_txt.setSelectedItem(company_info_list.get(3));
 						company_gu_txt.setSelectedItem(company_info_list.get(14));
-						
-						
-					} catch (IOException ex) {
+
+					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
 				} else if (e.getSource() == topy_load) {
@@ -375,9 +374,10 @@ public class InputPanel extends JFrame implements PanelTemplete {
 
 				JFileChooser chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); // 디렉토리 설정
 				chooser.setCurrentDirectory(new File(aermodDTO.getSelected_file_path())); // 현재 사용 디렉토리를 지정
-				chooser.setAcceptAllFileFilterUsed(true); // Fileter 모든 파일 적용
+				chooser.setAcceptAllFileFilterUsed(true); // Filter 모든 파일 적용
 				chooser.setDialogTitle("배출원 다운로드"); // 창의 제목
-				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
+				chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // 파일 선택 모드
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("xlsx", "xlsx"); // filter 확장자 추가
 				chooser.setFileFilter(filter); // 파일 필터를 추가
 
@@ -385,8 +385,6 @@ public class InputPanel extends JFrame implements PanelTemplete {
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) { // 열기를 클릭
 					folderPath = chooser.getSelectedFile().toString();
-					if(folderPath.lastIndexOf(".") != -1)
-						folderPath = folderPath.substring(0, folderPath.lastIndexOf("."));
 					try {
 						process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\resource\\source.xlsx",
 								folderPath + ".xlsx").start();
@@ -398,10 +396,13 @@ public class InputPanel extends JFrame implements PanelTemplete {
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
+
+					folderPath = folderPath.substring(0, folderPath.lastIndexOf("\\"));
+					System.out.println("Save Directory Path : " + folderPath);
 					aermodDTO.setSelected_file_path(folderPath);
 				} else if (returnVal == JFileChooser.CANCEL_OPTION) { // 취소를 클릭
 					System.out.println("cancel");
-					folderPath = "/";
+					folderPath = "\\";
 				}
 			}
 
@@ -455,8 +456,7 @@ public class InputPanel extends JFrame implements PanelTemplete {
 				System.out.println("Source Path : " + temp_path[3]);
 				
 				try {
-					
-					if(terrain_dxf.isSelected() == true) {
+					if(terrain_dxf.isSelected() == true) { // dxf 파일 업로드
 						process = new ProcessBuilder("cmd", "/c", "copy", temp_path[0], base_path + "\\temp\\topy.dxf")
 								.start();
 						process.waitFor();
@@ -485,6 +485,11 @@ public class InputPanel extends JFrame implements PanelTemplete {
 							processBuilder = new ProcessBuilder(cmd);
 							processBuilder.directory(terraindir);
 							process = processBuilder.start();
+							BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
+							String str = null;
+							while ((str = stdOut.readLine()) != null) {
+								System.out.println(str);
+							}
 							process.waitFor();
 						} else {
 							System.out.println("에러 : 지형변환 실행파일이 없습니다.(terrain.dat)");
@@ -495,10 +500,61 @@ public class InputPanel extends JFrame implements PanelTemplete {
 						process.waitFor();
 						
 						
-					} else {
-						process = new ProcessBuilder("cmd", "/c", "copy", temp_path[2], base_path + "\\run\\receptor_input.dat")
-								.start();
-						process.waitFor();
+					} else { // dat, sav 파일 업로드
+						String extension  = temp_path[2].substring(temp_path[2].lastIndexOf('.') + 1);
+						if(extension.equals("sav")) {
+							// sav 파일 및 디코딩 프로그램 복사
+							process = new ProcessBuilder("cmd", "/c", "copy", temp_path[2], base_path + "\\run\\receptor_input.sav")
+									.start();
+							process.waitFor();
+							process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\exe\\TEM.exe", base_path + "\\run\\TEM.exe")
+									.start();
+							process.waitFor();
+							process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\exe\\sav_decoding.bat", base_path + "\\run\\sav_decoding.bat")
+									.start();
+							process.waitFor();
+
+							// 디코딩 프로그램 실행
+							System.out.println("============ Decording Recepter_input Data ============");
+							File src_decoder = new File(base_path + "\\run\\sav_decoding.bat");
+							File src_decoder_dir = new File(base_path + "\\run\\");
+							String src_decoder_src = src_decoder.getAbsolutePath();
+							if (src_decoder.isFile()) {
+								List<String> cmd = new ArrayList<String>();
+								cmd.add(src_decoder_src);
+								processBuilder = new ProcessBuilder(cmd);
+								processBuilder.directory(src_decoder_dir);
+								process = processBuilder.start();
+								process.waitFor();
+							}
+							
+							// 디코딩 후 파일이 실제 입력은 아니므로 수정
+							System.out.println("============ Read Decorded Recepter_input Data ============");
+							Thread.sleep(1000);
+							String charset = AERPRE.findCharsetWithFile(base_path + "\\run\\receptor_input.dat");
+							InputStreamReader inStream = new InputStreamReader(new FileInputStream(base_path + "\\run\\receptor_input.dat"), charset);
+
+							int ch;
+							StringBuilder str = new StringBuilder();
+							while (true) {
+								ch = inStream.read();
+								if(ch == '=' || ch == -1)
+									break;
+								str.append((char) ch);
+							}
+							String datString = str.toString();
+							System.out.println("============ Decorded Recepter_input Data ============");
+							System.out.println(datString);
+
+							// 디코딩 및 수정완료 파일 출력
+							OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(base_path + "\\run\\receptor_input.dat"), "UTF-8");
+							outStream.write(datString, 0, datString.length());
+							outStream.close();
+						} else {
+							process = new ProcessBuilder("cmd", "/c", "copy", temp_path[2], base_path + "\\run\\receptor_input.dat")
+									.start();
+							process.waitFor();
+						}
 					}
 					process = new ProcessBuilder("cmd", "/c", "copy", temp_path[3], base_path + "\\run\\source.csv")
 							.start();
@@ -507,6 +563,8 @@ public class InputPanel extends JFrame implements PanelTemplete {
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}

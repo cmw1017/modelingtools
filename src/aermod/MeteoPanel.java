@@ -158,9 +158,10 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 	        
 	        JFileChooser chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); // 디렉토리 설정
 	        chooser.setCurrentDirectory(new File(aermodDTO.getSelected_file_path())); // 현재 사용 디렉토리를 지정
-	        chooser.setAcceptAllFileFilterUsed(true);   // Fileter 모든 파일 적용 
-	        chooser.setDialogTitle("파일 선택"); // 창의 제목
-	        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 선택 모드
+	        chooser.setAcceptAllFileFilterUsed(true);   // Filter 모든 파일 적용
+	        chooser.setDialogTitle("환경기준 다운로드"); // 창의 제목
+			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+	        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // 파일 선택 모드
 	        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv", "csv"); // filter 확장자 추가
 	        chooser.setFileFilter(filter); // 파일 필터를 추가
 	        
@@ -168,8 +169,6 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 	        
 	        if(returnVal == JFileChooser.APPROVE_OPTION) { // 열기를 클릭 
 	            folderPath = chooser.getSelectedFile().toString();
-	            if(folderPath.lastIndexOf(".") != -1)
-					folderPath = folderPath.substring(0, folderPath.lastIndexOf("."));
 				try {
 					process = new ProcessBuilder("cmd", "/c", "copy", base_path + "\\resource\\criteria.csv", folderPath+".csv").start();
 					process.waitFor();
@@ -180,10 +179,12 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+				folderPath = folderPath.substring(0, folderPath.lastIndexOf("\\"));
+				System.out.println("Save Directory Path : " + folderPath);
 				aermodDTO.setSelected_file_path(folderPath);
 	        }else if(returnVal == JFileChooser.CANCEL_OPTION){ // 취소를 클릭
 	            System.out.println("cancel"); 
-	            folderPath = "";
+	            folderPath = "\\";
 	        }
 		}
 
@@ -215,6 +216,7 @@ public class MeteoPanel extends JFrame implements PanelTemplete {
 		            folderPath = chooser.getSelectedFile().toString();
 		            ec_select_info.setText(folderPath);
 		            temp_path = folderPath;
+					ec_select.setSelected(true);
 					aermodDTO.setSelected_file_path(folderPath);
 		        }else if(returnVal == JFileChooser.CANCEL_OPTION){ // 취소를 클릭
 		            System.out.println("cancel"); 
