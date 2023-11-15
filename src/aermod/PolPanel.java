@@ -63,7 +63,7 @@ public class PolPanel extends JFrame implements PanelTemplete {
 		thread.setLocation(200, 870);
 		thread.setSize(200, 50);
 		thread.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-		thread.setText("동시 모델링 횟수 : ");
+		thread.setText("동시 모델링 횟수(1~10) : ");
 		thread_txt.setLocation(400, 870);
 		thread_txt.setSize(100, 50);
 		thread_txt.setFont(new Font("맑은 고딕", Font.BOLD, 15));
@@ -108,6 +108,10 @@ class MoveListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
 			if (e.getSource() == next) {
+				if(Integer.parseInt(thread_txt.getText()) == 0) {
+					JOptionPane.showMessageDialog(null, "동시모델링 횟수는 1 이상이어야 합니다.", "동시모델링 횟수 오류", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				aermodDTO.setThread_num(Integer.parseInt(thread_txt.getText()));
 				frames.get("aerpol").setUnVisible();
 				frames.get("aerres").setVisible();

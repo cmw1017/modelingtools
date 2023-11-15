@@ -20,7 +20,6 @@ public class AerMain extends JFrame {
 
 		// 경로별 설정(테스트 환경에 따라 경로가 달라짐)
 //		String base_path = ".\\";  // 패키징 시의 경로
-//		String base_path = "C:\\Users\\cmw10\\OneDrive\\aermod RELEASE 1.5";
 		String base_path = "E:\\cmw\\aermod RELEASE 1.7";
 
 		// 프레임을 하나씩 돌면서 세팅을 진행하고 보이지 않게 숨김(페이지가 많지 않기에 가능함)
