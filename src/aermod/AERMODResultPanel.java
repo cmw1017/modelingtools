@@ -23,40 +23,37 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	@SuppressWarnings("unused")
 	private Map<String, PanelTemplete> frames;
 	String base_path;
-	String temp_path;
-	AermodDTO aermodDTO;
+	AERDTO aerdto;
 	Process process = null;
 
-	private String[] header = { "오염물질", "모델 진행도", "진행 상태" };
-	private List<String> matters;
-
-	private JPanel aerresjp = new JPanel();
-	private JLabel[] headers = new JLabel[6];
-	private Color white = new Color(255, 255, 255);
-	private JLabel content = new JLabel();
-	private JLabel pol = new JLabel();
-	private JButton emissionResult = new RoundedButton("분석결과 저장", Color.decode("#84B1D9"), white, 20);
-	private JButton meteoResult = new RoundedButton("기상정보 저장", Color.decode("#84B1D9"), white, 20);
-	private JButton pointResult = new RoundedButton("수용점농도 저장", Color.decode("#84B1D9"), white, 20);
-	private JButton complete = new RoundedButton("완료", Color.decode("#84B1D9"), white, 20);
-	private JButton[] btnList = new JButton[] {emissionResult, meteoResult, pointResult, complete};
+	private final String[] header = { "오염물질", "모델 진행도", "진행 상태" };
+	private final JPanel basePanel = new JPanel();
+	private final JLabel[] headers = new JLabel[6];
+	private final Color white = new Color(255, 255, 255);
+	private final JLabel content = new JLabel();
+	private final JLabel pol = new JLabel();
+	private final JButton emissionResult = new RoundedButton("분석결과 저장", Color.decode("#84B1D9"), white, 20);
+	private final JButton meteoResult = new RoundedButton("기상정보 저장", Color.decode("#84B1D9"), white, 20);
+	private final JButton pointResult = new RoundedButton("수용점농도 저장", Color.decode("#84B1D9"), white, 20);
+	private final JButton complete = new RoundedButton("완료", Color.decode("#84B1D9"), white, 20);
+	private final JButton[] btnList = new JButton[] {emissionResult, meteoResult, pointResult, complete};
 
 	public AERMODResultPanel() {
 	}
 
 	public void setPanel(String base_path) {
 
-		aerresjp.setLayout(null);
+		basePanel.setLayout(null);
 
 		// 프레임
 		this.base_path = base_path;
 		ImagePanel title = new ImagePanel(base_path + "\\resource\\Step3.png", 1000, 130);
-		aerresjp.add(title);
-		aerresjp.add(pol);
-		aerresjp.add(emissionResult);
-		aerresjp.add(meteoResult);
-		aerresjp.add(pointResult);
-		aerresjp.add(complete);
+		basePanel.add(title);
+		basePanel.add(pol);
+		basePanel.add(emissionResult);
+		basePanel.add(meteoResult);
+		basePanel.add(pointResult);
+		basePanel.add(complete);
 
 		title.setLocation(0, 0);
 		title.setSize(1000, 130);
@@ -82,7 +79,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 			headers[i].setLocation(50 + 150 * i, 220);
 			headers[i].setSize(150, 50);
 			headers[i].setText(header[i % 3]);
-			aerresjp.add(headers[i]);
+			basePanel.add(headers[i]);
 		}
 		
 		// 이동 버튼 시작
@@ -109,12 +106,12 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 	}
 
 	public void setVisible() {
-		AerMain.frame.add(aerresjp);
-		aerresjp.setVisible(true);
+		startupGUI.frame.add(basePanel);
+		basePanel.setVisible(true);
 	}
 
 	public void setUnVisible() {
-		aerresjp.setVisible(false);
+		basePanel.setVisible(false);
 	}
 
 	public void setFrames(Map<String, PanelTemplete> frames) {
@@ -135,9 +132,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 					process.waitFor();
 					process.destroy();
 					System.exit(0);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				} catch (InterruptedException e1) {
+				} catch (IOException | InterruptedException e1) {
 					e1.printStackTrace();
 				}
 			}
@@ -154,10 +149,10 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			String folderPath = "";
+			String folderPath;
 
 			JFileChooser chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); // 디렉토리 설정
-			chooser.setCurrentDirectory(new File(aermodDTO.getSelected_file_path())); // 현재 사용 디렉토리를 지정
+			chooser.setCurrentDirectory(new File(aerdto.getSelected_file_path())); // 현재 사용 디렉토리를 지정
 			chooser.setAcceptAllFileFilterUsed(true); // Filter 모든 파일 적용
 			chooser.setDialogTitle("결과 다운로드"); // 창의 제목
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -188,11 +183,11 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 						process.waitFor();
 						process.destroy();
 					} else { // 수용점농도 저장
-						process = new ProcessBuilder("cmd", "/c", "xcopy", base_path + "\\result\\recepters\\",
+						process = new ProcessBuilder("cmd", "/c", "xcopy", base_path + "\\result\\receptors\\",
 								folderPath + "\\", "/E").start();
 						System.out.println("process wait");
 						BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream(), "euc-kr"));
-						String str = null;
+						String str;
 						while ((str = stdOut.readLine()) != null) {
 							System.out.println(str);
 						}
@@ -201,31 +196,25 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 						process.destroy();
 					}
 					JOptionPane.showMessageDialog(null, "다운로드가 완료되었습니다.", "다운로드 완료", JOptionPane.PLAIN_MESSAGE);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
+				} catch (InterruptedException | IOException e1) {
 					e1.printStackTrace();
 				}
 				folderPath = folderPath.substring(0, folderPath.lastIndexOf("\\"));
 				System.out.println("Save Directory Path : " + folderPath);
-				aermodDTO.setSelected_file_path(folderPath);
+				aerdto.setSelected_file_path(folderPath);
 			} else if (returnVal == JFileChooser.CANCEL_OPTION) { // 취소를 클릭
 				System.out.println("cancel");
-				folderPath = "\\";
 			}
 		}
 
 	}
 
 	@Override
-	public void exet(AermodDTO aermodDTO) {
-		this.aermodDTO = aermodDTO;
-		AerMain.frame.setPreferredSize(new Dimension(1000, 1000));
-		AerMain.frame.pack();
-		AERPRE aerpre = new AERPRE(aermodDTO);
-		aerpre.RunProcess();
-
-		matters = aermodDTO.getMatters();
+	public void execute(AERDTO aerdto) {
+		this.aerdto = aerdto;
+		startupGUI.frame.setPreferredSize(new Dimension(1000, 1000));
+		startupGUI.frame.pack();
+		List<String> matters = aerdto.getMatters();
 		int length = matters.size();
 
 		JLabel[][] matters_label = new JLabel[length][header.length];
@@ -242,16 +231,16 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 					matters_label[i][j].setText(matters.get(i));
 				else
 					matters_label[i][j].setText("대기");
-				aerresjp.add(matters_label[i][j]);
+				basePanel.add(matters_label[i][j]);
 			}
 			if (i == 10) {
 				k++;
 				y = -1;
 			}
 		}
-		aerresjp.add(content);
-		AERMOD_main aermain = new AERMOD_main(aermodDTO, matters_label, btnList, aermodDTO.getThread_num());
-		Thread thread = new Thread(aermain, "aermod_main");
+		basePanel.add(content);
+		AERMAIN aermain = new AERMAIN(aerdto, matters_label, btnList, aerdto.getThread_num());
+		Thread thread = new Thread(aermain, "aermain");
 		thread.start();
 	}
 }

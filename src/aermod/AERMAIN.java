@@ -8,19 +8,16 @@ import java.util.List;
 import java.util.Queue;
 import javax.swing.*;
 
-public class AERMOD_main implements Runnable{
+public class AERMAIN implements Runnable{
 	
-	private Queue<String> queue = new LinkedList<>();
-	private int max_thread = 3; // 최대 동시 계산 개수
+	private final Queue<String> queue = new LinkedList<>();
+	private final int max_thread; // 최대 동시 계산 개수
+	private final JLabel[][] matters_label;
+	private final JButton[] btnList;
+	private final AERDTO aerdto;
 	
-	private List<String> matters;
-	private JLabel[][] matters_label;
-	private JButton[] btnList;
-	AermodDTO aermodDTO;
-	
-	public AERMOD_main(AermodDTO aermodDTO, JLabel[][] matters_label, JButton[] btnList, Integer max_thread) {
-		this.aermodDTO = aermodDTO;
-		this.matters = aermodDTO.getMatters();
+	public AERMAIN(AERDTO aerdto, JLabel[][] matters_label, JButton[] btnList, Integer max_thread) {
+		this.aerdto = aerdto;
 		this.matters_label = matters_label;
 		this.btnList = btnList;
 		this.max_thread = max_thread;
@@ -28,12 +25,10 @@ public class AERMOD_main implements Runnable{
 
 	@Override
 	public void run() {
-		
 		try {
 			// 큐에 입력
-			for(String matter : matters) {
-				queue.add(matter);
-			}
+			List<String> matters = aerdto.getMatters();
+			queue.addAll(matters);
 			Thread[] threads = new Thread[max_thread]; // 최대 쓰레드 개수
 			ThreadInfo t_info = new ThreadInfo(max_thread);
 			while(queue.size() != 0) {
@@ -45,7 +40,7 @@ public class AERMOD_main implements Runnable{
 						int num = matters.indexOf(matter); // 리스트에서 몇번째인지 가져옴(테이블 순서 때문)
 						int index_thread = -1; // -1로 해야 할당 받지 못했을때 시작하지 않음
 						for (int i = 0; i < max_thread; i++) {
-							if (t_info.index[i] == false) {
+							if (!t_info.index[i]) {
 								index_thread = i;
 								t_info.index[i] = true;
 								System.out.println("use index num : " + i);
@@ -53,7 +48,8 @@ public class AERMOD_main implements Runnable{
 							}
 						}
 						if (index_thread != -1) {
-							AERMOD aermod = new AERMOD(aermodDTO, matter, matters_label[num][1], matters_label[num][2],
+							assert matter != null;
+							AERMOD aermod = new AERMOD(aerdto, matter, matters_label[num][1], matters_label[num][2],
 									t_info, index_thread, queue, btnList);
 							threads[index_thread] = new Thread(aermod, matter);
 							threads[index_thread].start();
