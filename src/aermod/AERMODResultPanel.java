@@ -239,7 +239,7 @@ public class AERMODResultPanel extends JFrame implements PanelTemplete {
 			}
 		}
 		basePanel.add(content);
-		AERMAIN aermain = new AERMAIN(aerdto, matters_label, btnList, aerdto.getThread_num());
+		AERMAIN aermain = new AERMAIN(aerdto, matters_label, btnList, aerdto.getThread_num(), 0.5);
 		Thread thread = new Thread(aermain, "aermain");
 		thread.start();
 	}

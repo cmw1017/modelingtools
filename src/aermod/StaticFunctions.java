@@ -6,6 +6,24 @@ import java.util.Map;
 
 public class StaticFunctions {
 
+	public static boolean file_not_exists(String path) {
+		File file = new File(path);
+		return !file.exists();
+	}
+
+	public static void clear_project(String base_path) throws InterruptedException, IOException {
+		Process process;
+		// 기존 실행 및 결과 파일 제거
+		System.out.println("Remove Exist File");
+		process = new ProcessBuilder("cmd", "/c", "rmdir", "/s", "/q", base_path + "\\run").start();
+		process.waitFor();
+		process = new ProcessBuilder("cmd", "/c", "rmdir", "/s", "/q", base_path + "\\temp").start();
+		process.waitFor();
+		process = new ProcessBuilder("cmd", "/c", "rmdir", "/s", "/q", base_path + "\\result").start();
+		process.waitFor();
+		process.destroy();
+	}
+
 	public static Double deg2rad(double deg) {
 		return (deg * 3.14159265358979 / 180);
 	}
@@ -46,15 +64,15 @@ public class StaticFunctions {
 	}
 
 
-	public void result_post(AERDTO AERDTO) {
-		Map<String, Map<String, Double>> criteria = AERDTO.getCriteria();
-		Map<String, Map<String, Double>> result = AERDTO.getResult();
-		List<String> matters = AERDTO.getMatters();
-		String base_path = AERDTO.getBase_path();
-		String sido = AERDTO.getSido();
-		String sigun = AERDTO.getSigun();
-		String gu = AERDTO.getGu();
-		Map<String, Map<String, Map<String, Map<String, Double>>>> air_list = AERDTO.getAir_list();
+	public void result_post(AERDTO aerdto) {
+		Map<String, Map<String, Double>> criteria = aerdto.getCriteria();
+		Map<String, Map<String, Double>> result = aerdto.getResult();
+		List<String> matters = aerdto.getMatters();
+		String base_path = aerdto.getBase_path();
+		String sido = aerdto.getSido();
+		String sigun = aerdto.getSigun();
+		String gu = aerdto.getGu();
+		Map<String, Map<String, Map<String, Map<String, Double>>>> air_list = aerdto.getAir_list();
 		try {
 			OutputStreamWriter outStream = new OutputStreamWriter(
 					new FileOutputStream(base_path + "\\result\\report.csv"), "euc-kr");

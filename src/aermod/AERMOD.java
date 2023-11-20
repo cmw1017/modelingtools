@@ -22,11 +22,12 @@ public class AERMOD implements Runnable {
 
 	// base_path : 기본 파일이 넣어져 있는 경로(에어모드 실행파일, inp base 파일 등..)
 	// matter : 모델링 할 물질 명
-	// produce : 진행 상태를 알려주는 상자
-	// count : 현재 모델링 진행 횟수를 알려주는 상자
+	// produce : 진행 상태를 알려주는 상자(CLI 경우 NULL)
+	// count : 현재 모델링 진행 횟수를 알려주는 상자(CLI 경우 NULL)
 	// t_info : 모든 쓰레드의 정보 및 상태를 가지고 있는 클래스
 	// index_thread : 쓰레드의 사용 상태를 알려주는 변수
 	// queue : 모델링 해야할 물질을 저장
+	// btnList : 모델링 이후 보여져야 할 버튼의 리스트(CLI 경우 NULL)
 	public AERMOD(AERDTO AERDTO, String matter, JLabel produce, JLabel state, ThreadInfo t_info, int index_thread,
 				  Queue<String> queue, JButton[] btnList) {
 		this.AERDTO = AERDTO;
@@ -87,18 +88,19 @@ public class AERMOD implements Runnable {
 			processBuilder.directory(aermodDir);
 			process = processBuilder.start();
 			BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			
-			state.setText("진행중");
+
+			if(state != null) state.setText("진행중");
 			while ((str = stdOut.readLine()) != null) {
 				if (str.contains("+Now Processing Data For Day No.")) {
 					str = str.substring(str.lastIndexOf("No.") + 5);
 					str = str.substring(0, 3);
-					produce.setText(str + "/365");
+					if(produce != null) produce.setText(str + "/365");
+					else System.out.println("MODELING IN PROGRESS_" + matter + "(" + str + "/365)");
 				}
 			}
 			process.waitFor();
 			process.destroy();
-			state.setText("완료");
+			if(state != null) state.setText("완료");
 		} else {
 			System.out.println("에러 : 모델링 실행파일이 없습니다.(3aermod.exe)");
 		}
@@ -141,7 +143,7 @@ public class AERMOD implements Runnable {
 			System.out.println("Start Modeling REPORT");
 			StaticFunctions fn = new StaticFunctions();
 			fn.result_post(AERDTO);
-			for (JButton jButton : btnList) jButton.setVisible(true);
+			if(btnList != null) for (JButton jButton : btnList) jButton.setVisible(true);
 		}
 	}
 
