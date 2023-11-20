@@ -4,8 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class AermodDTO {
+public class AERDTO {
 
+	// 모델링 오염물질
+	// 순서 SO2 CO NO2 Pb Benzene PM-10 Zn NH3 CS2 Cr Hg Cu Vinylchloride H2S Dichloromethane TCE As Ni Cd Br F HCN HCl
+	// Phenol Formaldehyde
+	public static final String[] polList = { "SO2", "CO", "NO2", "Pb", "Benzene", "PM-10", "Zn", "NH3", "CS2", "Cr", "Hg",
+			"Cu", "Vinylchloride", "H2S", "Dichloromethane", "TCE", "As", "Ni", "Cd", "Br", "F", "HCN", "HCl",
+			"Phenol", "Formaldehyde" };
 	private Integer thread_num; //쓰레드 개수
 	private String base_path; 	//실행파일이 있는 위치 경로
 	private Double latitude; 	//위도
@@ -19,8 +25,8 @@ public class AermodDTO {
 	private Map<String, Map<String, Map<String, Map<String, Double>>>> air_list; // 기존오염도
 	private String ec_path;		//환경기준 사용 파일 경로
 	private RMO rmo;			//기상대 정보
-	private List<String> matters;
-	private Map<String,Map<String,String>> inpparam;
+	private List<String> matters; // 모델에 사용할 오염물질들만 모음
+	private Map<String,Map<String,String>> inpParams;
 	private Map<String,Map<String,Double>> criteria;
 	private Map<String,Map<String,Double>> result;
 	private String selected_file_path = "/"; //업로드 하고 있는 파일 위치
@@ -110,11 +116,11 @@ public class AermodDTO {
 	public void setMatters(List<String> matters) {
 		this.matters = matters;
 	}
-	public Map<String, Map<String, String>> getInpparam() {
-		return inpparam;
+	public Map<String, Map<String, String>> getInpParams() {
+		return inpParams;
 	}
-	public void setInpparam(Map<String, Map<String, String>> inpparam) {
-		this.inpparam = inpparam;
+	public void setInpParams(Map<String, Map<String, String>> inpParams) {
+		this.inpParams = inpParams;
 	}
 	public Map<String, Map<String, Double>> getCriteria() {
 		return criteria;

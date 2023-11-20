@@ -8,44 +8,41 @@ import java.util.List;
 import java.util.Queue;
 import javax.swing.*;
 
-public class AERMOD_main implements Runnable{
+public class AERMAIN implements Runnable{
 	
-	private Queue<String> queue = new LinkedList<>();
-	private int max_thread = 3; // 최대 동시 계산 개수
+	private final Queue<String> queue = new LinkedList<>();
+	private final int max_thread; // 최대 동시 계산 개수
+	private final JLabel[][] matters_label;
+	private final JButton[] btnList;
+	private final AERDTO aerdto;
+	private final double cpu_limit;
 	
-	private List<String> matters;
-	private JLabel[][] matters_label;
-	private JButton[] btnList;
-	AermodDTO aermodDTO;
-	
-	public AERMOD_main(AermodDTO aermodDTO, JLabel[][] matters_label, JButton[] btnList, Integer max_thread) {
-		this.aermodDTO = aermodDTO;
-		this.matters = aermodDTO.getMatters();
+	public AERMAIN(AERDTO aerdto, JLabel[][] matters_label, JButton[] btnList, Integer max_thread, double cpu_limit) {
+		this.aerdto = aerdto;
 		this.matters_label = matters_label;
 		this.btnList = btnList;
 		this.max_thread = max_thread;
+		this.cpu_limit = cpu_limit;
 	}
 
 	@Override
 	public void run() {
-		
 		try {
 			// 큐에 입력
-			for(String matter : matters) {
-				queue.add(matter);
-			}
+			List<String> matters = aerdto.getMatters();
+			queue.addAll(matters);
 			Thread[] threads = new Thread[max_thread]; // 최대 쓰레드 개수
 			ThreadInfo t_info = new ThreadInfo(max_thread);
 			while(queue.size() != 0) {
 				final OperatingSystemMXBean osBean = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 				double currentCpuLoad = osBean.getSystemCpuLoad();
 				if(t_info.current_thread_count != max_thread) {
-					if(currentCpuLoad < 0.5) { // CPU 가용률 확인
+					if(currentCpuLoad < cpu_limit) { // CPU 가용률 확인
 						String matter = queue.poll();
 						int num = matters.indexOf(matter); // 리스트에서 몇번째인지 가져옴(테이블 순서 때문)
 						int index_thread = -1; // -1로 해야 할당 받지 못했을때 시작하지 않음
 						for (int i = 0; i < max_thread; i++) {
-							if (t_info.index[i] == false) {
+							if (!t_info.index[i]) {
 								index_thread = i;
 								t_info.index[i] = true;
 								System.out.println("use index num : " + i);
@@ -53,8 +50,14 @@ public class AERMOD_main implements Runnable{
 							}
 						}
 						if (index_thread != -1) {
-							AERMOD aermod = new AERMOD(aermodDTO, matter, matters_label[num][1], matters_label[num][2],
-									t_info, index_thread, queue, btnList);
+							assert matter != null;
+							AERMOD aermod;
+							if(matters_label == null)
+								aermod = new AERMOD(aerdto, matter, null, null,
+									t_info, index_thread, queue, null);
+							else
+								aermod = new AERMOD(aerdto, matter, matters_label[num][1], matters_label[num][2],
+										t_info, index_thread, queue, btnList);
 							threads[index_thread] = new Thread(aermod, matter);
 							threads[index_thread].start();
 							t_info.current_thread_count++;
@@ -68,7 +71,7 @@ public class AERMOD_main implements Runnable{
 				System.out.println();
 				Thread.sleep(3000);
 			}
-			System.out.println("Queue is empty");
+			System.out.println("END_Queue is empty");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
