@@ -791,7 +791,6 @@ public class AERPRE {
 				process.waitFor();
 
 				// 디코딩 프로그램 실행
-				System.out.println("============ Decoding Receptor_input Data ============");
 				File src_decoder = new File(base_path + "\\run\\sav_decoding.bat");
 				File src_decoder_dir = new File(base_path + "\\run\\");
 				String src_decoder_src = src_decoder.getAbsolutePath();
@@ -832,6 +831,64 @@ public class AERPRE {
 				process.waitFor();
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// 지형관련 프로세스(입력받은 반경(m)만큼만 남김)
+	public void runTerrainCutData(String dat_path, int radius) {
+		try {
+			String charset = StaticFunctions.findCharsetWithFile(dat_path);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(dat_path), charset));
+			String line;
+			
+			// 중앙 좌표값 구하기
+			int maxX = 0;
+			int minX = 999999;
+			int maxY = 0;
+			int minY = 999999;
+			while((line = reader.readLine()) != null) {
+				String[] lineArr = line.split("\\.");
+				String[] subLineArr = lineArr[0].split(" ");
+				int curX = Integer.parseInt(subLineArr[5].trim());
+				int curY = Integer.parseInt(lineArr[1].trim());
+
+				if(maxX <= curX)
+					maxX = curX;
+				if(minX >= curX)
+					minX = curX;
+				if(maxY <= curY)
+					maxY = curY;
+				if(minY >= curY)
+					minY = curY;
+			}
+			int centerX = (maxX + minX) / 2;
+			int centerY = (maxY + minY) / 2;
+			System.out.printf("X[%d, %d, %d] Y[%d, %d, %d]%n", minX, centerX, maxX, minY, centerY, maxY);
+			
+			// 중앙을 기준으로 반경범위 내 데이터 추출
+			StringBuilder str = new StringBuilder();
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(dat_path), charset));
+			while((line = reader.readLine()) != null) {
+				String[] lineArr = line.split("\\.");
+				String[] subLineArr = lineArr[0].split(" ");
+				int curX = Integer.parseInt(subLineArr[5].trim());
+				int curY = Integer.parseInt(lineArr[1].trim());
+				int distance = StaticFunctions.distance(centerX, centerY, curX, curY);
+				System.out.println("distance : " + distance);
+				if(distance <= radius)
+					str.append(line + "\n");
+			}
+
+			String datString = str.toString();
+			System.out.println("============ Filter Receptor_input Data ============");
+			System.out.println(datString);
+
+			// 디코딩 및 수정완료 파일 출력
+			OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(dat_path), StandardCharsets.UTF_8);
+			outStream.write(datString, 0, datString.length());
+			outStream.close();
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}

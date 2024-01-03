@@ -1,6 +1,7 @@
 package aermod;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,12 @@ public class StaticFunctions {
 		num1 = rad2deg(num1) * 60 * 1.1515;
 		return num1 * 1.609344;
 	}
+
+	public static int distance(int x1, int y1, int x2, int y2) {
+		double exp_val = Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2);
+		return (int) Math.sqrt(exp_val);
+	}
+
 	public static int getDecimal(double val) {
 		String val_str = String.valueOf(val);
 		val_str = val_str.substring(val_str.indexOf("."));
@@ -63,6 +70,50 @@ public class StaticFunctions {
 //		System.out.println("Charset : " + ch);
 	}
 
+	public static String parseSecond(int sec) {
+		DecimalFormat decimalFormat = new DecimalFormat("00");
+		int remain = sec;
+
+		String dayStr = "일 ";
+		String hourStr = "시간 ";
+		String minStr = "분 ";
+		String secStr = "초";
+
+		int day = remain / 86400;
+		remain %= 86400;
+
+		StringBuilder stringBuilder = new StringBuilder();
+		if (day > 0)
+		{
+			stringBuilder.append(decimalFormat.format(day));
+			stringBuilder.append(dayStr);
+		}
+
+		int hour = remain / 3600;
+		remain %= 3600;
+		if (hour > 0)
+		{
+			stringBuilder.append(decimalFormat.format(hour));
+			stringBuilder.append(hourStr);
+		}
+
+		int minute = remain / 60;
+		remain %= 60;
+		if (minute > 0)
+		{
+			stringBuilder.append(decimalFormat.format(minute));
+			stringBuilder.append(minStr);
+		}
+
+		int second = remain;
+		if (second > 0)
+		{
+			stringBuilder.append(decimalFormat.format(second));
+			stringBuilder.append(secStr);
+		}
+
+		return stringBuilder.toString();
+	}
 
 	public void result_post(AERDTO aerdto) {
 		Map<String, Map<String, Double>> criteria = aerdto.getCriteria();

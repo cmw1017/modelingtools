@@ -5,17 +5,19 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static aermod.StaticFunctions.*;
 
 public class startupCLI {
     public static void main(String[] args) throws InterruptedException {
         try {
+            long startTime = System.currentTimeMillis();
             // 경로별 설정(테스트 환경에 따라 경로가 달라짐)
 //		    String base_path = ".\\";  // 패키징 시의 경로
-            String base_path = "E:\\cmw\\aermod RELEASE 2.0";
+            String base_path = "E:\\cmw\\aermod RELEASE 2.1";
 
             AERDTO aerdto = new AERDTO();        // 모델링 프로그램이 구동되는 동안에 필요한 데이터를 가지고 있음
             aerdto.setBase_path(base_path);    // 메인 폴더 경로 등록
@@ -93,6 +95,18 @@ public class startupCLI {
                 aerpre.runTerrainWithSAV(sav_path);
             }
 
+            if(file_not_exists(base_path + "\\run\\receptor_input.dat")) {
+                System.out.println("지형도 데이터파일이 없습니다.");
+                return;
+            }
+
+            // 지형자료 데이터 범위 조정
+            String receptor_range = (String) jsonObject.get("receptor_range");
+            if(!receptor_range.trim().equals("")) {
+                int receptor_range_int = Integer.parseInt(receptor_range);
+                aerpre.runTerrainCutData(base_path + "\\run\\receptor_input.dat", receptor_range_int);
+            }
+
             // 기상대 로딩
             aerpre.runRMO();
 
@@ -127,8 +141,27 @@ public class startupCLI {
             // 실행
             double cpu_limit = Double.parseDouble((String) jsonObject.get("cpu_limit"));
             AERMAIN aermain = new AERMAIN(aerdto, null, null, aerdto.getThread_num(), cpu_limit);
-            Thread thread = new Thread(aermain, "aermain");
-            thread.start();
+            aermain.run();
+
+            // 결과파일 저장
+            String result_path = (String) jsonObject.get("result_path");
+            process = new ProcessBuilder("cmd", "/c", "xcopy", base_path + "\\result\\",
+                    result_path + "\\", "/E").start();
+            System.out.println("process wait");
+            BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream(), "euc-kr"));
+            String str;
+            while ((str = stdOut.readLine()) != null) {
+                System.out.println(str);
+            }
+            process.waitFor(5L, TimeUnit.SECONDS);
+            System.out.println("process destroy");
+            process.destroy();
+
+            // 경과시간 표기
+            long endTime = System.currentTimeMillis();
+            long timeDiff = (endTime - startTime) / 1000;
+            int timeDiffInt = Optional.of(timeDiff).orElse(0L).intValue();
+            System.out.println("경과시간 : " + parseSecond(timeDiffInt));
 
         } catch (Exception e) {
             e.printStackTrace();

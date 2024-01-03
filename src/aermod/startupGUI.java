@@ -20,7 +20,7 @@ public class startupGUI extends JFrame {
 
         // 경로별 설정(테스트 환경에 따라 경로가 달라짐)
 //		String base_path = ".\\";  // 패키징 시의 경로
-        String base_path = "E:\\cmw\\aermod RELEASE 2.0";
+        String base_path = "E:\\cmw\\aermod RELEASE 2.1";
 
         // 프레임을 하나씩 돌면서 세팅을 진행하고 보이지 않게 숨김(페이지가 많지 않기에 가능함)
         for (String s : frames.keySet()) {
