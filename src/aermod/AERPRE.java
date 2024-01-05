@@ -819,7 +819,7 @@ public class AERPRE {
 				}
 				String datString = str.toString();
 				System.out.println("============ Decoded Receptor_input Data ============");
-				System.out.println(datString);
+//				System.out.println(datString);
 
 				// 디코딩 및 수정완료 파일 출력
 				OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(base_path + "\\run\\receptor_input.dat"), StandardCharsets.UTF_8);
@@ -836,7 +836,7 @@ public class AERPRE {
 	}
 
 	// 지형관련 프로세스(입력받은 반경(m)만큼만 남김)
-	public void runTerrainCutData(String dat_path, int radius) {
+	public void runTerrainCutData(String dat_path, int distance) {
 		try {
 			String charset = StaticFunctions.findCharsetWithFile(dat_path);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(dat_path), charset));
@@ -866,29 +866,163 @@ public class AERPRE {
 			int centerY = (maxY + minY) / 2;
 			System.out.printf("X[%d, %d, %d] Y[%d, %d, %d]%n", minX, centerX, maxX, minY, centerY, maxY);
 			
-			// 중앙을 기준으로 반경범위 내 데이터 추출
+			// 중앙을 기준으로 직사각형 내 데이터 추출
 			StringBuilder str = new StringBuilder();
+			int data_num = 0;
 			reader = new BufferedReader(new InputStreamReader(new FileInputStream(dat_path), charset));
 			while((line = reader.readLine()) != null) {
 				String[] lineArr = line.split("\\.");
 				String[] subLineArr = lineArr[0].split(" ");
 				int curX = Integer.parseInt(subLineArr[5].trim());
 				int curY = Integer.parseInt(lineArr[1].trim());
-				int distance = StaticFunctions.distance(centerX, centerY, curX, curY);
-				System.out.println("distance : " + distance);
-				if(distance <= radius)
-					str.append(line + "\n");
+				if(curX <= centerX + distance && curX > centerX - distance
+					&& curY <= centerY + distance && curY > centerY - distance) {
+					str.append(line).append("\n");
+					data_num++;
+				}
 			}
 
 			String datString = str.toString();
 			System.out.println("============ Filter Receptor_input Data ============");
-			System.out.println(datString);
+			System.out.println("receptor count : " + data_num);
+//			System.out.println(datString);
 
-			// 디코딩 및 수정완료 파일 출력
+			// 필터완료 파일 출력
 			OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(dat_path), StandardCharsets.UTF_8);
 			outStream.write(datString, 0, datString.length());
 			outStream.close();
 		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// 지형관련 프로세스(일정 범위내 곂치는 수용점을 제거)
+	public void runTerrainMerge(String dat_path) {
+		try {
+			String charset = StaticFunctions.findCharsetWithFile(dat_path);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(dat_path), charset));
+			String line;
+
+			// 중앙 좌표값 구하기
+			int maxX = 0;
+			int minX = 999999;
+			int maxY = 0;
+			int minY = 999999;
+			while ((line = reader.readLine()) != null) {
+				String[] lineArr = line.split("\\.");
+				String[] subLineArr = lineArr[0].split(" ");
+				int curX = Integer.parseInt(subLineArr[5].trim());
+				int curY = Integer.parseInt(lineArr[1].trim());
+
+				if (maxX <= curX)
+					maxX = curX;
+				if (minX >= curX)
+					minX = curX;
+				if (maxY <= curY)
+					maxY = curY;
+				if (minY >= curY)
+					minY = curY;
+			}
+			int centerX = (maxX + minX) / 2;
+			int centerY = (maxY + minY) / 2;
+			System.out.printf("X[%d, %d, %d] Y[%d, %d, %d]%n", minX, centerX, maxX, minY, centerY, maxY);
+
+			HashMap<String, String> outRangeData = new HashMap<>();		// 중심과의 거리 2km 이상 데이터
+			HashMap<String, String> midRangeData = new HashMap<>();	// 중심과의 거리 0.5~2km 데이터
+			HashMap<String, String> inRangeData = new HashMap<>();		// 중심과의 거리 0.5km 이내 데이터
+			HashMap<String, String> inRemainData = new HashMap<>();
+			HashMap<String, String> inRemoveData = new HashMap<>();
+			HashMap<String, String> midRemainData = new HashMap<>();
+			HashMap<String, String> midRemoveData = new HashMap<>();
+			// 중앙을 기준으로 직사각형 내 데이터 추출
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(dat_path), charset));
+			while((line = reader.readLine()) != null) {
+				String[] lineArr = line.split("\\.");
+				String[] subLineArr = lineArr[0].split(" ");
+				int curX = Integer.parseInt(subLineArr[5].trim());
+				int curY = Integer.parseInt(lineArr[1].trim());
+				if(curX <= centerX + 500 && curX > centerX - 500
+						&& curY <= centerY + 500 && curY > centerY - 500)
+					inRangeData.put(String.format("%d,%d", curX, curY), line);
+				else if(curX <= centerX + 2000 && curX > centerX - 2000
+						&& curY <= centerY + 2000 && curY > centerY - 2000)
+					midRangeData.put(String.format("%d,%d", curX, curY), line);
+				else
+					outRangeData.put(String.format("%d,%d", curX, curY), line);
+			}
+
+			// 내부 데이터 병합
+			for(Map.Entry<String, String> entry : inRangeData.entrySet()) {
+				if(inRemoveData.containsKey(entry.getKey())) {
+					continue;
+				}
+				String[] val = entry.getKey().split(",");
+				int curX = Integer.parseInt(val[0].trim());
+				int curY = Integer.parseInt(val[1].trim());
+				inRemainData.put(entry.getKey(), entry.getValue());
+				for(Map.Entry<String, String> subEntry : inRangeData.entrySet()) {
+					String[] subVal = subEntry.getKey().split(",");
+					int searchX = Integer.parseInt(subVal[0].trim());
+					int searchY = Integer.parseInt(subVal[1].trim());
+					int distance = StaticFunctions.distance(curX, curY, searchX, searchY);
+					if(distance != 0 && distance <= 66)
+						inRemoveData.put(subEntry.getKey(), subEntry.getValue());
+				}
+			}
+
+			// 중간 데이터 병합
+			for(Map.Entry<String, String> entry : midRangeData.entrySet()) {
+				if(midRemoveData.containsKey(entry.getKey())) {
+					continue;
+				}
+				String[] val = entry.getKey().split(",");
+				int curX = Integer.parseInt(val[0].trim());
+				int curY = Integer.parseInt(val[1].trim());
+				midRemainData.put(entry.getKey(), entry.getValue());
+				for(Map.Entry<String, String> subEntry : midRangeData.entrySet()) {
+					if(midRemoveData.containsKey(subEntry.getKey())) {
+						continue;
+					}
+					String[] subVal = subEntry.getKey().split(",");
+					int searchX = Integer.parseInt(subVal[0].trim());
+					int searchY = Integer.parseInt(subVal[1].trim());
+					int distance = StaticFunctions.distance(curX, curY, searchX, searchY);
+					if(distance != 0 && distance <= 110) {
+//						System.out.printf("%s remove %s distance %dm\n", entry.getKey(), subEntry.getKey(), distance);
+						midRemoveData.put(subEntry.getKey(), subEntry.getValue());
+					}
+				}
+			}
+
+			StringBuilder str = new StringBuilder();
+			for(Map.Entry<String, String> entry : outRangeData.entrySet()) {
+				str.append(entry.getValue()).append("\n");
+			}
+			for(Map.Entry<String, String> entry : inRemainData.entrySet()) {
+				str.append(entry.getValue()).append("\n");
+			}
+			for(Map.Entry<String, String> entry : midRemainData.entrySet()) {
+				str.append(entry.getValue()).append("\n");
+			}
+			
+			String datString = str.toString();
+			System.out.println("============ Merged Receptor_input Data ============");
+			System.out.printf("inRange : %d, midRange : %d, outRange : %d, inRemainData : %d, inRemoveData : %d, " +
+							"midRemainData : %d, midRemoveData : %d%n",
+					inRangeData.size()
+					,midRangeData.size()
+					,outRangeData.size()
+					,inRemainData.size()
+					,inRemoveData.size()
+					,midRemainData.size()
+					,midRemoveData.size());
+//			System.out.println(datString);
+
+			// 병합완료 파일 출력
+			OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(dat_path), StandardCharsets.UTF_8);
+			outStream.write(datString, 0, datString.length());
+			outStream.close();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
