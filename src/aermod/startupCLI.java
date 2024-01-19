@@ -17,7 +17,8 @@ public class startupCLI {
             long startTime = System.currentTimeMillis();
             // 경로별 설정(테스트 환경에 따라 경로가 달라짐)
 //		    String base_path = ".\\";  // 패키징 시의 경로
-            String base_path = "E:\\cmw\\aermod RELEASE 2.1";
+            String base_path = "E:\\cmw\\aermod RELEASE 2.2";
+
 
             AERDTO aerdto = new AERDTO();        // 모델링 프로그램이 구동되는 동안에 필요한 데이터를 가지고 있음
             aerdto.setBase_path(base_path);    // 메인 폴더 경로 등록
@@ -112,65 +113,71 @@ public class startupCLI {
             if(!receptor_range.trim().equals("") && receptor_merge.trim().equals("true")) {
                 aerpre.runTerrainMerge(base_path + "\\run\\receptor_input.dat");
             }
-            
-//            // 기상대 로딩
-//            aerpre.runRMO();
-//
-//            // 배출원정보 자료 처리
-//            String source_path = (String) jsonObject.get("source_path");
-//            if(file_not_exists(source_path)) {
-//                System.out.println("배출원정보 파일이 없습니다.");
-//                // 기존 실행 및 결과 파일 제거
-//                clear_project(base_path);
-//                return;
-//            }
-//            aerpre.runProcess(source_path);
-//
-//            // 환경기준 로딩
-//            String ec_select_path = (String) jsonObject.get("ec_select_path");
-//            if(!ec_select_path.equals("")) {
-//                if(file_not_exists(ec_select_path)) {
-//                    System.out.println("별도환경기준 파일이 없습니다.");
-//                    // 기존 실행 및 결과 파일 제거
-//                    clear_project(base_path);
-//                    return;
-//                } else {
-//                    aerdto.setEc_path(ec_select_path);
-//                    aerpre.readCriteria(ec_select_path);
-//                }
-//            }
-//
-//            // 쓰레드 개수 설정
-//            int multi_thread_num = Integer.parseInt((String) jsonObject.get("multi_thread_num"));
-//            aerdto.setThread_num(multi_thread_num);
-//
-//            // 실행
-//            double cpu_limit = Double.parseDouble((String) jsonObject.get("cpu_limit"));
-//            AERMAIN aermain = new AERMAIN(aerdto, null, null, aerdto.getThread_num(), cpu_limit);
-//            aermain.run();
-//
-//            // 결과파일 저장
-//            String result_path = (String) jsonObject.get("result_path");
-//            process = new ProcessBuilder("cmd", "/c", "xcopy", base_path + "\\result\\",
-//                    result_path + "\\", "/E").start();
-//            System.out.println("process wait");
-//            BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream(), "euc-kr"));
-//            String str;
-//            while ((str = stdOut.readLine()) != null) {
-//                System.out.println(str);
-//            }
-//            process.waitFor(5L, TimeUnit.SECONDS);
-//            System.out.println("process destroy");
-//            process.destroy();
-//
-//            // 경과시간 표기
-//            long endTime = System.currentTimeMillis();
-//            long timeDiff = (endTime - startTime) / 1000;
-//            int timeDiffInt = Optional.of(timeDiff).orElse(0L).intValue();
-//            System.out.println("경과시간 : " + parseSecond(timeDiffInt));
+
+            // 기상대 로딩
+            aerpre.runRMO();
+
+            // 배출원정보 자료 처리
+            String source_path = (String) jsonObject.get("source_path");
+            if(file_not_exists(source_path)) {
+                System.out.println("배출원정보 파일이 없습니다.");
+                // 기존 실행 및 결과 파일 제거
+                clear_project(base_path);
+                return;
+            }
+            aerpre.runProcess(source_path);
+
+            // 환경기준 로딩
+            String ec_select_path = (String) jsonObject.get("ec_select_path");
+            if(!ec_select_path.equals("")) {
+                if(file_not_exists(ec_select_path)) {
+                    System.out.println("별도환경기준 파일이 없습니다.");
+                    // 기존 실행 및 결과 파일 제거
+                    clear_project(base_path);
+                    return;
+                } else {
+                    aerdto.setEc_path(ec_select_path);
+                    aerpre.readCriteria(ec_select_path);
+                }
+            }
+
+            // 쓰레드 개수 설정
+            int multi_thread_num = Integer.parseInt((String) jsonObject.get("multi_thread_num"));
+            aerdto.setThread_num(multi_thread_num);
+
+            // 실행
+            double cpu_limit = Double.parseDouble((String) jsonObject.get("cpu_limit"));
+            AERMAIN aermain = new AERMAIN(aerdto, null, null, aerdto.getThread_num(), cpu_limit);
+            aermain.run();
+
+            // 결과파일 저장
+            String result_path = (String) jsonObject.get("result_path");
+            Thread.sleep(3000);
+            System.out.println("Remove Exist Files");
+            process = new ProcessBuilder("cmd", "/c", "rmdir", "/s", "/q", result_path).start();
+            process.waitFor();
+            System.out.println("Copy Result Files");
+            process = new ProcessBuilder("cmd", "/c", "xcopy", base_path + "\\result\\",
+                    result_path + "\\", "/E").start();
+            System.out.println("process wait");
+            BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream(), "euc-kr"));
+            String str;
+            while ((str = stdOut.readLine()) != null) {
+                System.out.println(str);
+            }
+            process.waitFor(5L, TimeUnit.SECONDS);
+            System.out.println("process destroy");
+            process.destroy();
+
+            // 경과시간 표기
+            long endTime = System.currentTimeMillis();
+            long timeDiff = (endTime - startTime) / 1000;
+            int timeDiffInt = Optional.of(timeDiff).orElse(0L).intValue();
+            System.out.println("경과시간 : " + parseSecond(timeDiffInt));
 
         } catch (Exception e) {
             e.printStackTrace();
+            return;
         }
     }
 }

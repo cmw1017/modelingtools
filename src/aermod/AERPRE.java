@@ -965,7 +965,7 @@ public class AERPRE {
 					int searchX = Integer.parseInt(subVal[0].trim());
 					int searchY = Integer.parseInt(subVal[1].trim());
 					int distance = StaticFunctions.distance(curX, curY, searchX, searchY);
-					if(distance != 0 && distance <= 66)
+					if(distance != 0 && distance <= 55)
 						inRemoveData.put(subEntry.getKey(), subEntry.getValue());
 				}
 			}
